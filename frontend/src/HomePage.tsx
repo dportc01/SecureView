@@ -44,7 +44,7 @@ function Content() {
 }
 
 function TimeDisplay() {
-  const [time, setTime] = useState<String>(new Date().toLocaleString());
+  const [time, setTime] = useState<string>(new Date().toLocaleString());
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -75,8 +75,13 @@ function Video() {
   return (
     <div>
       <h2>Cámaras principales</h2>
+
+      <img
+        src="http://localhost:5000/video"
+        alt="Camera Stream"
+        style={{ width: "640px", borderRadius: "8px" }}
+      />
     </div>
   );
 }
-
 export default HomePage;

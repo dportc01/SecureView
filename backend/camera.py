@@ -1,22 +1,25 @@
-import cv2 as cv
- 
-cap = cv.VideoCapture(0)
-if not cap.isOpened():
-    print("Cannot open camera")
-    exit()
-while True:
-    # Capture frame-by-frame
-    ret, frame = cap.read()
- 
-    # if frame is read correctly ret is True
-    if not ret:
-        print("Can't receive frame (stream end?). Exiting ...")
-        break
-    # Display the resulting frame
-    cv.imshow('frame', frame)
-    if cv.waitKey(1) == ord('q'):
-        break
- 
-# When everything done, release the capture
-cap.release()
-cv.destroyAllWindows()
+import cv2
+from flask import Flask, Response
+
+app = Flask(__name__)
+cap = cv2.VideoCapture(0)
+
+def generate_frames():
+    while True:
+        success, frame = cap.read()
+        if not success:
+            break
+        else:
+            _, buffer = cv2.imencode('.jpg', frame)
+            frame_bytes = buffer.tobytes()
+
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+
+@app.route('/video')
+def video():
+    return Response(generate_frames(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+if __name__ == "__main__":
+    app.run(debug=True, use_reloader=False)
