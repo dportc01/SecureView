@@ -5,4 +5,4 @@ run:
 frontend:
 	cd frontend/ && npm run dev
 backend:
-	cd backend/ && source venv/bin/activate && python camera.py
+	cd backend/ && source venv/bin/activate && python app/main.py
