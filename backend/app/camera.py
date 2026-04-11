@@ -1,5 +1,6 @@
 import cv2
 
+
 class Camera:
     def __init__(self, device_index: int = 0):
         self.device_index = device_index

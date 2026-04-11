@@ -1,5 +1,6 @@
 from app.interfaces import CameraInterface
 
+
 class CameraService:
     def __init__(self, camera: CameraInterface):
         self.camera = camera
