@@ -4,4 +4,4 @@ from app.mock.camera_mock import CameraMock
 def test_get_cameras():
     camera = CameraMock()
     service = CameraService(camera)
-    assert(service.get_available_cameras(), 1)
+    assert service.get_available_cameras() == 1
