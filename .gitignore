@@ -29,3 +29,6 @@ venv/
 *.njsproj
 *.sln
 *.sw?
+
+# OpenCV training data
+backend/img-training/data/
