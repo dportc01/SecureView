@@ -31,4 +31,4 @@ venv/
 *.sw?
 
 # OpenCV training data
-backend/img-training/data/
+backend/img-training\[deprecated\]
