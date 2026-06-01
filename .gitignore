@@ -30,5 +30,7 @@ venv/
 *.sln
 *.sw?
 
-# OpenCV training data
+# OpenCV training data and results
 backend/img-training\[deprecated\]
+*.mp4
+
