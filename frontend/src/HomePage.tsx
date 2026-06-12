@@ -75,7 +75,7 @@ function Video() {
       <h2 className="text-2xl mb-2">Cámaras principales</h2>
 
       <img
-        src="http://localhost:5000/video"
+        src="http://100.88.161.15:5000/video"
         alt="Camera Stream"
         className="w-[640px] rounded-lg"
       />
