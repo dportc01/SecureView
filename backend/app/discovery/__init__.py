@@ -1,0 +1,1 @@
+from .discover_cameras import CameraData, CameraType

@@ -5,7 +5,7 @@ def create_app():
 
     app = Flask(__name__)
 
-    from backend.app.server.api.routes import bp as health_bp
+    from .api.routes import bp as health_bp
     app.register_blueprint(health_bp)
 
     print("App created successfully")
