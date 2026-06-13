@@ -1,4 +1,4 @@
-from app.interfaces import CameraInterface
+from backend.app.workers.camera_interface import CameraInterface
 
 
 class CameraService:
