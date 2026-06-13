@@ -5,26 +5,34 @@
 ### Backend structure
 
 ```
-.
-├── config ➜ Env variables and general configuration
+app
+├── config/                      # Environment variables & global configuration
 │   └── config.py
-├── main.py ➜ Dev entry point
-├── messaging ➜ Communication bus between Flask server and camera workers
+│
+├── main.py                     # Development entry point
+│
+├── messaging/                  # Communication bus (Flask ↔ camera workers)
 │   ├── bus_interface.py
 │   ├── multiprocessing_bus.py
-│   └── radis_bus.py
-├── server ➜ Flask initialization, routes, coms...
-│   ├── api
+│   └── redis_bus.py
+│
+├── server/                     # Flask app initialization, routes, services
+│   ├── api/
 │   │   ├── __init__.py
 │   │   └── routes.py
-│   ├── __init__.py
-│   └── services
-│       └── camera_service.py
-├── workers ➜ Camera workers initilization
-│   ├── camera
+│   │
+│   ├── services/
+│   │   └── camera_service.py
+│   │
+│   └── __init__.py
+│
+├── workers/                   # Camera worker system
+│   ├── camera/
 │   │   ├── camera_interface.py
 │   │   └── usb_camera.py
-│   ├── camera_worker.py ➜ Builds camera implementation
-│   └── manager.py ➜ Builds all camera workers
-└── wsgi.py ➜ Flask server entry point
+│   │
+│   ├── camera_worker.py        # Builds camera implementation
+│   └── manager.py              # Orchestrates all camera workers
+│
+└── wsgi.py                    # Production Flask entry point
 ```
