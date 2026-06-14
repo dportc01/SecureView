@@ -2,8 +2,10 @@ from multiprocessing import Queue
 from queue import Empty
 from .messages import Command, Action
 
+
 class InvalidQueueIndexError(Exception):
     pass
+
 
 class MutiprocessingBus():
     def __init__(self, queues: list[Queue]) -> None:
@@ -33,7 +35,7 @@ class MutiprocessingBus():
                 return Action.Empty
         else:
             raise InvalidQueueIndexError(f"Error: invalid queue id {id}")
-        
+
     def send(self, id: int, action: Action) -> None:
         if 0 <= id < self.queue_size:
             cmd = Command(

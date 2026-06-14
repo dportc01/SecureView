@@ -3,6 +3,7 @@ from app.discovery import CameraData
 from .camera.factory import build_camera
 from app.messaging import BusInterface, Action
 
+
 def camera_woker(camera_data: CameraData, bus: BusInterface):
 
     camera = build_camera(camera_data)

@@ -1,9 +1,14 @@
 from multiprocessing import Process
+import logging
 from app.messaging import BusInterface
 from app.discovery import CameraData
 from .camera_worker import camera_woker
 
+
 def start_camera_workers(cameras_data: list[CameraData], bus: BusInterface) -> list[Process]:
+
+    if len(cameras_data) == 0:
+        logging.warning("No cameras detected")
 
     processes = []
 
@@ -16,6 +21,7 @@ def start_camera_workers(cameras_data: list[CameraData], bus: BusInterface) -> l
 
     return processes
 
+
 def wait_and_terminate_camera_workeres(processes: list[Process]):
 
     for p in processes:
@@ -25,4 +31,3 @@ def wait_and_terminate_camera_workeres(processes: list[Process]):
         if p.is_alive():
             p.terminate()
             p.join()
-            

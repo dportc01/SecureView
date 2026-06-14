@@ -1,6 +1,7 @@
 from typing import Protocol
 from .messages import Action
 
+
 class BusInterface(Protocol):
 
     def send_start(self, id: int) -> None:
