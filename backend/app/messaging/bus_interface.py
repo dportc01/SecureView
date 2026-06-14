@@ -1,4 +1,5 @@
 from typing import Protocol
+from .messages import Action
 
 class BusInterface(Protocol):
 
@@ -8,5 +9,8 @@ class BusInterface(Protocol):
     def send_stop(self, id: int) -> None:
         ...
 
-    def recv(self, id: int) -> None:
+    def send_terminate(self) -> None:
+        ...
+
+    def recv(self, id: int) -> Action:
         ...

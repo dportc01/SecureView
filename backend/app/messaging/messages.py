@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Literal
 from enum import Enum
 
 @dataclass
@@ -10,4 +9,5 @@ class Command:
 class Action(str, Enum):
     START = "START"
     STOP = "STOP"
+    TERMINATE = "TERMINATE"
     Empty = "Empty"

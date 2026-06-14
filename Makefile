@@ -8,7 +8,7 @@ frontend:
 backend:
 	cd backend/ && source venv/bin/activate && flask --app wsgi run
 backend-test:
-	cd backend/ && source venv/bin/activate && pytest
+	cd backend/ && source venv/bin/activate && pytest -s --log-cli-level=INFO
 backend-lint:
 	cd backend/ && source venv/bin/activate && flake8
 clean-pycache:
