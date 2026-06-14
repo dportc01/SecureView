@@ -1,17 +1,25 @@
 import time
 import logging
+import pytest
 from multiprocessing import Queue, Process
 from app.workers.manager import start_camera_workers, wait_and_terminate_camera_workeres
 from app.messaging import BusInterface, MutiprocessingBus
 from app.discovery import CameraType, CameraData
 
 
-def test_manager_star_terminate_cycle():
-
-    cameras_data: list[CameraData] = [{"type": CameraType.MOCK, "id": 0}]
+@pytest.fixture
+def queues_setup():
     queues = [Queue()]
+    res_queue = Queue()
+    return queues, res_queue
 
-    bus = MutiprocessingBus(queues)
+
+def test_manager_star_terminate_cycle(queues_setup):
+
+    queues, res_queue = queues_setup
+    cameras_data: list[CameraData] = [{"type": CameraType.MOCK, "id": 0}]
+
+    bus = MutiprocessingBus(queues, res_queue)
 
     processes = start_camera_workers(cameras_data, bus)
 
@@ -30,12 +38,12 @@ def test_manager_star_terminate_cycle():
     aux_procc.join()
 
 
-def test_empty_data_manager():
+def test_empty_data_manager(queues_setup):
 
+    queues, res_queue = queues_setup
     cameras_data: list[CameraData] = []
-    queues: list[Queue] = []
 
-    bus = MutiprocessingBus(queues)
+    bus = MutiprocessingBus(queues, res_queue)
 
     processses = start_camera_workers(cameras_data, bus)
 

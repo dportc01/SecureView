@@ -1,6 +1,9 @@
-from typing import Protocol
+from typing import Protocol, Iterable
 
 
 class CameraInterface(Protocol):
-    def capture(self) -> None:
+    def start_capture(self) -> Iterable[bytes]:
+        ...
+
+    def stop_capture(self) -> None:
         ...

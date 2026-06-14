@@ -1,5 +1,6 @@
 from multiprocessing import Queue
 from queue import Empty
+from typing import Iterable
 from .messages import Command, Action
 
 
@@ -7,10 +8,11 @@ class InvalidQueueIndexError(Exception):
     pass
 
 
-class MutiprocessingBus():
-    def __init__(self, queues: list[Queue]) -> None:
+class MutiprocessingBus:
+    def __init__(self, queues: list[Queue], response_queue: Queue) -> None:
         self.queue_size = len(queues)
         self.queues = queues
+        self.res_queue = response_queue
 
     def send_start(self, id: int) -> None:
         self.send(id, Action.START)
@@ -35,6 +37,16 @@ class MutiprocessingBus():
                 return Action.Empty
         else:
             raise InvalidQueueIndexError(f"Error: invalid queue id {id}")
+        
+    def respond_frame_stream(self, frame_stream: Iterable[bytes]) -> None:
+        self.res_queue.put(frame_stream)
+
+    def read_frame_stream(self) -> None:
+        # TODO: READ byte stream iterable
+        print("FINSH THIS METHOD")
+        
+    def respond(self, response: str) -> None:
+        self.res_queue.put(str)
 
     def send(self, id: int, action: Action) -> None:
         if 0 <= id < self.queue_size:
