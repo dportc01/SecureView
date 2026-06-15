@@ -15,7 +15,7 @@ class BusInterface(Protocol):
 
     # TODO: Change name this should be more verbose and reflect that it is the camera,
     # the one that it is recving on this case
-    def recv(self, id: int) -> Action:
+    def cam_recv(self, id: int) -> Action | None:
         ...
 
     def write_frame(self, id: int, frame: bytes) -> None:
@@ -27,5 +27,5 @@ class BusInterface(Protocol):
     def respond(self, response: str) -> None:
         ...
 
-    def read_response(self) -> str:
+    def read_response(self) -> str | None:
         ...

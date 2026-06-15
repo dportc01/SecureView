@@ -10,22 +10,25 @@ def camera_woker(camera_data: CameraData, bus: BusInterface):
     alive = True
 
     while alive:
-        order = bus.recv(camera_data['id'])
+        order = bus.cam_recv(camera_data['id'])
 
         if (order == Action.START):
+            bus.respond(f"Starting recording on camera: {camera_data['id']}")
             frame_stream = camera.start_capture()
             for frame in frame_stream:
                 bus.write_frame(camera_data['id'], frame)
 
-                order = bus.recv(camera_data['id'])
+                order = bus.cam_recv(camera_data['id'])
                 if order == Action.STOP or order == Action.TERMINATE:
                     break
 
         if (order == Action.STOP):
+            bus.respond(f"Stoping recording on camera: {camera_data['id']}")
             camera.stop_capture()
 
         if (order == Action.TERMINATE):
-            logging.info(f"Terminating camera {camera_data["id"]}")
+            bus.respond(f"Terminating camera: {camera_data['id']}")
+            logging.info(f"Terminating camera {camera_data['id']}")
             alive = False
 
     return

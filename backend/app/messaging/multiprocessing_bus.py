@@ -35,13 +35,13 @@ class MutiprocessingBus:
             )
             queue.put(cmd)
 
-    def recv(self, id: int) -> Action:
+    def cam_recv(self, id: int) -> Action | None:
         queue = self._get_queue(id)
         try:
             msg: Command = queue.get_nowait()
             return msg.action
         except Empty:
-            return Action.Empty
+            return None
 
     def write_frame(self, id: int, frame: bytes) -> None:
         queue = self._get_frames_queue(id)
@@ -63,11 +63,13 @@ class MutiprocessingBus:
             return None
 
     def respond(self, response: str) -> None:
-        self.res_queue.put(str)
+        self.res_queue.put(response)
 
-    # TODO: Finish this function
-    def read_response(self) -> str:
-        return "N"
+    def read_response(self) -> str | None:
+        try:
+            self.res_queue.get_nowait()
+        except Empty:
+            return None
 
     def _send(self, id: int, action: Action) -> None:
         queue = self._get_queue(id)

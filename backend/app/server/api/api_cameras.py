@@ -1,12 +1,13 @@
-from flask import Blueprint, Response
+from flask import Blueprint, Response, jsonify
+from ..services.camera_service import CameraService
 
 
-def build_cameras_bp(camera_service) -> Blueprint:
+def build_cameras_bp(camera_service: CameraService) -> Blueprint:
 
     bp = Blueprint("cameras", __name__)
 
-    @bp.route("/video/<int:id>")
-    def video(id):
+    @bp.route("/cameras/<int:id>/start")
+    def show_video(id):
         def generate_frames():
             while True:
                 frame = camera_service.read_camera(id)
@@ -23,5 +24,23 @@ def build_cameras_bp(camera_service) -> Blueprint:
 
         return Response(generate_frames(),
                         mimetype="multipart/x-mixed-replace; boundary=frame")
+
+    @bp.route("/cameras/<int:id>/start", methods=["POST"])
+    def start_video(id):
+        res = camera_service.start_camera(id)
+
+        if res is None:
+            return jsonify({"status": "error", "message": f"Camera {id} didn't respond"}), 500
+
+        return jsonify({"status": "ok", "message": res}), 200
+
+    @bp.route("/cameras/<int:id>/stop", methods=["POST"])
+    def stop_video(id):
+        res = camera_service.stop_camera(id)
+
+        if res is None:
+            return jsonify({"status": "error", "message": f"Camera {id} didn't respond"}), 500
+
+        return jsonify({"status": "ok", "message": res}), 200
 
     return bp

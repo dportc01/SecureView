@@ -12,4 +12,3 @@ class Action(str, Enum):
     START = "START"
     STOP = "STOP"
     TERMINATE = "TERMINATE"
-    Empty = "Empty"
