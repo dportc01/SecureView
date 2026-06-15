@@ -13,7 +13,7 @@ def test_manager_star_terminate_cycle():
 
     cameras_data: list[CameraData] = [{"type": CameraType.MOCK, "id": 0}]
 
-    bus = MutiprocessingBus(len(cameras_data))
+    bus = MutiprocessingBus(cameras_data)
 
     processes = start_camera_workers(cameras_data, bus)
 
@@ -28,7 +28,7 @@ def test_empty_data_manager():
 
     cameras_data: list[CameraData] = []
 
-    bus = MutiprocessingBus(len(cameras_data))
+    bus = MutiprocessingBus(cameras_data)
 
     processses = start_camera_workers(cameras_data, bus)
 
@@ -37,15 +37,15 @@ def test_empty_data_manager():
 
 def test_camera_worker_coms():
 
-    camera_data: list[CameraData] = [{"id": 0, "type": CameraType.MOCK}]
+    cameras_data: list[CameraData] = [{"id": 0, "type": CameraType.MOCK}]
 
-    bus = MutiprocessingBus(len(camera_data))
+    bus = MutiprocessingBus(cameras_data)
 
-    processes = start_camera_workers(camera_data, bus)
+    processes = start_camera_workers(cameras_data, bus)
 
     bus.send_start(0)
 
-    time.sleep(10)
+    time.sleep(0.2)
     frame = bus.read_frame(0)
 
     assert frame in [b"frame1", b"frame2", b"frame3"]

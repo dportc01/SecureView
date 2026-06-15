@@ -4,6 +4,7 @@ from app.discovery import discover_cameras
 from app.discovery import CameraType
 
 
+# TODO: Refactor flaky test
 def test_discover_cameras():
     if os.getenv("GITHUB_ACTIONS") == "true":
         pytest.skip("No cameras available in GitHub Actions")

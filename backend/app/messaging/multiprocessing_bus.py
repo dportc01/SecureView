@@ -1,6 +1,7 @@
 from multiprocessing import Queue
 from queue import Empty
 from .messages import Command, Action
+from app.discovery import CameraData
 from app.config import MAX_QUEUE_SIZE
 
 
@@ -9,51 +10,57 @@ class InvalidQueueIndexError(Exception):
 
 
 class MutiprocessingBus:
-    def __init__(self, camera_num: int) -> None:
-        self.queues = [Queue(MAX_QUEUE_SIZE)] * camera_num
+    def __init__(self, cameras_data: list[CameraData]) -> None:
+        self.queues = {
+            cam["id"]: Queue(MAX_QUEUE_SIZE)
+            for cam in cameras_data
+        }
+        self.frames_queues = {
+            cam["id"]: Queue(MAX_QUEUE_SIZE)
+            for cam in cameras_data
+        }
         self.res_queue = Queue()
-        self.frames_queues = [Queue(MAX_QUEUE_SIZE)] * camera_num
-        self.queue_size = camera_num
 
     def send_start(self, id: int) -> None:
-        self.send(id, Action.START)
+        self._send(id, Action.START)
 
     def send_stop(self, id: int) -> None:
-        self.send(id, Action.STOP)
+        self._send(id, Action.STOP)
 
     def send_terminate(self) -> None:
-        for i in range(self.queue_size):
+        for id, queue in self.queues.items():
             cmd = Command(
-                dev_id=i,
+                dev_id=id,
                 action=Action.TERMINATE
             )
-            self.queues[i].put(cmd)
+            queue.put(cmd)
 
     def recv(self, id: int) -> Action:
-        if 0 <= id < self.queue_size:
-            try:
-                msg: Command = self.queues[id].get_nowait()
-                return msg.action
-            except Empty:
-                return Action.Empty
-        else:
-            raise InvalidQueueIndexError(f"Error: invalid queue id {id}")
+        queue = self._get_queue(id)
+        try:
+            msg: Command = queue.get_nowait()
+            return msg.action
+        except Empty:
+            return Action.Empty
 
     def write_frame(self, id: int, frame: bytes) -> None:
-        if 0 <= id < self.queue_size:
-            self.frames_queues[id].put(frame)
-        else:
-            raise InvalidQueueIndexError(f"Error: invalid queue id {id}")
-
-    def read_frame(self, id: int) -> bytes:
-        if 0 <= id < self.queue_size:
+        queue = self._get_frames_queue(id)
+        # If full drop oldest frame
+        if queue.full():
             try:
-                frame: bytes = self.frames_queues[id].get_nowait()
-                return frame
+                queue.get_nowait()
             except Empty:
-                return b'No frame data'
-        else:
-            raise InvalidQueueIndexError(f"Error: invalid queue id {id}")
+                pass
+
+        queue.put(frame)
+
+    def read_frame(self, id: int) -> bytes | None:
+        queue = self._get_frames_queue(id)
+        try:
+            frame: bytes = queue.get_nowait()
+            return frame
+        except Empty:
+            return None
 
     def respond(self, response: str) -> None:
         self.res_queue.put(str)
@@ -62,12 +69,24 @@ class MutiprocessingBus:
     def read_response(self) -> str:
         return "N"
 
-    def send(self, id: int, action: Action) -> None:
-        if 0 <= id < self.queue_size:
-            cmd = Command(
-                dev_id=id,
-                action=action
-            )
-            self.queues[id].put(cmd)
-        else:
+    def _send(self, id: int, action: Action) -> None:
+        queue = self._get_queue(id)
+
+        cmd = Command(
+            dev_id=id,
+            action=action
+        )
+
+        queue.put(cmd)
+
+    def _get_queue(self, id: int) -> Queue:
+        try:
+            return self.queues[id]
+        except KeyError:
+            raise InvalidQueueIndexError(f"Error: invalid queue id {id}")
+
+    def _get_frames_queue(self, id: int) -> Queue:
+        try:
+            return self.frames_queues[id]
+        except KeyError:
             raise InvalidQueueIndexError(f"Error: invalid queue id {id}")

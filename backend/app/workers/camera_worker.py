@@ -18,7 +18,6 @@ def camera_woker(camera_data: CameraData, bus: BusInterface):
                 bus.write_frame(camera_data['id'], frame)
 
                 order = bus.recv(camera_data['id'])
-                print(order)
                 if order == Action.STOP or order == Action.TERMINATE:
                     break
 

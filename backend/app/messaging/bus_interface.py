@@ -21,7 +21,7 @@ class BusInterface(Protocol):
     def write_frame(self, id: int, frame: bytes) -> None:
         ...
 
-    def read_frame(self, id: int) -> bytes:
+    def read_frame(self, id: int) -> bytes | None:
         ...
 
     def respond(self, response: str) -> None:
