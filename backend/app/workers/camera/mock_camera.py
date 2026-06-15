@@ -7,7 +7,9 @@ class MockCamera:
 
     def start_capture(self) -> Iterable[bytes]:
         print("Capture process begins")
-        return [b"frame1", b"frame2", b"frame3"]
+        yield b"frame1"
+        yield b"frame2"
+        yield b"frame3"
 
     def stop_capture(self) -> None:
         print("Capture process stop")

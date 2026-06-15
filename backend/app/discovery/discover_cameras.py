@@ -15,7 +15,7 @@ class CameraData(TypedDict):
     id: int
 
 
-def discover_camereas() -> list[CameraData]:
+def discover_cameras() -> list[CameraData]:
 
     cameras_data: list[CameraData] = []
     system = platform.system()

@@ -1,25 +1,19 @@
 import time
 import logging
-import pytest
-from multiprocessing import Queue, Process
-from app.workers.manager import start_camera_workers, wait_and_terminate_camera_workeres
+from multiprocessing import Process
+from app.workers.manager import (
+    start_camera_workers,
+    wait_and_terminate_camera_workeres
+)
 from app.messaging import BusInterface, MutiprocessingBus
 from app.discovery import CameraType, CameraData
 
 
-@pytest.fixture
-def queues_setup():
-    queues = [Queue()]
-    res_queue = Queue()
-    return queues, res_queue
+def test_manager_star_terminate_cycle():
 
-
-def test_manager_star_terminate_cycle(queues_setup):
-
-    queues, res_queue = queues_setup
     cameras_data: list[CameraData] = [{"type": CameraType.MOCK, "id": 0}]
 
-    bus = MutiprocessingBus(queues, res_queue)
+    bus = MutiprocessingBus(len(cameras_data))
 
     processes = start_camera_workers(cameras_data, bus)
 
@@ -27,6 +21,39 @@ def test_manager_star_terminate_cycle(queues_setup):
     for p in processes:
         assert p.is_alive()
 
+    terminate_workers(processes, bus)
+
+
+def test_empty_data_manager():
+
+    cameras_data: list[CameraData] = []
+
+    bus = MutiprocessingBus(len(cameras_data))
+
+    processses = start_camera_workers(cameras_data, bus)
+
+    assert len(processses) == 0
+
+
+def test_camera_worker_coms():
+
+    camera_data: list[CameraData] = [{"id": 0, "type": CameraType.MOCK}]
+
+    bus = MutiprocessingBus(len(camera_data))
+
+    processes = start_camera_workers(camera_data, bus)
+
+    bus.send_start(0)
+
+    time.sleep(10)
+    frame = bus.read_frame(0)
+
+    assert frame in [b"frame1", b"frame2", b"frame3"]
+
+    terminate_workers(processes, bus)
+
+
+def terminate_workers(processes, bus):
     aux_procc = Process(target=simulate_external_terminate, args=(bus,))
     aux_procc.start()
 
@@ -38,19 +65,8 @@ def test_manager_star_terminate_cycle(queues_setup):
     aux_procc.join()
 
 
-def test_empty_data_manager(queues_setup):
-
-    queues, res_queue = queues_setup
-    cameras_data: list[CameraData] = []
-
-    bus = MutiprocessingBus(queues, res_queue)
-
-    processses = start_camera_workers(cameras_data, bus)
-
-    assert len(processses) == 0
-
-
+# Helper method to avoid deadlock
 def simulate_external_terminate(bus: BusInterface):
-    time.sleep(1)
+    time.sleep(0.2)
     logging.warning("Attempt termination:")
     bus.send_terminate()

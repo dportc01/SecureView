@@ -4,8 +4,16 @@ import requests
 
 
 def start_server():
-    return subprocess.Popen(
-        ["flask", "--app", "app.wsgi", "run", "--host", "127.0.0.1", "--port", "5001"],
+    return subprocess.Popen([
+            "flask",
+            "--app",
+            "app.wsgi",
+            "run",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "5001"
+        ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )

@@ -9,6 +9,7 @@ def test_build_mock_camera():
 
     assert isinstance(camera, MockCamera)
 
+
 def test_build_local_camera():
     camera = factory.build_camera({"type": CameraType.LOCAL, "id": 0})
 

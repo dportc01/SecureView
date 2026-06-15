@@ -1,7 +1,8 @@
 from flask import Flask
+from app.messaging import BusInterface
 
 
-def create_app():
+def create_app(bus: BusInterface):
 
     app = Flask(__name__)
 

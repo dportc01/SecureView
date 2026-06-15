@@ -5,8 +5,8 @@ run:
 	$(MAKE) -j2 backend frontend
 frontend:
 	cd frontend/ && npm run dev
-backend:
-	cd backend/ && source venv/bin/activate && flask --app wsgi run
+backend-dev:
+	cd backend/ && source venv/bin/activate && python -m app.main
 backend-test:
 	cd backend/ && source venv/bin/activate && pytest -s --log-cli-level=INFO
 backend-lint:

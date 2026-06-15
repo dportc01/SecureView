@@ -8,7 +8,7 @@ from .camera_worker import camera_woker
 def start_camera_workers(cameras_data: list[CameraData], bus: BusInterface) -> list[Process]:
 
     if len(cameras_data) == 0:
-        logging.warning("No cameras detected")
+        logging.warning("Camera data is empty")
 
     processes = []
 

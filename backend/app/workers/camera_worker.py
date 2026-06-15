@@ -14,7 +14,13 @@ def camera_woker(camera_data: CameraData, bus: BusInterface):
 
         if (order == Action.START):
             frame_stream = camera.start_capture()
-            bus.respond_frame_stream(frame_stream)
+            for frame in frame_stream:
+                bus.write_frame(camera_data['id'], frame)
+
+                order = bus.recv(camera_data['id'])
+                print(order)
+                if order == Action.STOP or order == Action.TERMINATE:
+                    break
 
         if (order == Action.STOP):
             camera.stop_capture()

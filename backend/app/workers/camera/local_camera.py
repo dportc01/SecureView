@@ -18,7 +18,7 @@ class LocalCamera:
             self.module = cv2.CAP_DSHOW
 
     def start_capture(self) -> Iterable[bytes]:
-        if self.cap == None:
+        if self.cap is None:
             self.logger.info("Started video capture")
             self.cap = cv2.VideoCapture(self.device_index, self.module)
 
@@ -26,7 +26,7 @@ class LocalCamera:
                 self.cap.release()
                 self.cap = None
                 raise RuntimeError(f"Failed to open camera:{self.device_index}")
-            
+
             try:
                 while True:
                     success, frame = self.cap.read()
@@ -38,10 +38,7 @@ class LocalCamera:
                     frame_bytes = buffer.tobytes()
 
                     yield (
-                        b'--frame\r\n'
-                        b'Content-Type: image/jpeg\r\n\r\n' +
-                        frame_bytes +
-                        b'\r\n'
+                        frame_bytes
                     )
             except Exception:
                 self.logger.exception("Sudden stop")
@@ -51,7 +48,7 @@ class LocalCamera:
             return
 
     def stop_capture(self) -> None:
-        if self.cap == None:
+        if self.cap is None:
             self.logger.warning("Tried to stop incative camera")
         else:
             self.logger.info("Stopped video capture")

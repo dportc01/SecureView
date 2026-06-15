@@ -1,3 +1,3 @@
-from .config import MAX_LOCAL_CAMERA_INDEX
+from .config import MAX_LOCAL_CAMERA_INDEX, MAX_QUEUE_SIZE
 
-__all__ = ["MAX_LOCAL_CAMERA_INDEX"]
+__all__ = ["MAX_LOCAL_CAMERA_INDEX", "MAX_QUEUE_SIZE"]
