@@ -2,6 +2,7 @@ import cv2
 import platform
 from typing import Iterable
 from app.logging.camera_logger import camera_logger
+from .camera_interface import Frame
 
 
 class LocalCamera:
@@ -17,7 +18,7 @@ class LocalCamera:
         elif system == "Windows":
             self.module = cv2.CAP_DSHOW
 
-    def start_capture(self) -> Iterable[bytes]:
+    def start_capture(self) -> Iterable[Frame]:
         if self.cap is None:
             self.logger.info("Started video capture")
             self.cap = cv2.VideoCapture(self.device_index, self.module)
@@ -34,11 +35,16 @@ class LocalCamera:
                     if not success:
                         break
 
+                    height, width = frame.shape[:2]
+
                     _, buffer = cv2.imencode('.jpg', frame)
                     frame_bytes = buffer.tobytes()
 
-                    yield (
-                        frame_bytes
+                    yield Frame(
+                        data=frame,
+                        data_bytes=frame_bytes,
+                        width=width,
+                        height=height,
                     )
             except Exception:
                 self.logger.exception("Sudden stop")

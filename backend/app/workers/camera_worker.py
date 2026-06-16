@@ -17,7 +17,7 @@ def camera_woker(camera_data: CameraData, bus: BusInterface):
             bus.respond(f"Starting recording on camera: {camera_data['id']}")
             frame_stream = camera.start_capture()
             for frame in frame_stream:
-                bus.write_frame(camera_data['id'], frame)
+                bus.write_frame(camera_data['id'], frame.data_bytes)
 
                 order = bus.cam_recv(camera_data['id'])
                 if order == Action.STOP or order == Action.TERMINATE:
