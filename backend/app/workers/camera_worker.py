@@ -1,6 +1,6 @@
 import logging
 from app.discovery import CameraData
-from .camera.factory import build_camera
+from app.camera.factory import build_camera
 from app.messaging import BusInterface, Action
 
 
