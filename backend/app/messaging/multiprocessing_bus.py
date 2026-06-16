@@ -48,7 +48,7 @@ class MutiprocessingBus:
         # If full drop oldest frame
         if queue.full():
             try:
-                queue.get_nowait()
+                queue.get()
             except Empty:
                 pass
 

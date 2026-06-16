@@ -35,7 +35,7 @@ def test_empty_data_manager():
     assert len(processses) == 0
 
 
-def test_camera_worker_coms():
+def test_camera_worker_start():
 
     cameras_data: list[CameraData] = [{"id": 0, "type": CameraType.MOCK}]
 
@@ -45,10 +45,12 @@ def test_camera_worker_coms():
 
     bus.send_start(0)
 
-    time.sleep(0.2)
-    frame = bus.read_frame(0)
+    time.sleep(0.1)
+    frame1 = bus.read_frame(0)
+    time.sleep(0.1)
+    frame2 = bus.read_frame(0)
 
-    assert frame in [b"frame1", b"frame2", b"frame3"]
+    assert frame1 != frame2
 
     terminate_workers(processes, bus)
 
@@ -57,6 +59,7 @@ def terminate_workers(processes, bus):
     aux_procc = Process(target=simulate_external_terminate, args=(bus,))
     aux_procc.start()
 
+    logging.warning("Waiting for camera termination:")
     wait_and_terminate_camera_workeres(processes)
 
     for p in processes:

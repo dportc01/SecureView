@@ -31,3 +31,5 @@ def wait_and_terminate_camera_workeres(processes: list[Process]):
         if p.is_alive():
             p.terminate()
             p.join()
+
+    return
