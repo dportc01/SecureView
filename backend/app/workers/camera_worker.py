@@ -20,8 +20,7 @@ def camera_woker(camera_data: CameraData, bus: BusInterface):
 
                 order = bus.cam_recv(camera_data['id'])
                 if order == Action.STOP or order == Action.TERMINATE:
-                    print("Hello")
-                    frame_stream = None
+                    frame_stream = None  # Maybe unnecesary
                     break
 
         if (order == Action.STOP):

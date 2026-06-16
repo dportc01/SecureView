@@ -67,7 +67,7 @@ class MutiprocessingBus:
 
     def read_response(self) -> str | None:
         try:
-            self.res_queue.get_nowait()
+            return self.res_queue.get_nowait()
         except Empty:
             return None
 

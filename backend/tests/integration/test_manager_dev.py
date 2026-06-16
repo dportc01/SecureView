@@ -1,3 +1,5 @@
+# This tests are mostly falky and depend on the computer processing power
+
 import time
 import logging
 from multiprocessing import Process
@@ -7,6 +9,7 @@ from app.workers.manager import (
 )
 from app.messaging import BusInterface, MutiprocessingBus
 from app.discovery import CameraType, CameraData
+from app.config import MAX_QUEUE_SIZE
 
 
 def test_manager_star_terminate_cycle():
@@ -53,6 +56,42 @@ def test_camera_worker_start():
     assert frame1 != frame2
 
     terminate_workers(processes, bus)
+
+
+def test_camera_worker_stop():
+
+    cameras_data: list[CameraData] = [{"id": 0, "type": CameraType.MOCK}]
+
+    bus = MutiprocessingBus(cameras_data)
+
+    processes = start_camera_workers(cameras_data, bus)
+
+    bus.send_start(0)
+
+    # Wait to produce at least 60 frames
+    time.sleep(0.6)
+    bus.send_stop(0)
+
+    # Retry until stop response recieved
+    bus.read_response()  # Empty start response message
+    for i in range(5):
+        res = bus.read_response()
+        if res is not None:
+            break
+        time.sleep(0.1)
+
+    assert res is not None
+
+    # Empty queue
+    for i in range(MAX_QUEUE_SIZE):
+        frame = bus.read_frame(0)
+        if bus is None:
+            break
+
+    frame = bus.read_frame(0)
+    terminate_workers(processes, bus)
+
+    assert frame is None
 
 
 def terminate_workers(processes, bus):
