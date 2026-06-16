@@ -14,8 +14,5 @@ if __name__ == "__main__":
 
     start_camera_workers(cameras_data, bus)
 
-    bus.send_start(0)
-    bus.send_start(2)
-
     app = create_app(bus)
     app.run(host="0.0.0.0", port=5000)

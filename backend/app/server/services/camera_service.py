@@ -1,4 +1,5 @@
 from app.messaging import BusInterface
+import time
 
 
 class CameraService:
@@ -15,6 +16,11 @@ class CameraService:
 
         return self._get_response()
 
+    def terminate_cameras(self) -> str | None:
+        self.bus.send_terminate()
+
+        return self._get_response()
+
     def read_camera(self, id: int) -> bytes | None:
         return self.bus.read_frame(id)
 
@@ -24,5 +30,6 @@ class CameraService:
             reponse = self.bus.read_response()
             if reponse is not None:
                 break
+            time.sleep(0.1)
 
         return reponse

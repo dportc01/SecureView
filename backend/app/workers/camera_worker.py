@@ -4,6 +4,7 @@ from .camera.factory import build_camera
 from app.messaging import BusInterface, Action
 
 
+# TODO: If camera is alredy stopped change the respond message
 def camera_woker(camera_data: CameraData, bus: BusInterface):
 
     camera = build_camera(camera_data)

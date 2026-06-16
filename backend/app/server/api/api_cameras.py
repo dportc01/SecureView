@@ -6,7 +6,7 @@ def build_cameras_bp(camera_service: CameraService) -> Blueprint:
 
     bp = Blueprint("cameras", __name__)
 
-    @bp.route("/cameras/<int:id>/start")
+    @bp.route("/cameras/<int:id>")
     def show_video(id):
         def generate_frames():
             while True:
@@ -28,19 +28,23 @@ def build_cameras_bp(camera_service: CameraService) -> Blueprint:
     @bp.route("/cameras/<int:id>/start", methods=["POST"])
     def start_video(id):
         res = camera_service.start_camera(id)
-
-        if res is None:
-            return jsonify({"status": "error", "message": f"Camera {id} didn't respond"}), 500
-
-        return jsonify({"status": "ok", "message": res}), 200
+        return _format_response(res)
 
     @bp.route("/cameras/<int:id>/stop", methods=["POST"])
     def stop_video(id):
         res = camera_service.stop_camera(id)
+        return _format_response(res)
 
-        if res is None:
-            return jsonify({"status": "error", "message": f"Camera {id} didn't respond"}), 500
-
-        return jsonify({"status": "ok", "message": res}), 200
+    @bp.route("/cameras/terminate", methods=["POST"])
+    def terminate_video():
+        res = camera_service.terminate_cameras()
+        return _format_response(res)
 
     return bp
+
+
+def _format_response(res: str | None):
+    if res is None:
+        return jsonify({"status": "error", "message": f"Camera {id} didn't respond"}), 500
+
+    return jsonify({"status": "ok", "message": res}), 200
