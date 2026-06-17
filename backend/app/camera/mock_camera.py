@@ -13,13 +13,11 @@ class MockCamera:
         print("Capture process begins")
         self.capturing = True
         while self.capturing:
-            rand = str(time.time()).encode()
             frame = np.random.randint(
                 0, 255, (300, 400, 3), dtype=np.uint8
             )
             yield Frame(
                 data=frame,
-                data_bytes=b"frame1_" + rand,
                 width=400,
                 height=300
             )

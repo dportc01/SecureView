@@ -94,7 +94,7 @@ def test_camera_worker_stop():
     assert frame is None
 
 
-def terminate_workers(processes, bus):
+def terminate_workers(processes, bus: BusInterface):
     aux_procc = Process(target=simulate_external_terminate, args=(bus,))
     aux_procc.start()
 

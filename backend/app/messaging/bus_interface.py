@@ -29,3 +29,6 @@ class BusInterface(Protocol):
 
     def read_response(self) -> str | None:
         ...
+
+    def close(self) -> None:
+        ...

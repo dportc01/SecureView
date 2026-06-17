@@ -71,6 +71,18 @@ class MutiprocessingBus:
         except Empty:
             return None
 
+    def close(self):
+        for q in self.queues.values():
+            q.close()
+            q.cancel_join_thread()
+        for q in self.frames_queues.values():
+            q.close()
+            q.cancel_join_thread()
+        self.res_queue.close()
+        self.res_queue.cancel_join_thread()
+
+        print("Closed")
+
     def _send(self, id: int, action: Action) -> None:
         queue = self._get_queue(id)
 

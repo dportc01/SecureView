@@ -37,12 +37,8 @@ class LocalCamera:
 
                     height, width = frame.shape[:2]
 
-                    _, buffer = cv2.imencode('.jpg', frame)
-                    frame_bytes = buffer.tobytes()
-
                     yield Frame(
                         data=frame,
-                        data_bytes=frame_bytes,
                         width=width,
                         height=height,
                     )
