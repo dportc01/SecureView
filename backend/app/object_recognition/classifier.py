@@ -27,7 +27,14 @@ class Clasiffier():
 
         self.interested_classes: list[int] = [1]
 
+    def close(self):
+        # Drop reference to free space
+        self.model = None
+
     def classify(self, frame: Frame) -> list[Detection]:
+
+        if self.model is None:
+            raise RuntimeError("Tried to execute classify on unactive camera")
 
         width = frame.width
         height = frame.height

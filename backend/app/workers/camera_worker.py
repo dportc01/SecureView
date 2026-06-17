@@ -12,31 +12,33 @@ def camera_woker(camera_data: CameraData, bus: BusInterface):
     classifier = Clasiffier()
     alive = True
 
-    while alive:
-        order = bus.cam_recv(camera_data['id'])
+    try:
+        while alive:
+            order = bus.cam_recv(camera_data['id'])
 
-        if (order == Action.START):
-            bus.respond(f"Starting recording on camera: {camera_data['id']}")
-            frame_stream = camera.start_capture()
-            for frame in frame_stream:
-                detections = classifier.classify(frame)
-                classifier.draw(frame, detections)
+            if (order == Action.START):
+                bus.respond(f"Starting recording on camera: {camera_data['id']}")
+                frame_stream = camera.start_capture()
+                for frame in frame_stream:
+                    detections = classifier.classify(frame)
+                    classifier.draw(frame, detections)
 
-                bus.write_frame(camera_data['id'], frame.to_bytes())
+                    bus.write_frame(camera_data['id'], frame.to_bytes())
 
-                order = bus.cam_recv(camera_data['id'])
-                if order == Action.STOP or order == Action.TERMINATE:
-                    frame_stream = None  # Maybe unnecesary
-                    break
+                    order = bus.cam_recv(camera_data['id'])
+                    if order == Action.STOP or order == Action.TERMINATE:
+                        break
 
-        if (order == Action.STOP):
-            bus.respond(f"Stoping recording on camera: {camera_data['id']}")
-            camera.stop_capture()
+            if (order == Action.STOP):
+                bus.respond(f"Stoping recording on camera: {camera_data['id']}")
+                camera.stop_capture()
 
-        if (order == Action.TERMINATE):
-            bus.respond(f"Terminating camera: {camera_data['id']}")
-            logging.info(f"Terminating camera {camera_data['id']}")
-            alive = False
+            if (order == Action.TERMINATE):
+                bus.respond(f"Terminating camera: {camera_data['id']}")
+                logging.info(f"Terminating camera {camera_data['id']}")
+                alive = False
 
-    bus.close()
-    return
+        return
+    finally:
+        camera.stop_capture()
+        bus.close()
