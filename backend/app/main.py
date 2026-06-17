@@ -8,8 +8,6 @@ if __name__ == "__main__":
 
     cameras_data = discover_cameras()
 
-    print(cameras_data)
-
     bus = MutiprocessingBus(cameras_data)
 
     start_camera_workers(cameras_data, bus)
