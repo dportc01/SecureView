@@ -19,6 +19,9 @@ def camera_woker(camera_data: CameraData, bus: BusInterface):
             bus.respond(f"Starting recording on camera: {camera_data['id']}")
             frame_stream = camera.start_capture()
             for frame in frame_stream:
+                detections = classifier.classify(frame)
+                classifier.draw(frame, detections)
+
                 bus.write_frame(camera_data['id'], frame.to_bytes())
 
                 order = bus.cam_recv(camera_data['id'])

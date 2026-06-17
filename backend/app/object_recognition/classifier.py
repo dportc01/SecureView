@@ -25,7 +25,7 @@ class Clasiffier():
             'TensorFlow'
         )
 
-        self.interested_classes = [1]
+        self.interested_classes: list[int] = [1]
 
     def classify(self, frame: Frame) -> list[Detection]:
 
@@ -45,19 +45,19 @@ class Clasiffier():
         detections: list[Detection] = []
 
         for detection in outputs[0, 0, :, :]:
-            class_id = detection[1]
+            class_id = int(detection[1])
             if class_id not in self.interested_classes:
-                pass
+                continue
 
             confidence = detection[2]
             if confidence > 0.6:
-                box_x = detection[3] * width
-                box_y = detection[4] * height
-                box_width = detection[5] * width
-                box_height = detection[6] * height
+                x1 = int(detection[3] * width)
+                y1 = int(detection[4] * height)
+                x2 = int(detection[5] * width)
+                y2 = int(detection[6] * height)
                 detections.append(Detection(
                     class_id=class_id,
-                    box=(box_x, box_y, box_width, box_height),
+                    box=(x1, y1, x2, y2),
                 ))
 
         return detections
@@ -72,7 +72,7 @@ class Clasiffier():
                     (x1, y1),
                     (x2, y2),
                     self.detection_color,
-                    thickness=1
+                    thickness=2
                 )
             cv2.putText(
                 frame.data,
