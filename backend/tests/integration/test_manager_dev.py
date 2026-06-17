@@ -47,15 +47,16 @@ def test_camera_worker_start():
     processes = start_camera_workers(cameras_data, bus)
 
     bus.send_start(0)
+    # Warm-up time
+    time.sleep(0.4)
 
-    time.sleep(0.1)
     frame1 = bus.read_frame(0)
     time.sleep(0.1)
     frame2 = bus.read_frame(0)
 
-    assert frame1 != frame2
-
     terminate_workers(processes, bus)
+
+    assert frame1 != frame2
 
 
 def test_camera_worker_stop():
