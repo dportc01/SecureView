@@ -1,7 +1,7 @@
 import cv2
 import platform
 from typing import Iterable
-from app.logging.camera_logger import camera_logger
+from app.logging.loggers import get_camera_logger
 from .camera_interface import Frame
 
 
@@ -10,7 +10,7 @@ class LocalCamera:
         self.device_index = device_index
         self.cap = None
         self.module = cv2.CAP_ANY
-        self.logger = camera_logger(self.device_index)
+        self.logger = get_camera_logger(self.device_index)
 
         system = platform.system()
         if system == "Linux":

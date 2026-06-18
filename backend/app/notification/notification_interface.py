@@ -2,8 +2,8 @@ from typing import Protocol
 
 
 class NotificationInterface(Protocol):
-    def start(self):
+    async def notify_msg(self, msg: str) -> None:
         ...
 
-    def notify(self, msg: str):
+    async def notify_img(self, byte_data) -> None:
         ...
