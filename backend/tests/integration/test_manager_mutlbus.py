@@ -51,7 +51,7 @@ def test_camera_worker_start():
 
     bus.send_start(0)
     # Warm-up time
-    time.sleep(0.4)
+    time.sleep(0.8)
 
     frame1 = bus.read_frame(0)
     time.sleep(0.1)
