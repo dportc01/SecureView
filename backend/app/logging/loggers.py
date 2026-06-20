@@ -25,6 +25,17 @@ def get_notification_logger():
     return logger
 
 
+def get_record_logger(device_index: int):
+    logger = logging.getLogger(f"RECORD{device_index}")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    if not logger.handlers:
+        logger.addHandler(_get_file_handler())
+
+    return logger
+
+
 def _get_file_handler() -> logging.FileHandler:
     global _file_handler
 
