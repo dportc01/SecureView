@@ -6,6 +6,7 @@ from threading import Thread
 from app.messaging import BusInterface
 from app.discovery import CameraData
 from app.notification import NotificationInterface, Command, Type
+from app.config import MAX_QUEUE_SIZE
 from .camera_worker import camera_woker
 from .notification_worker import notification_worker
 
@@ -23,7 +24,7 @@ def start_workers(
         notifier: NotificationInterface) -> ManagerControlParams:
 
     # Notifier woker
-    notif_queue = Queue()
+    notif_queue = Queue(MAX_QUEUE_SIZE * len(cameras_data))
     notif_thread = notification_worker(notifier, notif_queue)
 
     # Camera wokers

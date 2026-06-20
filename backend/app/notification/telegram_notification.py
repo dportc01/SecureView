@@ -7,6 +7,8 @@ from app.config import telegram_token, telegram_allowed_users
 
 class TelegramNotification():
     def __init__(self) -> None:
+        if telegram_token is None:
+            raise RuntimeError("Missing telegram bot token")
         self.bot = Bot(token=telegram_token)
         self.logger = get_notification_logger()
 
