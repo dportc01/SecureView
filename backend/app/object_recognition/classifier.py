@@ -1,4 +1,4 @@
-from app.camera.camera_interface import Frame
+from app.camera.frame import Frame
 from dataclasses import dataclass
 from pathlib import Path
 import cv2
@@ -6,7 +6,7 @@ import cv2
 
 @dataclass
 class Detection:
-    class_id: int
+    class_name: str
     box: tuple[int, int, int, int]
 
 
@@ -62,8 +62,9 @@ class Clasiffier():
                 y1 = int(detection[4] * height)
                 x2 = int(detection[5] * width)
                 y2 = int(detection[6] * height)
+                class_name = self.class_names[int(class_id)-1]
                 detections.append(Detection(
-                    class_id=class_id,
+                    class_name=class_name,
                     box=(x1, y1, x2, y2),
                 ))
 
@@ -72,7 +73,6 @@ class Clasiffier():
     def draw(self, frame: Frame, detections: list[Detection]):
         for detect in detections:
             x1, y1, x2, y2 = detect.box
-            class_name = self.class_names[int(detect.class_id)-1]
 
             cv2.rectangle(
                     frame.data,
@@ -83,7 +83,7 @@ class Clasiffier():
                 )
             cv2.putText(
                 frame.data,
-                class_name,
+                detect.class_name,
                 (x1, y1 - 5),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 1,

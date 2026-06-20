@@ -2,7 +2,7 @@ from multiprocessing import Queue
 from queue import Empty
 from .messages import Command, Action
 from app.discovery import CameraData
-from app.config import MAX_QUEUE_SIZE
+from app.config import MAX_QUEUE_SIZE, MAX_FRAME_QUEUE_SIZE
 
 
 class InvalidQueueIndexError(Exception):
@@ -16,7 +16,7 @@ class MutiprocessingBus:
             for cam in cameras_data
         }
         self.frames_queues = {
-            cam["id"]: Queue(MAX_QUEUE_SIZE)
+            cam["id"]: Queue(MAX_FRAME_QUEUE_SIZE)
             for cam in cameras_data
         }
         self.res_queue = Queue()

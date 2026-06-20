@@ -1,5 +1,5 @@
 from app.object_recognition.classifier import Clasiffier
-from app.camera.camera_interface import Frame
+from app.camera.frame import Frame
 from pathlib import Path
 import cv2
 
@@ -21,5 +21,5 @@ def test_classifier():
     ))
 
     assert len(detections) == 2
-    assert detections[1].class_id == 1
-    assert detections[1].class_id == 1
+    assert detections[1].class_name == 'person'
+    assert detections[1].class_name == 'person'

@@ -2,7 +2,7 @@ import cv2
 import platform
 from typing import Iterable
 from app.logging.loggers import get_camera_logger
-from .camera_interface import Frame
+from .frame import Frame
 
 
 class LocalCamera:

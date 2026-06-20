@@ -1,16 +1,22 @@
 import logging
+import time
+from queue import Queue
+from app.config import NOTIF_COOLDOWN
 from app.discovery import CameraData
 from app.camera.factory import build_camera
+from app.camera.frame import Frame
 from app.messaging import BusInterface, Action
+from app.notification import Command as notif_cmd, Type as notif_type
 from app.object_recognition.classifier import Clasiffier
 
 
 # TODO: If camera is alredy stopped change the respond message
-def camera_woker(camera_data: CameraData, bus: BusInterface):
+def camera_woker(camera_data: CameraData, bus: BusInterface, notif_queue: Queue):
 
     camera = build_camera(camera_data)
     classifier = Clasiffier()
     alive = True
+    last_notif_time: float = 0.0
 
     try:
         while alive:
@@ -20,11 +26,16 @@ def camera_woker(camera_data: CameraData, bus: BusInterface):
                 bus.respond(f"Starting recording on camera: {camera_data['id']}")
                 frame_stream = camera.start_capture()
                 for frame in frame_stream:
-                    detections = classifier.classify(frame)
-                    classifier.draw(frame, detections)
+                    last_notif_time = _process_frame(
+                        bus,
+                        frame,
+                        classifier,
+                        notif_queue,
+                        camera_data['id'],
+                        last_notif_time
+                    )
 
-                    bus.write_frame(camera_data['id'], frame.to_bytes())
-
+                    # Breack loop check
                     order = bus.cam_recv(camera_data['id'])
                     if order == Action.STOP or order == Action.TERMINATE:
                         break
@@ -42,3 +53,42 @@ def camera_woker(camera_data: CameraData, bus: BusInterface):
     finally:
         camera.stop_capture()
         bus.close()
+
+
+def _process_frame(
+    bus: BusInterface,
+    frame: Frame,
+    classifier: Clasiffier,
+    notif_queue: Queue,
+    camera_id: int,
+    last_notif_time: float
+) -> float:
+
+    now = time.time()
+
+    # Object detection
+    detections = classifier.classify(frame)
+    classifier.draw(frame, detections)
+
+    # JPG img encoding
+    img_frame = frame.to_bytes()
+
+    # Notification if person detected
+    try:
+        if detections and (now - last_notif_time >= NOTIF_COOLDOWN):
+            for detect in detections:
+                notif_queue.put_nowait(
+                    notif_cmd(
+                        notif_type.IMAGE,
+                        f"{detect} detected on camera: {camera_id}",
+                        img_frame
+                    )
+                )
+            last_notif_time = now
+    except Exception:
+        logging.error("Couldn't put notification on queue")
+
+    # Sending to Flask server
+    bus.write_frame(camera_id, img_frame)
+
+    return last_notif_time

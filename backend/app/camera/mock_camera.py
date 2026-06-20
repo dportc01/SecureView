@@ -1,5 +1,5 @@
 from typing import Iterable
-from .camera_interface import Frame
+from .frame import Frame
 import time
 import numpy as np
 
