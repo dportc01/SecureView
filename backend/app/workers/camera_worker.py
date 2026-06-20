@@ -80,7 +80,7 @@ def _process_frame(
                 notif_queue.put_nowait(
                     notif_cmd(
                         notif_type.IMAGE,
-                        f"{detect} detected on camera: {camera_id}",
+                        f"{detect.class_name} detected on camera: {camera_id}",
                         img_frame
                     )
                 )
