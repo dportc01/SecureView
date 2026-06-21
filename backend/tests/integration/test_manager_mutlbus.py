@@ -109,6 +109,8 @@ def terminate_workers(control_params: ManagerControlParams, bus: BusInterface):
     for p in control_params.camera_processes:
         assert not p.is_alive()
 
+    assert not control_params.notif_thread.is_alive()
+
     aux_procc.join()
 
 

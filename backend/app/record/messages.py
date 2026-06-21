@@ -1,12 +1,16 @@
 from dataclasses import dataclass
 from enum import Enum
+import numpy as np
 
 
 @dataclass
 class Command:
     type: Type
-    frame: bytes
+    frame: np.ndarray | None
 
 
 class Type(str, Enum):
+    START = "START"
+    STOP = "STOP"
     FRAME = "FRAME"
+    TERMINATE = "TERMINATE"  # Only meant to be called by manager

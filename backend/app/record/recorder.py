@@ -19,5 +19,5 @@ class Recorder():
     def insert_frame(self, frame: np.ndarray) -> None:
         self.out.write(frame)
 
-    def stop_record(self, frame: np.ndarray) -> None:
+    def stop_record(self) -> None:
         self.out.release()
