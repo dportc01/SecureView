@@ -1,5 +1,5 @@
 from multiprocessing import Queue
-from queue import Empty
+from queue import Empty, Full
 from .messages import Command, Action
 from app.discovery import CameraData
 from app.config import MAX_QUEUE_SIZE, MAX_FRAME_QUEUE_SIZE
@@ -45,14 +45,20 @@ class MutiprocessingBus:
 
     def write_frame(self, id: int, frame: bytes) -> None:
         queue = self._get_frames_queue(id)
-        # If full drop oldest frame
-        if queue.full():
+
+        try:
+            queue.put_nowait(frame)
+        except Full:
+            # If full try to drop oldest Frame
             try:
-                queue.get()
+                queue.get_nowait()
             except Empty:
                 pass
-
-        queue.put(frame)
+            # Retry to put, if still drop current frame
+            try:
+                queue.put_nowait(frame)
+            except Full:
+                pass
 
     def read_frame(self, id: int) -> bytes | None:
         queue = self._get_frames_queue(id)
