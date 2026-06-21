@@ -1,5 +1,5 @@
 from multiprocessing import Queue
-from record import Recorder, Command, Type
+from app.record import Recorder, Command, Type
 from app.logging.loggers import get_record_logger
 
 
@@ -11,7 +11,7 @@ def record_woker(recoder: Recorder, queue: Queue, id: int):
         order: Command = queue.get()  # Process should stay dormant when no recording is happening
         if order.type == Type.START:
             while order.type != Type.STOP and order.type != Type.TERMINATE:
-                recoder.start_record()
+                recoder.start_record(id)
                 logger.info("Started recording")
 
                 order = queue.get()
@@ -23,8 +23,10 @@ def record_woker(recoder: Recorder, queue: Queue, id: int):
                         recoder.insert_frame(order.frame)
 
             recoder.stop_record()
+            logger.info("Stopped recording")
 
         if order.type == Type.TERMINATE:
             alive = False
+            logger.info("Terminating recorder")
 
     return

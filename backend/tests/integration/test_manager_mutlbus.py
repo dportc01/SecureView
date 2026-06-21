@@ -2,6 +2,7 @@
 
 import time
 import logging
+from tests.integration.recorder_mock import RecorderMock
 from multiprocessing import Process
 from app.workers import start_workers, wait_and_terminate_workeres, ManagerControlParams
 from app.messaging import BusInterface, MutiprocessingBus
@@ -16,8 +17,9 @@ def test_manager_star_terminate_cycle():
 
     bus = MutiprocessingBus(cameras_data)
     notifier = MockNotification()
+    recorder = RecorderMock()
 
-    control_params = start_workers(cameras_data, bus, notifier)
+    control_params = start_workers(cameras_data, bus, notifier, recorder)
 
     assert len(control_params.camera_processes) == 1
     for p in control_params.camera_processes:
@@ -34,8 +36,9 @@ def test_empty_data_manager():
 
     bus = MutiprocessingBus(cameras_data)
     notifier = MockNotification()
+    recorder = RecorderMock()
 
-    control_params = start_workers(cameras_data, bus, notifier)
+    control_params = start_workers(cameras_data, bus, notifier, recorder)
 
     assert len(control_params.camera_processes) == 0
 
@@ -46,8 +49,9 @@ def test_camera_worker_start():
 
     bus = MutiprocessingBus(cameras_data)
     notifier = MockNotification()
+    recorder = RecorderMock()
 
-    control_params = start_workers(cameras_data, bus, notifier)
+    control_params = start_workers(cameras_data, bus, notifier, recorder)
 
     bus.send_start(0)
     # Warm-up time
@@ -68,8 +72,9 @@ def test_camera_worker_stop():
 
     bus = MutiprocessingBus(cameras_data)
     notifier = MockNotification()
+    recorder = RecorderMock()
 
-    control_params = start_workers(cameras_data, bus, notifier)
+    control_params = start_workers(cameras_data, bus, notifier, recorder)
 
     bus.send_start(0)
 
@@ -110,6 +115,9 @@ def terminate_workers(control_params: ManagerControlParams, bus: BusInterface):
         assert not p.is_alive()
 
     assert not control_params.notif_thread.is_alive()
+
+    for p in control_params.record_processes:
+        assert not p.is_alive()
 
     aux_procc.join()
 
