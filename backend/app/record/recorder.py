@@ -9,7 +9,7 @@ class Recorder():
         self.fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # type: ignore[attr-defined]
         self.out: cv2.VideoWriter
 
-    def start_record(self, camera_id: int):
+    def start_record(self, camera_id: int) -> None:
         filename = f"camera{camera_id}_{time.time()}{self.format}"
         self.out = cv2.VideoWriter(filename, self.fourcc, 30, (960, 540))
 

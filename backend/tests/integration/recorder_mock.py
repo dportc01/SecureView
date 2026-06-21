@@ -3,11 +3,17 @@ from app.record import Recorder
 
 
 class RecorderMock(Recorder):
-    def start_record(self):
-        pass
+    def __init__(self) -> None:
+        self.recording = False
+        self.frame_recieved = False
+
+    def start_record(self, id: int) -> None:
+        print("Started recording")
+        self.recording = True
+        print(self.recording)
 
     def insert_frame(self, frame: np.ndarray) -> None:
-        pass
+        self.frame_recieved = True
 
     def stop_record(self) -> None:
-        pass
+        self.recording = False
