@@ -1,7 +1,8 @@
 import logging
 import time
+from datetime import datetime, time as dt_time
 from queue import Queue
-from app.config import NOTIF_COOLDOWN
+from app.config import NOTIF_COOLDOWN, RECORD_TIMES, RecordTime
 from app.discovery import CameraData
 from app.camera.factory import build_camera
 from app.camera.frame import Frame
@@ -17,6 +18,7 @@ def camera_woker(camera_data: CameraData, bus: BusInterface, notif_queue: Queue)
     classifier = Clasiffier()
     alive = True
     last_notif_time: float = 0.0
+    record_times = RECORD_TIMES.get(camera_data['id'])
 
     try:
         while alive:
@@ -32,7 +34,8 @@ def camera_woker(camera_data: CameraData, bus: BusInterface, notif_queue: Queue)
                         classifier,
                         notif_queue,
                         camera_data['id'],
-                        last_notif_time
+                        last_notif_time,
+                        record_times
                     )
 
                     # Breack loop check
@@ -61,14 +64,21 @@ def _process_frame(
     classifier: Clasiffier,
     notif_queue: Queue,
     camera_id: int,
-    last_notif_time: float
+    last_notif_time: float,
+    record_times: RecordTime | None,
 ) -> float:
 
     now = time.time()
+    now_time = datetime.now().time()
 
     # Object detection
     detections = classifier.classify(frame)
     classifier.draw(frame, detections)
+
+    # Record frame
+    if record_times:
+        if _is_between(now_time, record_times.start, record_times.end):
+            ...
 
     # JPG img encoding
     img_frame = frame.to_bytes()
@@ -92,3 +102,10 @@ def _process_frame(
     bus.write_frame(camera_id, img_frame)
 
     return last_notif_time
+
+
+def _is_between(now: dt_time, start: dt_time, end: dt_time):
+    if start <= end:
+        return start <= now <= end
+    else:
+        return now >= start or now <= end
