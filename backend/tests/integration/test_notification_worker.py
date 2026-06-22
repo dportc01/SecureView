@@ -6,7 +6,7 @@ from multiprocessing import Queue
 
 
 @pytest.fixture
-def pre_build():
+def set_up_tests():
     mock = MockNotification()
     queue = Queue()
     thread = notification_worker(mock, queue)
@@ -17,28 +17,28 @@ def pre_build():
     thread.join()
 
 
-def test_send_msg(pre_build):
-    mock, queue = pre_build
+def test_send_msg(set_up_tests):
+    mock, queue = set_up_tests
     queue.put(Command(Type.MESSAGE, "msg", None))
     time.sleep(0.1)
     assert mock.msg_called is True
 
 
-def test_send_img(pre_build):
-    mock, queue = pre_build
+def test_send_img(set_up_tests):
+    mock, queue = set_up_tests
     queue.put(Command(Type.IMAGE, "msg", b"bytes"))
     time.sleep(0.1)
     assert mock.img_called is True
 
 
-def test_none_msg(pre_build):
-    mock, queue = pre_build
+def test_none_msg(set_up_tests):
+    mock, queue = set_up_tests
     queue.put(Command(Type.MESSAGE, None, None))
     assert mock.msg_called is False
 
 
-def test_none_img(pre_build):
-    mock, queue = pre_build
+def test_none_img(set_up_tests):
+    mock, queue = set_up_tests
     queue.put(Command(Type.IMAGE, "msg", None))
     assert mock.img_called is False
 

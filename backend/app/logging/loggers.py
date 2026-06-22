@@ -26,7 +26,7 @@ def get_notification_logger():
 
 
 def get_record_logger(device_index: int):
-    logger = logging.getLogger(f"RECORD{device_index}")
+    logger = logging.getLogger(f"RECORD:{device_index}")
     logger.setLevel(logging.INFO)
     logger.propagate = False
 

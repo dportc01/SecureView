@@ -25,7 +25,7 @@ telegram_allowed_users = [x.strip() for x in raw.split(",") if x.strip()]
 
 
 # Open SecureView/data/config.json
-base_dir = Path(__file__).resolve().parents[2]
+base_dir = Path(__file__).resolve().parents[3]
 config_json_path = base_dir / "data" / "config.json"
 
 if not config_json_path.exists():

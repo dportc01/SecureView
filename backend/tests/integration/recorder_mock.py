@@ -1,19 +1,15 @@
-import numpy as np
 from app.record import Recorder
 
 
 class RecorderMock(Recorder):
-    def __init__(self) -> None:
-        self.recording = False
-        self.frame_recieved = False
+    def __init__(self, state):
+        self.state = state
 
-    def start_record(self, id: int) -> None:
-        print("Started recording")
-        self.recording = True
-        print(self.recording)
+    def start_record(self, id):
+        self.state["recording"] = True
 
-    def insert_frame(self, frame: np.ndarray) -> None:
-        self.frame_recieved = True
+    def insert_frame(self, frame):
+        self.state["frame_received"] = True
 
-    def stop_record(self) -> None:
-        self.recording = False
+    def stop_record(self):
+        self.state["recording"] = False

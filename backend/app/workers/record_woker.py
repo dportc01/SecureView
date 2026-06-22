@@ -10,10 +10,9 @@ def record_woker(recoder: Recorder, queue: Queue, id: int):
     while alive:
         order: Command = queue.get()  # Process should stay dormant when no recording is happening
         if order.type == Type.START:
+            recoder.start_record(id)
+            logger.info("Started recording")
             while order.type != Type.STOP and order.type != Type.TERMINATE:
-                recoder.start_record(id)
-                logger.info("Started recording")
-
                 order = queue.get()
 
                 if order.type == Type.FRAME:

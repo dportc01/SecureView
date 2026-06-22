@@ -16,29 +16,42 @@ from app.record import (
     Type as RecType,
     Command as RecCommand
 )
-from app.config import MAX_QUEUE_SIZE
 from .camera_worker import camera_woker
 from .notification_worker import notification_worker
 from .record_woker import record_woker
 
 
 @dataclass
-class ManagerControlParams:
+class ManagerProcesses:
     camera_processes: list[Process]
     notif_thread: Thread
-    notif_queue: Queue
     record_processes: list[Process]
-    record_queue: list[Queue]
 
 
 def start_workers(
         cameras_data: list[CameraData],
         bus: BusInterface,
         notifier: NotificationInterface,
-        recorder: Recorder) -> ManagerControlParams:
+        notif_queue: Queue,
+        recorder: Recorder,
+        record_queue: list[Queue]
+) -> ManagerProcesses:
+    """
+    Start worker processes for handling camera streams, notifications and recording.
+
+    Args:
+        cameras_data (list[CameraData]): List of camera configuration data.
+        bus (BusInterface): Communication bus for camera to server messaging.
+        notifier (NotificationInterface): Service used to send notifications.
+        notif_queue (Queue): Queue used to dispatch notification events.
+        recorder (Recorder): Recorder instance handling video storage.
+        record_queue (list[Queue]): List of queues per camera for recording tasks.
+
+    Returns:
+        ManagerProcesses: Processes containing the workers started.
+    """
 
     # Notifier woker
-    notif_queue = Queue(MAX_QUEUE_SIZE * len(cameras_data))
     notif_thread = notification_worker(notifier, notif_queue)
 
     # Camera wokers
@@ -47,37 +60,40 @@ def start_workers(
 
     camera_processes = []
     record_processes = []
-    record_queue = []
 
     for i in range(len(cameras_data)):
-
-        queue_rec = Queue()
-        record_queue.append(queue_rec)
-        p_rec = Process(target=record_woker, args=(recorder, queue_rec, cameras_data[i]["id"]))
+        p_rec = Process(
+            target=record_woker,
+            args=(recorder, record_queue[i], cameras_data[0]["id"])
+        )
         p_rec.start()
         record_processes.append(p_rec)
 
-        p_cam = Process(target=camera_woker, args=(cameras_data[i], bus, notif_queue))
+        p_cam = Process(
+            target=camera_woker,
+            args=(cameras_data[i], bus, notif_queue, record_queue[i])
+        )
         p_cam.start()
         camera_processes.append(p_cam)
 
-    return ManagerControlParams(
+    return ManagerProcesses(
         camera_processes=camera_processes,
         notif_thread=notif_thread,
-        notif_queue=notif_queue,
         record_processes=record_processes,
-        record_queue=record_queue,
     )
 
 
-def wait_and_terminate_workeres(control_params: ManagerControlParams):
+def wait_and_terminate_workeres(
+        control_params: ManagerProcesses,
+        notif_queue: Queue,
+        record_queue: list[Queue]):
 
     for p in control_params.camera_processes:
         p.join()
 
-    _stop_notification_thread(control_params.notif_thread, control_params.notif_queue)
+    _stop_notification_thread(control_params.notif_thread, notif_queue)
 
-    _stop_record_process(control_params.record_processes, control_params.record_queue)
+    _stop_record_process(control_params.record_processes, record_queue)
 
     # Force close everything (thread closes on return)
     for p in control_params.camera_processes:

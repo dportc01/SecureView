@@ -9,7 +9,7 @@ class InvalidQueueIndexError(Exception):
     pass
 
 
-class MutiprocessingBus:
+class MultiprocessingBus:
     def __init__(self, cameras_data: list[CameraData]) -> None:
         self.queues = {
             cam["id"]: Queue(MAX_QUEUE_SIZE)

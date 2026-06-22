@@ -22,4 +22,3 @@ __all__ = [
     "RECORD_TIMES",
     "RecordTime"
 ]
-print("Loading configuration")

@@ -1,24 +1,38 @@
 import logging
 import time
+import numpy as np
 from datetime import datetime, time as dt_time
-from queue import Queue
+from queue import Queue, Full
 from app.config import NOTIF_COOLDOWN, RECORD_TIMES, RecordTime
 from app.discovery import CameraData
 from app.camera.factory import build_camera
 from app.camera.frame import Frame
 from app.messaging import BusInterface, Action
-from app.notification import Command as notif_cmd, Type as notif_type
+from app.notification import (
+    Command as NotifCmd,
+    Type as NotifType
+)
+from app.record import (
+    Command as RecCmd,
+    Type as RecType
+)
 from app.object_recognition.classifier import Clasiffier
 
 
 # TODO: If camera is alredy stopped change the respond message
-def camera_woker(camera_data: CameraData, bus: BusInterface, notif_queue: Queue):
+def camera_woker(
+    camera_data: CameraData,
+    bus: BusInterface,
+    notif_queue: Queue,
+    record_queue: Queue,
+):
 
     camera = build_camera(camera_data)
     classifier = Clasiffier()
     alive = True
     last_notif_time: float = 0.0
     record_times = RECORD_TIMES.get(camera_data['id'])
+    is_recording = False
 
     try:
         while alive:
@@ -28,14 +42,16 @@ def camera_woker(camera_data: CameraData, bus: BusInterface, notif_queue: Queue)
                 bus.respond(f"Starting recording on camera: {camera_data['id']}")
                 frame_stream = camera.start_capture()
                 for frame in frame_stream:
-                    last_notif_time = _process_frame(
-                        bus,
-                        frame,
-                        classifier,
-                        notif_queue,
-                        camera_data['id'],
-                        last_notif_time,
-                        record_times
+                    last_notif_time, is_recording = _process_frame(
+                        camera_id=camera_data['id'],
+                        bus=bus,
+                        frame=frame,
+                        classifier=classifier,
+                        notif_queue=notif_queue,
+                        last_notif_time=last_notif_time,
+                        record_queue=record_queue,
+                        record_times=record_times,
+                        is_recording=is_recording,
                     )
 
                     # Breack loop check
@@ -59,17 +75,19 @@ def camera_woker(camera_data: CameraData, bus: BusInterface, notif_queue: Queue)
 
 
 def _process_frame(
+    camera_id: int,
     bus: BusInterface,
     frame: Frame,
     classifier: Clasiffier,
     notif_queue: Queue,
-    camera_id: int,
     last_notif_time: float,
+    record_queue: Queue,
     record_times: RecordTime | None,
-) -> float:
+    is_recording: bool
+) -> tuple[float, bool]:
 
     now = time.time()
-    now_time = datetime.now().time()
+    now_dt = datetime.now().time()
 
     # Object detection
     detections = classifier.classify(frame)
@@ -77,8 +95,14 @@ def _process_frame(
 
     # Record frame
     if record_times:
-        if _is_between(now_time, record_times.start, record_times.end):
-            ...
+        is_recording = _record_frame(
+            now=now_dt,
+            start=record_times.start,
+            end=record_times.end,
+            record_queue=record_queue,
+            is_recording=is_recording,
+            frame=frame.data
+        )
 
     # JPG img encoding
     img_frame = frame.to_bytes()
@@ -88,8 +112,8 @@ def _process_frame(
         if detections and (now - last_notif_time >= NOTIF_COOLDOWN):
             for detect in detections:
                 notif_queue.put_nowait(
-                    notif_cmd(
-                        notif_type.IMAGE,
+                    NotifCmd(
+                        NotifType.IMAGE,
                         f"{detect.class_name} detected on camera: {camera_id}",
                         img_frame
                     )
@@ -101,7 +125,32 @@ def _process_frame(
     # Sending to Flask server
     bus.write_frame(camera_id, img_frame)
 
-    return last_notif_time
+    return last_notif_time, is_recording
+
+
+def _record_frame(
+        now: dt_time,
+        start: dt_time,
+        end: dt_time,
+        record_queue: Queue,
+        is_recording: bool,
+        frame: np.ndarray
+) -> bool:
+
+    if _is_between(now, start, end):
+        if not is_recording:
+            is_recording = True
+            record_queue.put(RecCmd(RecType.START, None))
+
+        try:
+            record_queue.put_nowait(RecCmd(RecType.FRAME, frame))
+        except Full:
+            pass  # If full drop frame
+    else:
+        if is_recording:
+            is_recording = False
+
+    return is_recording
 
 
 def _is_between(now: dt_time, start: dt_time, end: dt_time):

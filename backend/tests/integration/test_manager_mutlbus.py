@@ -2,24 +2,47 @@
 
 import time
 import logging
+import pytest
 from tests.integration.recorder_mock import RecorderMock
-from multiprocessing import Process
-from app.workers import start_workers, wait_and_terminate_workeres, ManagerControlParams
-from app.messaging import BusInterface, MutiprocessingBus
+from multiprocessing import Process, Queue
+from app.workers import start_workers, wait_and_terminate_workeres, ManagerProcesses
+from app.messaging import BusInterface, MultiprocessingBus
 from app.notification import MockNotification
 from app.discovery import CameraType, CameraData
 from app.config import MAX_FRAME_QUEUE_SIZE
 
 
-def test_manager_star_terminate_cycle():
-
+@pytest.fixture(scope="session")
+def set_up_tests():
     cameras_data: list[CameraData] = [{"type": CameraType.MOCK, "id": 0}]
-
-    bus = MutiprocessingBus(cameras_data)
+    bus = MultiprocessingBus(cameras_data)
     notifier = MockNotification()
-    recorder = RecorderMock()
+    notif_queue = Queue()
+    recorder = RecorderMock({
+        "recording": False,
+        "frame_received": False
+    })
+    record_queue = []
+    for _ in range(len(cameras_data)):
+        record_queue.append(Queue())
 
-    control_params = start_workers(cameras_data, bus, notifier, recorder)
+    control_params = start_workers(
+        cameras_data=cameras_data,
+        bus=bus,
+        notifier=notifier,
+        notif_queue=notif_queue,
+        recorder=recorder,
+        record_queue=record_queue
+    )
+
+    yield bus, control_params
+
+    terminate_workers(control_params, bus, notif_queue, record_queue)
+
+
+def test_manager_start_terminate_cycle(set_up_tests):
+
+    _, control_params = set_up_tests
 
     assert len(control_params.camera_processes) == 1
     for p in control_params.camera_processes:
@@ -27,31 +50,29 @@ def test_manager_star_terminate_cycle():
 
     assert control_params.notif_thread.is_alive()
 
-    terminate_workers(control_params, bus)
-
 
 def test_empty_data_manager():
 
     cameras_data: list[CameraData] = []
-
-    bus = MutiprocessingBus(cameras_data)
+    bus = MultiprocessingBus(cameras_data)
     notifier = MockNotification()
-    recorder = RecorderMock()
+    notif_queue = Queue()
+    recorder = RecorderMock({
+        "recording": False,
+        "frame_received": False
+    })
+    record_queue = []
+    for _ in range(len(cameras_data)):
+        record_queue.append(Queue())
 
-    control_params = start_workers(cameras_data, bus, notifier, recorder)
+    control_params = start_workers(cameras_data, bus, notifier, notif_queue, recorder, record_queue)
 
     assert len(control_params.camera_processes) == 0
 
 
-def test_camera_worker_start():
+def test_camera_worker_start(set_up_tests):
 
-    cameras_data: list[CameraData] = [{"id": 0, "type": CameraType.MOCK}]
-
-    bus = MutiprocessingBus(cameras_data)
-    notifier = MockNotification()
-    recorder = RecorderMock()
-
-    control_params = start_workers(cameras_data, bus, notifier, recorder)
+    bus, _ = set_up_tests
 
     bus.send_start(0)
     # Warm-up time
@@ -61,20 +82,12 @@ def test_camera_worker_start():
     time.sleep(0.1)
     frame2 = bus.read_frame(0)
 
-    terminate_workers(control_params, bus)
-
     assert frame1 != frame2
 
 
-def test_camera_worker_stop():
+def test_camera_worker_stop(set_up_tests):
 
-    cameras_data: list[CameraData] = [{"id": 0, "type": CameraType.MOCK}]
-
-    bus = MutiprocessingBus(cameras_data)
-    notifier = MockNotification()
-    recorder = RecorderMock()
-
-    control_params = start_workers(cameras_data, bus, notifier, recorder)
+    bus, _ = set_up_tests
 
     bus.send_start(0)
 
@@ -99,17 +112,20 @@ def test_camera_worker_stop():
             break
 
     frame = bus.read_frame(0)
-    terminate_workers(control_params, bus)
 
     assert frame is None
 
 
-def terminate_workers(control_params: ManagerControlParams, bus: BusInterface):
+def terminate_workers(
+        control_params: ManagerProcesses,
+        bus: BusInterface,
+        notif_queue: Queue, record_queue: list[Queue]
+):
     aux_procc = Process(target=simulate_external_terminate, args=(bus,))
     aux_procc.start()
 
     logging.warning("Waiting for camera termination:")
-    wait_and_terminate_workeres(control_params)
+    wait_and_terminate_workeres(control_params, notif_queue, record_queue)
 
     for p in control_params.camera_processes:
         assert not p.is_alive()
