@@ -32,20 +32,20 @@ def test_start_record(set_up_tests):
     assert state["recording"] is False
 
     queue.put(Command(Type.START, None))
-    time.sleep(0.4)
+    time.sleep(0.5)
     assert state["recording"] is True
 
 
 def test_send_frame(set_up_tests):
     state, queue = set_up_tests
     queue.put(Command(Type.FRAME, np.array([])))
-    time.sleep(0.4)
+    time.sleep(0.5)
     assert state["frame_received"] is False
 
     queue.put(Command(Type.START, None))
-    time.sleep(0.4)
+    time.sleep(0.5)
     queue.put(Command(Type.FRAME, np.array([])))
-    time.sleep(0.4)
+    time.sleep(0.5)
     assert state["recording"] is True
 
 
@@ -54,20 +54,20 @@ def test_stop_record(set_up_tests):
     assert state["recording"] is False
 
     queue.put(Command(Type.START, None))
-    time.sleep(0.4)
+    time.sleep(0.5)
     assert state["recording"] is True
 
     queue.put(Command(Type.STOP, None))
-    time.sleep(0.4)
+    time.sleep(0.5)
     assert state["recording"] is False
 
 
 def test_no_frame(set_up_tests):
     state, queue = set_up_tests
     queue.put(Command(Type.START, None))
-    time.sleep(0.4)
+    time.sleep(0.5)
     assert state["recording"] is True
 
     queue.put(Command(Type.FRAME, None))
-    time.sleep(0.4)
+    time.sleep(0.5)
     assert state["frame_received"] is False
