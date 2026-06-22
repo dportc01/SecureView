@@ -1,11 +1,16 @@
 from .server import create_app
 from .discovery import discover_cameras
-from .workers import start_workers
+from .workers import start_workers, wait_and_terminate_workeres
 from .messaging import MultiprocessingBus
 from .notification import TelegramNotification
 from .record import Recorder
 from .config import MAX_QUEUE_SIZE, MAX_FRAME_QUEUE_SIZE
-from multiprocessing import Queue
+from multiprocessing import Queue, Process
+
+
+def run_app(bus):
+    app = create_app(bus)
+    app.run(host="0.0.0.0", port=5000)
 
 
 if __name__ == "__main__":
@@ -20,7 +25,7 @@ if __name__ == "__main__":
     for _ in range(len(cameras_data)):
         recorder_queue.append(Queue(MAX_FRAME_QUEUE_SIZE))
 
-    start_workers(
+    processes = start_workers(
         cameras_data=cameras_data,
         bus=bus,
         notifier=notifier,
@@ -29,5 +34,10 @@ if __name__ == "__main__":
         record_queue=recorder_queue
     )
 
-    app = create_app(bus)
-    app.run(host="0.0.0.0", port=5000)
+    app_process = Process(target=run_app, args=(bus,))
+    app_process.start()
+
+    wait_and_terminate_workeres(processes, notif_queue, recorder_queue)
+
+    app_process.terminate()
+    app_process.join()

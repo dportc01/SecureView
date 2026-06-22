@@ -124,7 +124,7 @@ def _stop_record_process(processes: list[Process], queue: list[Queue]):
     for q in queue:
         while True:
             try:
-                q.put(RecCommand(RecType.TERMINATE, None), timeout=1)
+                q.put(RecCommand(RecType.TERMINATE, None))
                 break
             except Full:
                 pass  # retry
