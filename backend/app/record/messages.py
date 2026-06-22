@@ -10,7 +10,6 @@ class Command:
 
 
 class Type(str, Enum):
-    START = "START"
     STOP = "STOP"
     FRAME = "FRAME"
     TERMINATE = "TERMINATE"  # Only meant to be called by manager

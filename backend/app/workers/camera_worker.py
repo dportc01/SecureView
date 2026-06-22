@@ -62,6 +62,7 @@ def camera_woker(
             if (order == Action.STOP):
                 bus.respond(f"Stoping recording on camera: {camera_data['id']}")
                 camera.stop_capture()
+                record_queue.put(RecCmd(RecType.STOP, None))
 
             if (order == Action.TERMINATE):
                 bus.respond(f"Terminating camera: {camera_data['id']}")
@@ -140,7 +141,6 @@ def _record_frame(
     if _is_between(now, start, end):
         if not is_recording:
             is_recording = True
-            record_queue.put(RecCmd(RecType.START, None))
 
         try:
             record_queue.put_nowait(RecCmd(RecType.FRAME, frame))
@@ -148,6 +148,7 @@ def _record_frame(
             pass  # If full drop frame
     else:
         if is_recording:
+            record_queue.put(RecCmd(RecType.STOP, None))
             is_recording = False
 
     return is_recording

@@ -9,9 +9,11 @@ class Recorder():
         self.fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # type: ignore[attr-defined]
         self.out: cv2.VideoWriter
 
-    def start_record(self, camera_id: int) -> None:
+    def start_record(self, camera_id: int, height: int, width: int) -> None:
         filename = f"camera{camera_id}_{time.time()}{self.format}"
-        self.out = cv2.VideoWriter(filename, self.fourcc, 30, (960, 540))
+        self.out = cv2.VideoWriter(filename, self.fourcc, 30, (width, height))
+        if not self.out.isOpened():
+            raise RuntimeError("VideoWriter failed to open")
 
     def insert_frame(self, frame: np.ndarray) -> None:
         self.out.write(frame)

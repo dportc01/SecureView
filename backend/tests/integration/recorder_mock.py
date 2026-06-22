@@ -5,11 +5,11 @@ class RecorderMock(Recorder):
     def __init__(self, state):
         self.state = state
 
-    def start_record(self, id):
-        self.state["recording"] = True
+    def start_record(self, camera_id: int, height: int, width: int) -> None:
+        ...
 
     def insert_frame(self, frame):
-        self.state["frame_received"] = True
+        self.state["recording"] = True
 
     def stop_record(self):
         self.state["recording"] = False

@@ -34,7 +34,6 @@ if not config_json_path.exists():
 with open(config_json_path) as f:
     data = json.load(f)
 
-
 # Notfication
 SECOND = 1
 MINUTE = 60 * SECOND
@@ -55,5 +54,5 @@ if "cameras" in data:
     for cam in data["cameras"]:
         RECORD_TIMES[cam["id"]] = RecordTime(
             start=parse_time(cam["start_record"]),
-            end=parse_time(cam["start_record"]),
+            end=parse_time(cam["end_record"]),
         )
