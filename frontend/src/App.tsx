@@ -1,35 +1,17 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "@/Home";
+import Storage from "@/Storage";
+import Settings from "@/Settings";
 
-import { useEffect, useState } from "react";
-
-export function App() {
+function App() {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main>
-        <SidebarTrigger />
-        <TimeDisplay />
-      </main>
-    </SidebarProvider>
-  );
-}
-
-function TimeDisplay() {
-  const [time, setTime] = useState<string>(new Date().toLocaleString());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date().toLocaleString());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div>
-      <h2 className="text-2xl">Hora actual: {time}</h2>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/storage" element={<Storage />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
