@@ -10,6 +10,6 @@ def test_discover_cameras():
         pytest.skip("No cameras available in GitHub Actions")
 
     result = discover_cameras()
-    assert len(result) == 1
+    assert len(result) >= 1
 
     assert result == [{"id": 0, "type": CameraType.LOCAL}]

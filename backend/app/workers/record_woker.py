@@ -14,8 +14,12 @@ def record_woker(recoder: Recorder, queue: Queue, id: int):
                 logger.error("Need initial frame to determine size before recording")
             else:
                 h, w = order.frame.shape[:2]
-                recoder.start_record(camera_id=id, height=h, width=w)
-                logger.info("Started recording")
+                try:
+                    recoder.start_record(camera_id=id, height=h, width=w)
+                    logger.info("Started recording")
+                except RuntimeError as e:
+                    logger.exception(e)
+                    order.frame = None  # Drop fram when file hasn't opened
 
                 while order.type != Type.STOP and order.type != Type.TERMINATE:
 

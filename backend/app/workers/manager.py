@@ -64,7 +64,7 @@ def start_workers(
     for i in range(len(cameras_data)):
         p_rec = Process(
             target=record_woker,
-            args=(recorder, record_queue[i], cameras_data[0]["id"])
+            args=(recorder, record_queue[i], cameras_data[i]["id"])
         )
         p_rec.start()
         record_processes.append(p_rec)

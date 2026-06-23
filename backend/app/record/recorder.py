@@ -10,7 +10,9 @@ class Recorder():
         self.out: cv2.VideoWriter
 
     def start_record(self, camera_id: int, height: int, width: int) -> None:
-        filename = f"camera{camera_id}_{datetime.now().time()}{self.format}"
+        now = datetime.now()
+        date = now.strftime("%d.%m.%y-%H:%M:%S.%f")
+        filename = f"camera{camera_id}_{date}{self.format}"
         self.out = cv2.VideoWriter(filename, self.fourcc, 30, (width, height))
         if not self.out.isOpened():
             raise RuntimeError("VideoWriter failed to open")

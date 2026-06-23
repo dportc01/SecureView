@@ -1,4 +1,3 @@
-import logging
 import time
 import numpy as np
 from datetime import datetime, time as dt_time
@@ -17,6 +16,8 @@ from app.record import (
     Type as RecType
 )
 from app.object_recognition.classifier import Clasiffier
+from app.logging.loggers import get_camera_logger
+from logging import Logger
 
 
 # TODO: If camera is alredy stopped change the respond message
@@ -28,11 +29,12 @@ def camera_woker(
 ):
 
     camera = build_camera(camera_data)
+    logger = get_camera_logger(camera_data['id'])
     classifier = Clasiffier()
-    alive = True
     last_notif_time: float = 0.0
     record_times = RECORD_TIMES.get(camera_data['id'])
     is_recording = False
+    alive = True
 
     try:
         while alive:
@@ -44,6 +46,7 @@ def camera_woker(
                 for frame in frame_stream:
                     last_notif_time, is_recording = _process_frame(
                         camera_id=camera_data['id'],
+                        logger=logger,
                         bus=bus,
                         frame=frame,
                         classifier=classifier,
@@ -66,7 +69,7 @@ def camera_woker(
 
             if (order == Action.TERMINATE):
                 bus.respond(f"Terminating camera: {camera_data['id']}")
-                logging.info(f"Terminating camera {camera_data['id']}")
+                logger.info(f"Terminating camera {camera_data['id']}")
                 alive = False
 
         return
@@ -77,6 +80,7 @@ def camera_woker(
 
 def _process_frame(
     camera_id: int,
+    logger: Logger,
     bus: BusInterface,
     frame: Frame,
     classifier: Clasiffier,
@@ -121,7 +125,7 @@ def _process_frame(
                 )
             last_notif_time = now
     except Exception:
-        logging.error("Couldn't put notification on queue")
+        logger.error("Couldn't put notification on queue")
 
     # Sending to Flask server
     bus.write_frame(camera_id, img_frame)
