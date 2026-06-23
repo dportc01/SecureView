@@ -1,4 +1,4 @@
-.PHONY: run backend frontend backend-clean
+.PHONY: run frontend backend-dev backend-test backend-lint backend-clean
 
 run:
 	@echo "================ STARTING ALL SERVICES ================"
