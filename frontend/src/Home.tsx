@@ -3,8 +3,17 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 
 import { useEffect, useState } from "react";
+import { getCameras } from "./api/CameraClient";
+import { CamerasContainer } from "./components/app-camerasContainer";
 
 export function Home() {
+  const [cameras_ids, setCameraIds] = useState<number[]>([]);
+
+  useEffect(() => {
+    getCameras().then(setCameraIds);
+    // setCameraIds([0, 2, 4, 6]);
+  }, []);
+
   return (
     <SidebarProvider>
       <AppSidebar variant="inset" />
@@ -12,6 +21,7 @@ export function Home() {
         <SiteHeader site="Home" />
         <main className="px-5">
           <TimeDisplay />
+          <CamerasContainer ids={cameras_ids} />
         </main>
       </SidebarInset>
     </SidebarProvider>

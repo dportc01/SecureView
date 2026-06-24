@@ -8,8 +8,8 @@ from .config import MAX_QUEUE_SIZE, MAX_FRAME_QUEUE_SIZE
 from multiprocessing import Queue, Process
 
 
-def run_app(bus):
-    app = create_app(bus)
+def run_app(bus, cameras_ids):
+    app = create_app(bus, cameras_ids)
     app.run(host="0.0.0.0", port=5000)
 
 
@@ -34,7 +34,8 @@ if __name__ == "__main__":
         record_queue=recorder_queue
     )
 
-    app_process = Process(target=run_app, args=(bus,))
+    cameras_ids = [cam["id"] for cam in cameras_data]
+    app_process = Process(target=run_app, args=(bus, cameras_ids))
     app_process.start()
 
     wait_and_terminate_workeres(processes, notif_queue, recorder_queue)

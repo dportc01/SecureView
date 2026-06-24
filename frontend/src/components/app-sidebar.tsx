@@ -4,7 +4,7 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import type { SiteName, SiteRoute } from "@/sites";
+import type { SiteName, SiteRoute } from "@/types/sites";
 import { FilePlay, HouseIcon, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -39,7 +39,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="flex flex-row items-center gap-2">
+        <img
+          src="/SecureView_logo.svg"
+          alt="SecureView logo"
+          className="h-5 w-auto"
+        />
         <h1 className="text-xl font-medium">SecureView</h1>
       </SidebarHeader>
       <SidebarContent>

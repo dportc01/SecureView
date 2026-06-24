@@ -2,7 +2,7 @@
 
 run:
 	@echo "================ STARTING ALL SERVICES ================"
-	$(MAKE) -j2 backend frontend
+	$(MAKE) -j2 backend-dev frontend
 frontend:
 	cd frontend/ && npm run dev
 frontend-lint:

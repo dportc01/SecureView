@@ -6,6 +6,12 @@ def build_cameras_bp(camera_service: CameraService) -> Blueprint:
 
     bp = Blueprint("cameras", __name__)
 
+    @bp.route("/cameras/discover")
+    def discover_cameras():
+        ids = camera_service.get_disovered_cameras()
+        res = jsonify(ids)
+        return res, 200
+
     @bp.route("/cameras/<int:id>")
     def show_video(id):
         def generate_frames():

@@ -11,18 +11,22 @@ MAX_LOCAL_CAMERA_INDEX = 4
 MAX_FRAME_QUEUE_SIZE = 60
 MAX_QUEUE_SIZE = 10
 
+# Env vars
 load_dotenv()
 
 raw = os.getenv("TELEGRAM_BOT_TOKEN")
-if raw is None:
+if not raw:
     logging.error("Missing enviromental variable TELEGRAM_BOT_TOKEN")
 telegram_token = raw
 
-raw = os.getenv("TELEGRAM_ALLOWED_USERS", "")
-if raw is None:
+raw = os.getenv("TELEGRAM_ALLOWED_USERS")
+if not raw:
     logging.error("Missing enviromental variable TELEGRAM_ALLOWED_USERS")
-telegram_allowed_users = [x.strip() for x in raw.split(",") if x.strip()]
+    telegram_allowed_users = raw
+else:
+    telegram_allowed_users = [x.strip() for x in raw.split(",") if x.strip()]
 
+frontend_url = os.getenv("FRONTEND_URL", "*")
 
 # Open SecureView/data/config.json
 base_dir = Path(__file__).resolve().parents[3]
