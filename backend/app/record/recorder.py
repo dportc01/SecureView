@@ -1,6 +1,7 @@
 import cv2
 from datetime import datetime
 import numpy as np
+import os
 
 
 class Recorder():
@@ -8,12 +9,20 @@ class Recorder():
         self.format = ".mp4"
         self.fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # type: ignore[attr-defined]
         self.out: cv2.VideoWriter
+        self.output_dir = "video_records"
 
     def start_record(self, camera_id: int, height: int, width: int) -> None:
+        if not os.path.exists(self.output_dir):
+            os.makedirs(self.output_dir)
+
         now = datetime.now()
-        date = now.strftime("%d.%m.%y-%H:%M:%S.%f")
+        date = now.strftime("%d.%m.%y_%H-%M-%S.%f")
+
         filename = f"camera{camera_id}_{date}{self.format}"
-        self.out = cv2.VideoWriter(filename, self.fourcc, 30, (width, height))
+        filepath = os.path.join(self.output_dir, filename)
+
+        self.out = cv2.VideoWriter(filepath, self.fourcc, 30, (width, height))
+
         if not self.out.isOpened():
             raise RuntimeError("VideoWriter failed to open")
 
