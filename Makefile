@@ -1,10 +1,12 @@
-.PHONY: run frontend backend-dev backend-test backend-lint backend-clean
+.PHONY: run frontend frontend-lint backend-dev backend-test backend-lint backend-clean
 
 run:
 	@echo "================ STARTING ALL SERVICES ================"
 	$(MAKE) -j2 backend frontend
 frontend:
 	cd frontend/ && npm run dev
+frontend-lint:
+	cd frontend/ && npm run lint
 backend-dev:
 	cd backend/ && source .venv/bin/activate && python -m app.main
 backend-test:
