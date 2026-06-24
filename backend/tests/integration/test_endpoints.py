@@ -34,7 +34,8 @@ def client():
         record_queue=record_queue
     )
 
-    app = create_app(bus)
+    cameras_ids = [cam["id"] for cam in cameras_data]
+    app = create_app(bus, cameras_ids)
     client = app.test_client()
 
     yield client  # test run here

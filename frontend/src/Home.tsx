@@ -40,9 +40,9 @@ function TimeDisplay() {
   }, []);
 
   return (
-    <div>
+    <section>
       <h2 className="text-base">Hora actual: {time}</h2>
-    </div>
+    </section>
   );
 }
 

@@ -6,4 +6,5 @@ cameras_data = discover_cameras()
 
 bus = MultiprocessingBus(cameras_data)
 
-app = create_app(bus)
+cameras_ids = [cam["id"] for cam in cameras_data]
+app = create_app(bus, cameras_ids)
