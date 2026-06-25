@@ -26,7 +26,7 @@ if not raw:
 else:
     telegram_allowed_users = [x.strip() for x in raw.split(",") if x.strip()]
 
-frontend_url = os.getenv("FRONTEND_URL", "*")
+cors_allow_url = os.getenv("FRONTEND_URL", "*")
 
 # Open SecureView/data/config.json
 base_dir = Path(__file__).resolve().parents[3]
@@ -53,6 +53,7 @@ def parse_time(t: str) -> time:
 
 
 RECORD_TIMES: dict[int, RecordTime] = {}
+RECORD_DIR = "video_records"
 
 if "cameras" in data:
     for cam in data["cameras"]:

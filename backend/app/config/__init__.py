@@ -5,8 +5,9 @@ from .config import (
     NOTIF_COOLDOWN,
     telegram_token,
     telegram_allowed_users,
-    frontend_url,
-    RECORD_TIMES
+    cors_allow_url,
+    RECORD_TIMES,
+    RECORD_DIR,
 )
 
 from .config_types import (
@@ -20,7 +21,8 @@ __all__ = [
     "NOTIF_COOLDOWN",
     "telegram_token",
     "telegram_allowed_users",
-    "frontend_url",
+    "cors_allow_url",
     "RECORD_TIMES",
-    "RecordTime"
+    "RecordTime",
+    "RECORD_DIR"
 ]

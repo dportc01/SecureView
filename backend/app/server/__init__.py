@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from app.config import frontend_url
+from app.config import cors_allow_url
 from app.messaging import BusInterface
 from .services.camera_service import CameraService
 
@@ -8,7 +8,7 @@ from .services.camera_service import CameraService
 def create_app(bus: BusInterface, cameras_ids: list[int]):
 
     app = Flask(__name__)
-    CORS(app, origins=frontend_url)
+    CORS(app, origins=cors_allow_url)
 
     from .api.routes import bp as health_bp
     app.register_blueprint(health_bp)
