@@ -1,4 +1,4 @@
-import type { SiteName } from "@/types/sites";
+import type { SiteName } from "@/types/Sites";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function SiteHeader({ site }: { site: SiteName }) {

@@ -4,7 +4,7 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import type { SiteName, SiteRoute } from "@/types/sites";
+import type { SiteName, SiteRoute } from "@/types/Sites";
 import { FilePlay, HouseIcon, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";

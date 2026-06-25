@@ -15,8 +15,15 @@ class Status(str, Enum):
 class VideoFile:
     name: str
     status: Status
-    duration: float | None
-    size: int
+    duration: str
+    size: str
+
+
+SIZE_BYTE = 1
+SIZE_KB = 1024 * SIZE_BYTE
+SIZE_MB = SIZE_KB * 1024
+SIZE_GB = SIZE_MB * 1024
+SIZE_TB = SIZE_GB * 1024
 
 
 class StorageServive:
@@ -30,25 +37,25 @@ class StorageServive:
                 if ".tmp" in file.suffixes:
                     video_files.append(
                         VideoFile(
-                            name=str(file),
+                            name=str(file.stem),
                             status=Status.RECORDING,
-                            duration=None,
-                            size=file.stat().st_size,
+                            duration="N/A",
+                            size=self._get_size_string(file.stat().st_size),
                         )
                     )
                 elif ".mp4" == file.suffix:
                     video_files.append(
                         VideoFile(
-                            name=str(file),
+                            name=str(file.stem),
                             status=Status.FINISHED,
                             duration=self._get_duration(file),
-                            size=file.stat().st_size,
+                            size=self._get_size_string(file.stat().st_size),
                         )
                     )
 
         return video_files
 
-    def _get_duration(self, path: Path) -> float | None:
+    def _get_duration(self, path: Path) -> str:
         try:
             result = subprocess.run(
                 [
@@ -63,6 +70,24 @@ class StorageServive:
             )
 
             data = json.loads(result.stdout)
-            return round(float(data["format"]["duration"]), 2)
+            duration = float(data["format"]["duration"])
+
+            hours = int(duration // 3600)
+            minutes = int((duration % 3600) // 60)
+            seconds = int(duration % 60)
+
+            return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
         except Exception:
-            return None
+            return "N/A"
+
+    def _get_size_string(self, size: int) -> str:
+        if size >= SIZE_TB:
+            return f"{size / SIZE_TB:.2f} TB"
+        elif size >= SIZE_GB:
+            return f"{size / SIZE_GB:.2f} GB"
+        elif size >= SIZE_MB:
+            return f"{size / SIZE_MB:.2f} MB"
+        elif size >= SIZE_KB:
+            return f"{size / SIZE_KB:.2f} KB"
+        else:
+            return f"{size} Bytes"

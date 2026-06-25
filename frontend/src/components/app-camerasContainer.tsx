@@ -1,4 +1,4 @@
-import { terminateCameras } from "@/api/CameraClient";
+import { terminateCameras } from "@/api/cameraClient";
 import { Camera } from "@/components/app-camera";
 import { Button } from "@/components/ui/button";
 

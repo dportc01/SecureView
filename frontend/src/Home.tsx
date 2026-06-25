@@ -3,8 +3,9 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 
 import { useEffect, useState } from "react";
-import { getCameras } from "./api/CameraClient";
+import { getCameras } from "./api/cameraClient";
 import { CamerasContainer } from "./components/app-camerasContainer";
+import { TimeDisplay } from "@/components/app-timedisplay";
 
 export function Home() {
   const [cameras_ids, setCameraIds] = useState<number[]>([]);
@@ -25,24 +26,6 @@ export function Home() {
         </main>
       </SidebarInset>
     </SidebarProvider>
-  );
-}
-
-function TimeDisplay() {
-  const [time, setTime] = useState<string>(new Date().toLocaleString());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date().toLocaleString());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <section>
-      <h2 className="text-base">Hora actual: {time}</h2>
-    </section>
   );
 }
 

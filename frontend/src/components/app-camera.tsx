@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { startCamera, stopCamera } from "@/api/CameraClient";
+import { startCamera, stopCamera } from "@/api/cameraClient";
 import { Button } from "@/components/ui/button";
 import {
   Card,
