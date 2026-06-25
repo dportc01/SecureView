@@ -1,5 +1,5 @@
 from flask import Blueprint, Response, jsonify
-from ..services.camera_service import CameraService
+from app.server.services.camera_service import CameraService
 
 
 def build_cameras_bp(camera_service: CameraService) -> Blueprint:
