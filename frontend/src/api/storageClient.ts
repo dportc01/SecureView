@@ -22,7 +22,7 @@ async function getFilesInfo(): Promise<VideoFile[]> {
   return files;
 }
 
-async function downloadFile(name: string) {
+async function downloadFile(name: string): Promise<void> {
   const res = await fetch(`${apiUrl}/storage/download`, {
     method: "POST",
     headers: {
@@ -49,4 +49,18 @@ async function downloadFile(name: string) {
   window.URL.revokeObjectURL(url);
 }
 
-export { getFilesInfo, downloadFile };
+async function deleteFiles(names: string[]): Promise<void> {
+  const res = await fetch(`${apiUrl}/storage/delete`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      filenames: names,
+    }),
+  });
+
+  await checkStatus(res);
+}
+
+export { getFilesInfo, downloadFile, deleteFiles };

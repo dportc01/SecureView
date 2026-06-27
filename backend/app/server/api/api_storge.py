@@ -30,4 +30,22 @@ def build_storage_bp(storage_service: StorageServive) -> Blueprint:
             }
         )
 
+    @bp.route("/storage/delete", methods=["POST"])
+    def delete_file():
+        data = request.get_json(silent=True)
+
+        if not data or "filenames" not in data:
+            return {"status": "error", "message": 'Missing "filenames" on request'}, 400
+
+        filenames = data["filenames"]
+
+        if not isinstance(filenames, list):
+            return {"status": "error", "message": "Filenames must be a list"}, 400
+
+        success, filename = storage_service.delete_file(filenames)
+        if not success:
+            return {"status": "error", "message": f"File {filename} not found"}, 404
+
+        return {"status": "ok", "message": "Files deleted succesfully"}, 200
+
     return bp

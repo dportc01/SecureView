@@ -4,39 +4,6 @@ import { DataTable } from "./data-table";
 import { getFilesInfo } from "@/api/storageClient";
 import { useEffect, useState } from "react";
 
-// const data: VideoFile[] = [
-//   {
-//     status: "Finished",
-//     name: "Vide_file_1",
-//     duration: 34500,
-//     size: "1132 MB",
-//   },
-//   {
-//     status: "Recording",
-//     name: "Vide_file_1",
-//     duration: "N/A",
-//     size: "1132 KB",
-//   },
-//   {
-//     status: "Recording",
-//     name: "Vide_file_1",
-//     duration: "N/A",
-//     size: "1132 KB",
-//   },
-//   {
-//     status: "Finished",
-//     name: "Vide_file_1",
-//     duration: "N/A",
-//     size: "1132 KB",
-//   },
-//   {
-//     status: "Finished",
-//     name: "Vide_file_1",
-//     duration: "N/A",
-//     size: "1132 KB",
-//   },
-// ];
-
 export default function TableContainer() {
   const [files, setFiles] = useState<VideoFile[]>([]);
 
@@ -44,9 +11,13 @@ export default function TableContainer() {
     getFilesInfo().then(setFiles);
   }, []);
 
+  function updateValues() {
+    getFilesInfo().then(setFiles);
+  }
+
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={files} />
+      <DataTable columns={columns({ updateValues })} data={files} />
     </div>
   );
 }

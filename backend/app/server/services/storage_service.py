@@ -66,6 +66,15 @@ class StorageServive:
             while chunk := f.read(8192):
                 yield chunk
 
+    def delete_file(self, filenames_list: list[str]) -> tuple[bool, str]:
+        for filename in filenames_list:
+            file = Path(RECORD_DIR) / f"{filename}.mp4"
+            if file.is_file():
+                file.unlink()
+            else:
+                return False, filename
+        return True, ""
+
     def _get_duration(self, path: Path) -> str:
         try:
             result = subprocess.run(
