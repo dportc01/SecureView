@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getCameras } from "./api/cameraClient";
 import { CamerasContainer } from "./components/app-camerasContainer";
 import { TimeDisplay } from "@/components/app-timedisplay";
+import { Toaster } from "@/components/ui/sonner";
 
 export function Home() {
   const [cameras_ids, setCameraIds] = useState<number[]>([]);
@@ -24,6 +25,7 @@ export function Home() {
           <TimeDisplay />
           <CamerasContainer ids={cameras_ids} />
         </main>
+        <Toaster />
       </SidebarInset>
     </SidebarProvider>
   );

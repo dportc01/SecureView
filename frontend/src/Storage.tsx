@@ -1,7 +1,8 @@
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
-import TableContainer from "./components/app-table/table-container";
+import TableContainer from "@/components/app-table/table-container";
+import { Toaster } from "./components/ui/sonner";
 
 export function Storage() {
   return (
@@ -12,6 +13,7 @@ export function Storage() {
         <main className="px-5">
           <TableContainer />
         </main>
+        <Toaster />
       </SidebarInset>
     </SidebarProvider>
   );

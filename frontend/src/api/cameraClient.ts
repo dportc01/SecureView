@@ -1,4 +1,4 @@
-import { checkStatus } from "./checkStatus";
+import { checkStatus, readSucces } from "./resAnalyzer";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 if (!apiUrl) {
@@ -21,7 +21,7 @@ async function startCamera(id: number) {
     method: "POST",
   });
 
-  checkStatus(res);
+  await checkStatus(res);
 }
 
 async function stopCamera(id: number) {
@@ -29,7 +29,7 @@ async function stopCamera(id: number) {
     method: "POST",
   });
 
-  checkStatus(res);
+  await checkStatus(res);
 }
 
 async function terminateCameras() {
@@ -37,7 +37,8 @@ async function terminateCameras() {
     method: "POST",
   });
 
-  checkStatus(res);
+  await checkStatus(res);
+  await readSucces(res);
 }
 
 export { getCameras, startCamera, stopCamera, terminateCameras };

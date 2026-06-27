@@ -1,4 +1,4 @@
-import { checkStatus } from "./checkStatus";
+import { checkStatus, readSucces } from "./resAnalyzer";
 import { type VideoFile } from "@/types/VideoFile";
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -61,6 +61,7 @@ async function deleteFiles(names: string[]): Promise<void> {
   });
 
   await checkStatus(res);
+  await readSucces(res);
 }
 
 export { getFilesInfo, downloadFile, deleteFiles };
