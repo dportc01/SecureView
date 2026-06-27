@@ -51,6 +51,6 @@ def build_cameras_bp(camera_service: CameraService) -> Blueprint:
 
 def _format_response(res: str | None):
     if res is None:
-        return jsonify({"status": "error", "message": f"Camera {id} didn't respond"}), 500
+        return {"status": "error", "message": f"Camera {id} didn't respond"}, 500
 
-    return jsonify({"status": "ok", "message": res}), 200
+    return {"status": "ok", "message": res}, 200

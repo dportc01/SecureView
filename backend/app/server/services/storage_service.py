@@ -55,6 +55,17 @@ class StorageServive:
 
         return video_files
 
+    def get_file(self, filename: str) -> Path | None:
+        file = Path(RECORD_DIR) / f"{filename}.mp4"
+        if file.is_file():
+            return file
+        return None
+
+    def stream_file(self, file: Path):
+        with open(file, "rb") as f:
+            while chunk := f.read(8192):
+                yield chunk
+
     def _get_duration(self, path: Path) -> str:
         try:
             result = subprocess.run(

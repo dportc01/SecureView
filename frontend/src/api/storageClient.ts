@@ -6,12 +6,11 @@ if (!apiUrl) {
   console.error("Missing env VITE_API_URL");
 }
 
-async function getFiles() {
+async function getFilesInfo(): Promise<VideoFile[]> {
   const res = await fetch(`${apiUrl}/storage/get`);
 
   await checkStatus(res);
   const data = await res.json();
-  console.log(data);
 
   const files: VideoFile[] = data.map((file: VideoFile) => ({
     status: file.status,
@@ -20,8 +19,34 @@ async function getFiles() {
     size: file.size,
   }));
 
-  console.log(files);
   return files;
 }
 
-export { getFiles };
+async function downloadFile(name: string) {
+  const res = await fetch(`${apiUrl}/storage/download`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      filename: name,
+    }),
+  });
+
+  await checkStatus(res);
+
+  const blob = await res.blob();
+
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name + ".mp4";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  window.URL.revokeObjectURL(url);
+}
+
+export { getFilesInfo, downloadFile };

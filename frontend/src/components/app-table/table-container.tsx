@@ -1,7 +1,7 @@
 import type { VideoFile } from "@/types/VideoFile";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { getFiles } from "@/api/storageClient";
+import { getFilesInfo } from "@/api/storageClient";
 import { useEffect, useState } from "react";
 
 // const data: VideoFile[] = [
@@ -41,7 +41,7 @@ export default function TableContainer() {
   const [files, setFiles] = useState<VideoFile[]>([]);
 
   useEffect(() => {
-    getFiles().then(setFiles);
+    getFilesInfo().then(setFiles);
   }, []);
 
   return (

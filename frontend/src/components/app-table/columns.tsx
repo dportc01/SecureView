@@ -5,6 +5,7 @@ import { Check, Loader, Trash2, ArrowDownToLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { type VideoFile } from "@/types/VideoFile";
+import { downloadFile } from "@/api/storageClient";
 
 export const columns: ColumnDef<VideoFile>[] = [
   {
@@ -66,20 +67,22 @@ export const columns: ColumnDef<VideoFile>[] = [
     header: "Size",
   },
   {
-    id: "delete_action",
+    id: "download_action",
     size: 20,
     minSize: 20,
     maxSize: 20,
-    cell: () => {
+    cell: ({ row }) => {
+      const filename: VideoFile["name"] = row.getValue("name");
+
       return (
-        <Button variant={"ghost"}>
+        <Button variant={"ghost"} onClick={() => downloadFile(filename)}>
           <ArrowDownToLine color="#86a7fc" />
         </Button>
       );
     },
   },
   {
-    id: "download_action",
+    id: "delete_action",
     size: 20,
     minSize: 20,
     maxSize: 20,
