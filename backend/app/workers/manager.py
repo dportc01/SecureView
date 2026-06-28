@@ -83,7 +83,7 @@ def start_workers(
     )
 
 
-def wait_and_terminate_workeres(
+def wait_and_terminate_workers(
         control_params: ManagerProcesses,
         notif_queue: Queue,
         record_queue: list[Queue]):

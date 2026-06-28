@@ -28,14 +28,13 @@ else:
 
 cors_allow_url = os.getenv("FRONTEND_URL", "*")
 
-# Open SecureView/data/config.json
-base_dir = Path(__file__).resolve().parents[3]
-config_json_path = base_dir / "data" / "config.json"
+# Open ./config.json
+CONFIG_JSON_PATH = Path(__file__).with_name("config.json")
 
-if not config_json_path.exists():
-    raise RuntimeError(f"Missing config.json file on {config_json_path}")
+if not CONFIG_JSON_PATH.exists():
+    raise RuntimeError(f"Missing config.json file on {CONFIG_JSON_PATH}")
 
-with open(config_json_path) as f:
+with open(CONFIG_JSON_PATH) as f:
     data = json.load(f)
 
 # Notfication
@@ -43,7 +42,9 @@ SECOND = 1
 MINUTE = 60 * SECOND
 HOUR = 60 * MINUTE
 
-NOTIF_COOLDOWN = data.get("notification_time", 10) * MINUTE
+DEFAULT_NOTIF_TIME = 10
+
+NOTIF_COOLDOWN = data.get("notification_time", DEFAULT_NOTIF_TIME) * MINUTE
 
 
 # Recording

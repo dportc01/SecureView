@@ -28,8 +28,8 @@ export async function checkStatus(res: Response) {
 export async function readSucces(res: Response) {
   try {
     const body = await res.json();
-    toast.info(body.message, { position: "top-center" });
+    toast.success(body.message, { position: "top-center" });
   } catch {
-    toast.info("Operation succes", { position: "top-center" });
+    toast.success("Operation succes", { position: "top-center" });
   }
 }

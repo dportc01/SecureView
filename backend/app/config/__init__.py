@@ -11,7 +11,8 @@ from .config import (
 )
 
 from .config_types import (
-    RecordTime
+    RecordTime,
+    ConfigJson
 )
 
 __all__ = [
@@ -24,5 +25,6 @@ __all__ = [
     "cors_allow_url",
     "RECORD_TIMES",
     "RecordTime",
-    "RECORD_DIR"
+    "RECORD_DIR",
+    "ConfigJson"
 ]

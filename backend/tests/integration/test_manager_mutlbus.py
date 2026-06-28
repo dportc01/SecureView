@@ -5,7 +5,7 @@ import logging
 import pytest
 from tests.integration.recorder_mock import RecorderMock
 from multiprocessing import Process, Queue
-from app.workers import start_workers, wait_and_terminate_workeres, ManagerProcesses
+from app.workers import start_workers, wait_and_terminate_workers, ManagerProcesses
 from app.messaging import BusInterface, MultiprocessingBus
 from app.notification import MockNotification
 from app.discovery import CameraType, CameraData
@@ -125,7 +125,7 @@ def terminate_workers(
     aux_procc.start()
 
     logging.warning("Waiting for camera termination:")
-    wait_and_terminate_workeres(control_params, notif_queue, record_queue)
+    wait_and_terminate_workers(control_params, notif_queue, record_queue)
 
     for p in control_params.camera_processes:
         assert not p.is_alive()

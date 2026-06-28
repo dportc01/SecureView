@@ -32,13 +32,4 @@ async function stopCamera(id: number) {
   await checkStatus(res);
 }
 
-async function terminateCameras() {
-  const res = await fetch(`${apiUrl}/cameras/terminate`, {
-    method: "POST",
-  });
-
-  await checkStatus(res);
-  await readSucces(res);
-}
-
-export { getCameras, startCamera, stopCamera, terminateCameras };
+export { getCameras, startCamera, stopCamera };

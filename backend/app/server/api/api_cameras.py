@@ -41,11 +41,6 @@ def build_cameras_bp(camera_service: CameraService) -> Blueprint:
         res = camera_service.stop_camera(id)
         return _format_response(res)
 
-    @bp.route("/cameras/terminate", methods=["POST"])
-    def terminate_video():
-        res = camera_service.terminate_cameras()
-        return _format_response(res)
-
     return bp
 
 
