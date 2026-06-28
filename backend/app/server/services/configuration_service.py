@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from app.config import ConfigJson, NOTIF_COOLDOWN, CONFIG_JSON_PATH
+from app.config import ConfigJson
 
 
 class ConfigurationService:
@@ -14,6 +14,6 @@ class ConfigurationService:
             data = json.load(f)
 
             return ConfigJson(
-                notification_time=data.get("notification_time", DEFAULT_NOTIF_TIME),
+                notification_time=data.get("notification_time"),
                 cameras=data["cameras"]
             )
