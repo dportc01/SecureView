@@ -21,13 +21,15 @@ export function Settings() {
   };
 
   useEffect(() => {
-    // get_config().then((data) => {
-    //   setConf(data);
-    //   setNewConf(data);
-    // });
-
-    setConf(placeholder);
-    setNewConf(placeholder);
+    get_config()
+      .then((data) => {
+        setConf(data);
+        setNewConf(data);
+      })
+      .catch(() => {
+        setConf(placeholder);
+        setNewConf(placeholder);
+      });
   }, []);
 
   return (
