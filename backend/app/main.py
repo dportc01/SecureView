@@ -1,3 +1,5 @@
+import time
+
 from .server import create_app
 from .discovery import discover_cameras
 from .workers import start_workers, wait_and_terminate_workers
@@ -48,6 +50,7 @@ def start_all() -> bool:
     except Empty:
         restart = False
 
+    time.sleep(0.5)  # Wait for Flask request to completly send
     app_process.terminate()
     app_process.join()
 

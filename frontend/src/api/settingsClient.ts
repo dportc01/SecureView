@@ -1,5 +1,5 @@
 import { type ConfigJson } from "@/types/Conf";
-import { checkStatus } from "./resAnalyzer";
+import { checkStatus, readSucces } from "./resAnalyzer";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 if (!apiUrl) {
@@ -12,6 +12,7 @@ async function get_config(): Promise<ConfigJson> {
   await checkStatus(res);
 
   const body: ConfigJson = await res.json();
+  console.log(body);
 
   if (!body.cameras || !body.notification_time)
     throw new Error("Invalid body response");
@@ -19,4 +20,17 @@ async function get_config(): Promise<ConfigJson> {
   return body;
 }
 
-export { get_config };
+async function update_config(newConfig: ConfigJson) {
+  const res = await fetch(`${apiUrl}/config/update`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newConfig),
+  });
+
+  await checkStatus(res);
+  await readSucces(res);
+}
+
+export { get_config, update_config };

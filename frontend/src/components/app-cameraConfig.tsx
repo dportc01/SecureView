@@ -12,32 +12,48 @@ import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { cn } from "@/lib/utils";
-import type { ConfigJsonCam } from "@/types/Conf";
+import type { ConfigJsonCam, ConfigJson } from "@/types/Conf";
 
 type Props = {
-  data: ConfigJsonCam;
+  conf: ConfigJsonCam;
+  setNewConf: Dispatch<SetStateAction<ConfigJson | null>>;
   unedited: boolean;
   setUnedited: Dispatch<SetStateAction<boolean>>;
 };
 
-export function CameraConfig({ data, unedited, setUnedited }: Props) {
+export function CameraConfig({
+  conf,
+  setNewConf,
+  unedited,
+  setUnedited,
+}: Props) {
   const [readOnlyStart, setReadOnlyStart] = useState<boolean>(true);
   const [readOnlyEnd, setReadOnlyEnd] = useState<boolean>(true);
 
   return (
-    <Card className="p-4 max-w-md">
+    <Card className="p-4 max-w-md w-full">
       <FieldSet>
-        <FieldLegend>Camera {data.id} configuration</FieldLegend>
+        <FieldLegend>Camera {conf.id} configuration</FieldLegend>
         <FieldGroup className="pt-4">
           <Field>
-            <FieldLabel htmlFor={`cam${data.id}-start-time`}>
+            <FieldLabel htmlFor={`cam${conf.id}-start-time`}>
               Record start time
             </FieldLabel>
             <div className="flex items-center gap-2">
               <Input
-                id={`cam${data.id}-start-time`}
+                id={`cam${conf.id}-start-time`}
                 type="time"
-                defaultValue={data.start_record}
+                defaultValue={conf.start_record}
+                onChange={(e) =>
+                  setNewConf((prev) => ({
+                    ...prev!,
+                    cameras: prev!.cameras.map((cam) =>
+                      cam.id === conf.id
+                        ? { ...cam, start_record: e.target.value }
+                        : cam,
+                    ),
+                  }))
+                }
                 readOnly={readOnlyStart}
                 className={cn(
                   readOnlyStart ? "text-muted-foreground" : "text-primary",
@@ -58,14 +74,24 @@ export function CameraConfig({ data, unedited, setUnedited }: Props) {
             </FieldDescription>
           </Field>
           <Field>
-            <FieldLabel htmlFor={`cam${data.id}-end-time`}>
+            <FieldLabel htmlFor={`cam${conf.id}-end-time`}>
               Record end time
             </FieldLabel>
             <div className="flex items-center gap-2">
               <Input
-                id={`cam${data.id}-end-time`}
+                id={`cam${conf.id}-end-time`}
                 type="time"
-                defaultValue={data.end_record}
+                defaultValue={conf.end_record}
+                onChange={(e) =>
+                  setNewConf((prev) => ({
+                    ...prev!,
+                    cameras: prev!.cameras.map((cam) =>
+                      cam.id === conf.id
+                        ? { ...cam, end_record: e.target.value }
+                        : cam,
+                    ),
+                  }))
+                }
                 readOnly={readOnlyEnd}
                 className={cn(
                   readOnlyEnd ? "text-muted-foreground" : "text-primary",
