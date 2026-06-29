@@ -4,12 +4,14 @@ import logging
 import os
 import json
 from datetime import time
-from .config_types import RecordTime
+from .config_types import RecordTime, ConfigJson, ConfigJsonCam
+
 
 # Queue
 MAX_LOCAL_CAMERA_INDEX = 4
 MAX_FRAME_QUEUE_SIZE = 60
 MAX_QUEUE_SIZE = 10
+
 
 # Env vars
 load_dotenv()
@@ -37,6 +39,7 @@ if not CONFIG_JSON_PATH.exists():
 with open(CONFIG_JSON_PATH) as f:
     data = json.load(f)
 
+
 # Notfication
 SECOND = 1
 MINUTE = 60 * SECOND
@@ -54,6 +57,7 @@ def parse_time(t: str) -> time:
 
 
 RECORD_TIMES: dict[int, RecordTime] = {}
+camera_config: list[ConfigJsonCam] = []
 RECORD_DIR = "video_records"
 
 if "cameras" in data:
@@ -62,3 +66,14 @@ if "cameras" in data:
             start=parse_time(cam["start_record"]),
             end=parse_time(cam["end_record"]),
         )
+        camera_config.append(
+            ConfigJsonCam(
+                id=cam["id"],
+                start_record=cam["start_record"],
+                end_record=cam["end_record"],
+            )
+        )
+
+
+# Data for configuration api
+CONF_JSON = ConfigJson(notification_time=NOTIF_COOLDOWN, cameras=camera_config)

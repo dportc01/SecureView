@@ -8,11 +8,12 @@ from .config import (
     cors_allow_url,
     RECORD_TIMES,
     RECORD_DIR,
+    CONF_JSON,
 )
 
 from .config_types import (
     RecordTime,
-    ConfigJson
+    ConfigJson,
 )
 
 __all__ = [
@@ -26,5 +27,6 @@ __all__ = [
     "RECORD_TIMES",
     "RecordTime",
     "RECORD_DIR",
-    "ConfigJson"
+    "ConfigJson",
+    "CONF_JSON",
 ]

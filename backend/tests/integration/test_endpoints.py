@@ -58,6 +58,7 @@ def wait_for_server(host="127.0.0.1", port=5001, timeout=5):
     raise RuntimeError("Server did not start in time")
 
 
+# ============== CAMERAS ENDPOINTS ==============
 def test_start(client):
     response = client.post("/cameras/0/start")
     assert response.status_code == 200
@@ -69,10 +70,22 @@ def test_stop(client):
     assert response.status_code == 200
 
 
+# ============== SYSTEM ENDPOINTS ==============
 def test_terminate(client):
     client.post("/cameras/0/start")
     response = client.post("/system/terminate")
     assert response.status_code == 200
+
+
+# ============== CONFIGURATIONS ENPOINTS ==============
+def test_get_conf(client):
+    respose = client.get("/config/get")
+    assert respose.status_code == 200
+
+    data = respose.json
+    
+    assert "notification_time" in data
+    assert "cameras" in data
 
 
 def simulate_external_terminate(bus: BusInterface):

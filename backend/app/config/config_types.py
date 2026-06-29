@@ -2,14 +2,14 @@ from dataclasses import dataclass
 from datetime import time
 
 
-@dataclass
+@dataclass(frozen=True)
 class ConfigJson:
     notification_time: int
-    cameras: list[ConfigJsonTime]
+    cameras: list[ConfigJsonCam]
 
 
-@dataclass
-class ConfigJsonTime:
+@dataclass(frozen=True)
+class ConfigJsonCam:
     id: int
     start_record: str
     end_record: str
