@@ -12,30 +12,32 @@ import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { cn } from "@/lib/utils";
+import type { ConfigJsonCam } from "@/types/Conf";
 
 type Props = {
-  cameraId: number;
+  data: ConfigJsonCam;
   unedited: boolean;
   setUnedited: Dispatch<SetStateAction<boolean>>;
 };
 
-export function CameraConfig({ cameraId, unedited, setUnedited }: Props) {
+export function CameraConfig({ data, unedited, setUnedited }: Props) {
   const [readOnlyStart, setReadOnlyStart] = useState<boolean>(true);
   const [readOnlyEnd, setReadOnlyEnd] = useState<boolean>(true);
 
   return (
     <Card className="p-4 max-w-md">
       <FieldSet>
-        <FieldLegend>Camera {cameraId} configuration</FieldLegend>
+        <FieldLegend>Camera {data.id} configuration</FieldLegend>
         <FieldGroup className="pt-4">
           <Field>
-            <FieldLabel htmlFor={`cam${cameraId}-start-time`}>
+            <FieldLabel htmlFor={`cam${data.id}-start-time`}>
               Record start time
             </FieldLabel>
             <div className="flex items-center gap-2">
               <Input
-                id={`cam${cameraId}-start-time`}
+                id={`cam${data.id}-start-time`}
                 type="time"
+                defaultValue={data.start_record}
                 readOnly={readOnlyStart}
                 className={cn(
                   readOnlyStart ? "text-muted-foreground" : "text-primary",
@@ -56,13 +58,14 @@ export function CameraConfig({ cameraId, unedited, setUnedited }: Props) {
             </FieldDescription>
           </Field>
           <Field>
-            <FieldLabel htmlFor={`cam${cameraId}-end-time`}>
+            <FieldLabel htmlFor={`cam${data.id}-end-time`}>
               Record end time
             </FieldLabel>
             <div className="flex items-center gap-2">
               <Input
-                id={`cam${cameraId}-end-time`}
+                id={`cam${data.id}-end-time`}
                 type="time"
+                defaultValue={data.end_record}
                 readOnly={readOnlyEnd}
                 className={cn(
                   readOnlyEnd ? "text-muted-foreground" : "text-primary",
