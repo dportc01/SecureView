@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import { Minus, Pencil } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { cn } from "@/lib/utils";
 import type { ConfigJsonCam, ConfigJson } from "@/types/Conf";
@@ -29,11 +29,33 @@ export function CameraConfig({
 }: Props) {
   const [readOnlyStart, setReadOnlyStart] = useState<boolean>(true);
   const [readOnlyEnd, setReadOnlyEnd] = useState<boolean>(true);
+  const [deleted, setDelete] = useState<boolean>(false);
+
+  if (deleted) {
+    return (
+      <span className="text-muted-foreground">Deleted conf for {conf.id}</span>
+    );
+  }
 
   return (
     <Card className="p-4 max-w-md w-full">
       <FieldSet>
-        <FieldLegend>Camera {conf.id} configuration</FieldLegend>
+        <FieldLegend className="flex w-full items-center justify-between">
+          Camera {conf.id} configuration{" "}
+          <Button
+            className="max-h-8 max-w-8"
+            onClick={() => {
+              setDelete(true);
+              if (unedited) setUnedited(false);
+              setNewConf((prev) => ({
+                ...prev!,
+                cameras: prev!.cameras.filter((cam) => cam.id !== conf.id),
+              }));
+            }}
+          >
+            <Minus />
+          </Button>
+        </FieldLegend>
         <FieldGroup className="pt-4">
           <Field>
             <FieldLabel htmlFor={`cam${conf.id}-start-time`}>

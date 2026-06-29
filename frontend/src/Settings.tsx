@@ -15,11 +15,19 @@ export function Settings() {
   const [conf, setConf] = useState<ConfigJson | null>(null);
   const [newConf, setNewConf] = useState<ConfigJson | null>(null);
 
+  const placeholder: ConfigJson = {
+    notification_time: 600,
+    cameras: [{ id: 0, start_record: "08:00", end_record: "22:00" }],
+  };
+
   useEffect(() => {
-    get_config().then((data) => {
-      setConf(data);
-      setNewConf(data);
-    });
+    // get_config().then((data) => {
+    //   setConf(data);
+    //   setNewConf(data);
+    // });
+
+    setConf(placeholder);
+    setNewConf(placeholder);
   }, []);
 
   return (
