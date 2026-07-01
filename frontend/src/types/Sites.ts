@@ -1,2 +1,2 @@
-export type SiteName = "Home" | "Storage" | "Settings";
-export type SiteRoute = "/" | "/storage" | "/settings";
+export type SiteName = "Home" | "Storage" | "Settings" | "Logs";
+export type SiteRoute = "/" | "/storage" | "/settings" | "/logs";

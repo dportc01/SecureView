@@ -4,11 +4,11 @@ import { SiteHeader } from "@/components/site-header";
 
 import { useEffect, useState } from "react";
 import { getCameras } from "./api/cameraClient";
-import { CamerasContainer } from "./components/app-camerasContainer";
-import { TimeDisplay } from "@/components/app-timedisplay";
+import { CamerasContainer } from "@/components/home/app-camerasContainer";
+import { TimeDisplay } from "@/components/home/app-timedisplay";
 import { Toaster } from "@/components/ui/sonner";
-import { TerminateSection } from "@/components/app-terminateSection";
-import { RestartSection } from "./components/app-restartSection";
+import { TerminateSection } from "@/components/home/app-terminateSection";
+import { RestartSection } from "@/components/home/app-restartSection";
 
 export function Home() {
   const [cameras_ids, setCameraIds] = useState<number[]>([]);

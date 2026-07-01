@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "@/Home";
 import Storage from "@/Storage";
 import Settings from "@/Settings";
+import Logs from "@/Logs";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/storage" element={<Storage />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/logs" element={<Logs />} />
       </Routes>
     </BrowserRouter>
   );

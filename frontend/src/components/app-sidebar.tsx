@@ -5,7 +5,7 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import type { SiteName, SiteRoute } from "@/types/Sites";
-import { FilePlay, HouseIcon, Settings } from "lucide-react";
+import { BookText, FilePlay, HouseIcon, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -31,6 +31,11 @@ const content: ContentType[] = [
     title: "Settings",
     icon: Settings,
     route: "/settings",
+  },
+  {
+    title: "Logs",
+    icon: BookText,
+    route: "/logs",
   },
 ];
 

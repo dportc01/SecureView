@@ -1,22 +1,17 @@
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
-import TableContainer from "@/components/storage/app-table/table-container";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
-export function Storage() {
+export default function Logs() {
   return (
     <SidebarProvider>
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader site="Storage" />
-        <main className="px-5">
-          <TableContainer />
-        </main>
+        <SiteHeader site="Logs" />
+        <main className="px-5"></main>
         <Toaster />
       </SidebarInset>
     </SidebarProvider>
   );
 }
-
-export default Storage;
