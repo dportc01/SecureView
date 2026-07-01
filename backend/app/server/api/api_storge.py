@@ -20,7 +20,7 @@ def build_storage_bp(storage_service: StorageServive) -> Blueprint:
         file = storage_service.get_file(data["filename"])
 
         if file is None:
-            return {"status": "error", "message": "File not found"}, 404
+            return {"status": "error", "message": f"File {data["filename"]} not found"}, 404
 
         return Response(
             storage_service.stream_file(file),

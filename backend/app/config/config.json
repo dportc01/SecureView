@@ -1,15 +1,15 @@
 {
     "cameras": [
         {
-            "end_record": "20:32",
+            "end_record": "22:00",
             "id": 0,
             "start_record": "08:00"
         },
         {
-            "end_record": "16:00",
-            "id": 2,
-            "start_record": "13:00"
+            "end_record": "22:00",
+            "id": 1,
+            "start_record": "08:00"
         }
     ],
-    "notification_time": 2160000
+    "notification_time": 1
 }

@@ -37,7 +37,7 @@ class StorageServive:
                 if ".tmp" in file.suffixes:
                     video_files.append(
                         VideoFile(
-                            name=str(file.stem),
+                            name=str(file.name.removesuffix(".tmp.mp4")),
                             status=Status.RECORDING,
                             duration="N/A",
                             size=self._get_size_string(file.stat().st_size),

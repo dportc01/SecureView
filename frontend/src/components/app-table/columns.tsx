@@ -84,9 +84,14 @@ export const columns = ({
     maxSize: 20,
     cell: ({ row }) => {
       const filename: VideoFile["name"] = row.getValue("name");
+      const status: VideoFile["status"] = row.getValue("status");
 
       return (
-        <Button variant={"ghost"} onClick={() => downloadFile(filename)}>
+        <Button
+          variant={"ghost"}
+          disabled={status === "Recording"}
+          onClick={() => downloadFile(filename)}
+        >
           <ArrowDownToLine color="#86a7fc" />
         </Button>
       );
@@ -99,10 +104,12 @@ export const columns = ({
     maxSize: 20,
     cell: ({ row }) => {
       const filename: VideoFile["name"] = row.getValue("name");
+      const status: VideoFile["status"] = row.getValue("status");
 
       return (
         <Button
           variant={"ghost"}
+          disabled={status === "Recording"}
           onClick={() => {
             deleteFiles([filename]).then(() => updateValues());
           }}

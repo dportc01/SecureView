@@ -159,6 +159,9 @@ def _record_frame(
 
 
 def _is_between(now: dt_time, start: dt_time, end: dt_time):
+    if start == end:
+        return True
+
     if start <= end:
         return start <= now <= end
     else:

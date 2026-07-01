@@ -43,7 +43,6 @@ with open(CONFIG_JSON_PATH) as f:
 # Notfication
 SECOND = 1
 MINUTE = 60 * SECOND
-HOUR = 60 * MINUTE
 
 DEFAULT_NOTIF_TIME = 10
 
@@ -76,4 +75,4 @@ if "cameras" in data:
 
 
 # Data for configuration api
-CONF_JSON = ConfigJson(notification_time=NOTIF_COOLDOWN, cameras=camera_config)
+CONF_JSON = ConfigJson(notification_time=NOTIF_COOLDOWN/MINUTE, cameras=camera_config)

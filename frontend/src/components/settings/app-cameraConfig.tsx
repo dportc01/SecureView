@@ -13,41 +13,35 @@ import { Minus, Pencil } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { cn } from "@/lib/utils";
 import type { ConfigJsonCam, ConfigJson } from "@/types/Conf";
+import { toast } from "sonner";
 
 type Props = {
   conf: ConfigJsonCam;
-  setNewConf: Dispatch<SetStateAction<ConfigJson | null>>;
+  setConf: Dispatch<SetStateAction<ConfigJson | null>>;
   unedited: boolean;
   setUnedited: Dispatch<SetStateAction<boolean>>;
 };
 
-export function CameraConfig({
-  conf,
-  setNewConf,
-  unedited,
-  setUnedited,
-}: Props) {
+export function CameraConfig({ conf, setConf, unedited, setUnedited }: Props) {
   const [readOnlyStart, setReadOnlyStart] = useState<boolean>(true);
   const [readOnlyEnd, setReadOnlyEnd] = useState<boolean>(true);
-  const [deleted, setDelete] = useState<boolean>(false);
-
-  if (deleted) {
-    return (
-      <span className="text-muted-foreground">Deleted conf for {conf.id}</span>
-    );
-  }
 
   return (
     <Card className="p-4 max-w-md w-full">
       <FieldSet>
         <FieldLegend className="flex w-full items-center justify-between">
-          Camera {conf.id} configuration{" "}
+          Camera {conf.id} configuration
           <Button
             className="max-h-8 max-w-8"
             onClick={() => {
-              setDelete(true);
+              toast.info(
+                `Deleted config for camera ${conf.id}, save changes to apply`,
+                {
+                  position: "top-center",
+                },
+              );
               if (unedited) setUnedited(false);
-              setNewConf((prev) => ({
+              setConf((prev) => ({
                 ...prev!,
                 cameras: prev!.cameras.filter((cam) => cam.id !== conf.id),
               }));
@@ -67,7 +61,7 @@ export function CameraConfig({
                 type="time"
                 defaultValue={conf.start_record}
                 onChange={(e) =>
-                  setNewConf((prev) => ({
+                  setConf((prev) => ({
                     ...prev!,
                     cameras: prev!.cameras.map((cam) =>
                       cam.id === conf.id
@@ -105,7 +99,7 @@ export function CameraConfig({
                 type="time"
                 defaultValue={conf.end_record}
                 onChange={(e) =>
-                  setNewConf((prev) => ({
+                  setConf((prev) => ({
                     ...prev!,
                     cameras: prev!.cameras.map((cam) =>
                       cam.id === conf.id
