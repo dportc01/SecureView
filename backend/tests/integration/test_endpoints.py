@@ -83,7 +83,7 @@ def test_get_conf(client):
     assert respose.status_code == 200
 
     data = respose.json
-    
+
     assert "notification_time" in data
     assert "cameras" in data
 

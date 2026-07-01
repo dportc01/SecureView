@@ -40,7 +40,7 @@ export function NotifTime({ conf, setConf, unedited, setUnedited }: Porps) {
 
             if (Number.isNaN(value)) return;
 
-            var clamped = value;
+            let clamped = value;
             if (minutes <= 0) {
               if (value <= 0) {
                 toast.warning("Value can not be bellow 0 hours, 1 minutes", {
@@ -78,7 +78,7 @@ export function NotifTime({ conf, setConf, unedited, setUnedited }: Porps) {
 
             if (Number.isNaN(value)) return;
 
-            var clamped = value;
+            let clamped = value;
             if (hours <= 0) {
               clamped = Math.min(59, Math.max(1, value));
             } else {
