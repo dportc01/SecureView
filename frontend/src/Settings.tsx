@@ -1,7 +1,7 @@
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
-import { CameraConfig } from "@/components/settings/app-cameraConfig";
+import { CameraConfig } from "@/components/settings/settings-cameraConfig";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { get_config, update_config } from "@/api/settingsClient";
@@ -9,8 +9,8 @@ import { type ConfigJson } from "@/types/Conf";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { restartSystem } from "@/api/systemClient";
-import { AddCameraConf } from "@/components/settings/app-addCameraConf";
-import { NotifTime } from "@/components/settings/app-notifTime";
+import { AddCameraConf } from "@/components/settings/settings-addCameraConf";
+import { NotifTime } from "@/components/settings/settings-notifTime";
 
 export function Settings() {
   const [unedited, setUnedited] = useState<boolean>(true);

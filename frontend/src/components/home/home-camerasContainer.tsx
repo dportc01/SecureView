@@ -1,4 +1,4 @@
-import { Camera } from "@/components/home/app-camera";
+import { Camera } from "@/components/home/home-camera";
 
 export function CamerasContainer({ ids }: { ids: number[] }) {
   const cameras = ids.map((id) => {
