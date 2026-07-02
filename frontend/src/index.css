@@ -81,6 +81,11 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+
+
+    --log-info: oklch(0.52 0.18 255);
+    --log-warning: oklch(0.62 0.17 85);
+    --log-error: oklch(0.56 0.22 28);
 }
 
 .dark {
@@ -115,6 +120,10 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+
+    --log-info: oklch(0.75 0.16 255);
+    --log-warning: oklch(0.82 0.16 90);
+    --log-error: oklch(0.72 0.19 28);
 }
 
 @layer base {
@@ -127,4 +136,18 @@
   html {
     @apply font-sans;
     }
+}
+
+@layer utilities {
+  .text-log-info {
+    color: var(--log-info);
+  }
+
+  .text-log-warning {
+    color: var(--log-warning);
+  }
+
+  .text-log-error {
+    color: var(--log-error);
+  }
 }

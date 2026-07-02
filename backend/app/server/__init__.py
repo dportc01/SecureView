@@ -6,6 +6,7 @@ from app.server.services.camera_service import CameraService
 from app.server.services.storage_service import StorageServive
 from app.server.services.configuration_service import ConfigurationService
 from app.server.services.system_service import SystemService
+from app.server.services.log_service import LogService
 from multiprocessing import Queue
 
 
@@ -36,6 +37,11 @@ def create_app(bus: BusInterface, cameras_ids: list[int], system_queue: Queue):
     system_service = SystemService(system_queue)
     system_bp = build_system_bp(camera_service, system_service)
     app.register_blueprint(system_bp)
+
+    from app.server.api.api_log import build_log_bp
+    log_service = LogService()
+    log_bp = build_log_bp(log_service)
+    app.register_blueprint(log_bp)
 
     print("App created successfully")
 

@@ -7,7 +7,6 @@ if (!apiUrl) {
 
 async function getCameras(): Promise<number[]> {
   const res = await fetch(`${apiUrl}/cameras/discover`);
-  console.log(res);
 
   await checkStatus(res);
   const data = await res.json();
