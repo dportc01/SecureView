@@ -33,9 +33,9 @@ const content: ContentType[] = [
     route: "/settings",
   },
   {
-    title: "Logs",
+    title: "Logging",
     icon: BookText,
-    route: "/logs",
+    route: "/logging",
   },
 ];
 
