@@ -2,14 +2,14 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
-import { LogsText } from "@/components/logs/logs-text";
+import { LogsText } from "@/components/logging/logging-text";
 import { useEffect, useState } from "react";
-import type { ResLogs } from "@/types/Log";
+import type { ResLogs } from "@/types/Logging";
 import { clean_log, download_log, get_log } from "@/api/logClient";
 import { Button } from "@/components/ui/button";
 import { ArrowDownToLine, Trash2 } from "lucide-react";
 
-export default function Logs() {
+export default function Logging() {
   const [log, setLog] = useState<ResLogs | null>(null);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function Logs() {
     <SidebarProvider>
       <AppSidebar variant="inset" />
       <SidebarInset>
-        <SiteHeader site="Logs" />
+        <SiteHeader site="Logging" />
         <main className="px-5">
           {log == null ? (
             <div className="pt-4">

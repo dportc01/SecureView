@@ -1,4 +1,4 @@
-import type { ResLogs, Log } from "@/types/Log";
+import type { ResLogs, Log } from "@/types/Logging";
 import { checkStatus, readSucces } from "./resAnalyzer";
 
 const apiUrl = import.meta.env.VITE_API_URL;
