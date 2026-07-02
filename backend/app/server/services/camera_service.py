@@ -30,6 +30,7 @@ class CameraService:
 
     def _get_response(self) -> str | None:
         # Retry to get response
+        reponse = None
         for i in range(10):
             reponse = self.bus.read_response()
             if reponse is not None:

@@ -6,5 +6,8 @@ class CameraInterface(Protocol):
     def start_capture(self) -> Iterable[Frame]:
         ...
 
-    def stop_capture(self) -> None:
+    def open_camera(self) -> None:
+        ...
+
+    def stop_camera(self) -> None:
         ...

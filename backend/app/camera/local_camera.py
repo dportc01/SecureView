@@ -18,16 +18,25 @@ class LocalCamera:
         elif system == "Windows":
             self.module = cv2.CAP_DSHOW
 
-    def start_capture(self) -> Iterable[Frame]:
+    def open_camera(self) -> None:
         if self.cap is None:
-            self.logger.info("Started video capture")
             self.cap = cv2.VideoCapture(self.device_index, self.module)
 
             if not self.cap.isOpened():
                 self.cap.release()
                 self.cap = None
-                raise RuntimeError(f"Failed to open camera:{self.device_index}")
+                raise RuntimeError(f"Failed to open camera: {self.device_index}")
 
+            self.logger.info("Opening camera")
+        else:
+            self.logger.warning("Alredy capturing")
+            return
+
+    def start_capture(self) -> Iterable[Frame]:
+        if self.cap is None:
+            self.logger.error("Camera is not opened")
+        else:
+            self.logger.info("Starting camera capture")
             try:
                 while True:
                     success, frame = self.cap.read()
@@ -42,14 +51,11 @@ class LocalCamera:
                         width=width,
                         height=height,
                     )
-            except Exception:
-                self.logger.exception("Sudden stop")
-                self.stop_capture()
-        else:
-            self.logger.warning("Alredy capturing")
-            return
+            except Exception as e:
+                self.logger.exception(f"Sudden stop {e}")
+                self.stop_camera()
 
-    def stop_capture(self) -> None:
+    def stop_camera(self) -> None:
         if self.cap is None:
             self.logger.warning("Tried to stop incative camera")
         else:

@@ -34,17 +34,17 @@ def build_cameras_bp(camera_service: CameraService) -> Blueprint:
     @bp.route("/cameras/<int:id>/start", methods=["POST"])
     def start_video(id):
         res = camera_service.start_camera(id)
-        return _format_response(res)
+        return _format_response(res, id)
 
     @bp.route("/cameras/<int:id>/stop", methods=["POST"])
     def stop_video(id):
         res = camera_service.stop_camera(id)
-        return _format_response(res)
+        return _format_response(res, id)
 
     return bp
 
 
-def _format_response(res: str | None):
+def _format_response(res: str | None, id: int):
     if res is None:
         return {"status": "error", "message": f"Camera {id} didn't respond"}, 500
 

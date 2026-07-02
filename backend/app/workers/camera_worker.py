@@ -41,6 +41,7 @@ def camera_woker(
             order = bus.cam_recv(camera_data['id'])
 
             if (order == Action.START):
+                camera.open_camera()
                 bus.respond(f"Starting recording on camera: {camera_data['id']}")
                 frame_stream = camera.start_capture()
                 for frame in frame_stream:
@@ -64,7 +65,7 @@ def camera_woker(
 
             if (order == Action.STOP):
                 bus.respond(f"Stoping recording on camera: {camera_data['id']}")
-                camera.stop_capture()
+                camera.stop_camera()
                 record_queue.put(RecCmd(RecType.STOP, None))
 
             if (order == Action.TERMINATE):
@@ -73,8 +74,10 @@ def camera_woker(
                 alive = False
 
         return
+    except Exception as e:
+        logger.exception(e)
     finally:
-        camera.stop_capture()
+        camera.stop_camera()
         bus.close()
 
 
