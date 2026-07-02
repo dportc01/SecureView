@@ -4,14 +4,16 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { LogsText } from "@/components/logs/logs-text";
 import { useEffect, useState } from "react";
-import type { Log } from "@/types/Log";
-import { get_log } from "@/api/logClient";
+import type { ResLogs } from "@/types/Log";
+import { clean_log, download_log, get_log } from "@/api/logClient";
+import { Button } from "@/components/ui/button";
+import { ArrowDownToLine, Trash2 } from "lucide-react";
 
 export default function Logs() {
-  const [logs, setLogs] = useState<Log[] | null>(null);
+  const [log, setLog] = useState<ResLogs | null>(null);
 
   useEffect(() => {
-    get_log().then(setLogs);
+    get_log().then(setLog);
   }, []);
 
   return (
@@ -20,16 +22,35 @@ export default function Logs() {
       <SidebarInset>
         <SiteHeader site="Logs" />
         <main className="px-5">
-          {logs == null ? (
+          {log == null ? (
             <div className="pt-4">
               No logs found check that backend is running correctly and the file
               exists
             </div>
           ) : (
-            <div className="flex flex-col pt-4 gap-2">
-              <span>Last {logs.length} logs</span>
-              <LogsText logs={logs} />
-            </div>
+            <>
+              <div className="flex flex-col pt-4 gap-2">
+                <span>Last {log.logs.length} logs</span>
+                <LogsText logs={log.logs} />
+                Size: {log.size}
+              </div>
+              <div className="flex gap-6 py-4">
+                <Button
+                  variant={"secondary"}
+                  className="text-log-error"
+                  onClick={clean_log}
+                >
+                  Clean logs <Trash2 />
+                </Button>
+                <Button
+                  variant={"secondary"}
+                  className="text-log-info"
+                  onClick={download_log}
+                >
+                  Full download <ArrowDownToLine />
+                </Button>
+              </div>
+            </>
           )}
         </main>
         <Toaster />

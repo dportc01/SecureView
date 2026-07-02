@@ -15,7 +15,7 @@ async function getCameras(): Promise<number[]> {
   return data;
 }
 
-async function startCamera(id: number) {
+async function startCamera(id: number): Promise<void> {
   const res = await fetch(`${apiUrl}/cameras/${id}/start`, {
     method: "POST",
   });
@@ -23,7 +23,7 @@ async function startCamera(id: number) {
   await checkStatus(res);
 }
 
-async function stopCamera(id: number) {
+async function stopCamera(id: number): Promise<void> {
   const res = await fetch(`${apiUrl}/cameras/${id}/stop`, {
     method: "POST",
   });

@@ -5,7 +5,7 @@ if (!apiUrl) {
   console.error("Missing env VITE_API_URL");
 }
 
-async function terminateSystem() {
+async function terminateSystem(): Promise<void> {
   const res = await fetch(`${apiUrl}/system/terminate`, {
     method: "POST",
   });

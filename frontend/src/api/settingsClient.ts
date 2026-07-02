@@ -20,7 +20,7 @@ async function get_config(): Promise<ConfigJson> {
   return body;
 }
 
-async function update_config(newConfig: ConfigJson) {
+async function update_config(newConfig: ConfigJson): Promise<void> {
   const res = await fetch(`${apiUrl}/config/update`, {
     method: "PUT",
     headers: {

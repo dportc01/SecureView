@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, Response
+from flask import Blueprint, jsonify, request, send_file
 from app.server.services.storage_service import StorageServive
 
 
@@ -22,12 +22,11 @@ def build_storage_bp(storage_service: StorageServive) -> Blueprint:
         if file is None:
             return {"status": "error", "message": f"File {data["filename"]} not found"}, 404
 
-        return Response(
-            storage_service.stream_file(file),
+        return send_file(
+            file,
             mimetype="video/mp4",
-            headers={
-                "Content-Disposition": f'attachment; filename="{file.name}"'
-            }
+            as_attachment=True,
+            download_name=file.name,
         )
 
     @bp.route("/storage/delete", methods=["POST"])

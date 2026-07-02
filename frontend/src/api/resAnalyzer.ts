@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-export async function checkStatus(res: Response) {
+export async function checkStatus(res: Response): Promise<void> {
   if (!res.ok) {
     let errorBody;
     let message = "Something went wrong";
@@ -25,7 +25,7 @@ export async function checkStatus(res: Response) {
   }
 }
 
-export async function readSucces(res: Response) {
+export async function readSucces(res: Response): Promise<void> {
   try {
     const body = await res.json();
     toast.success(body.message, { position: "top-center" });

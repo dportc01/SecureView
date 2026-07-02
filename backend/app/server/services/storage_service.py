@@ -56,15 +56,10 @@ class StorageServive:
         return video_files
 
     def get_file(self, filename: str) -> Path | None:
-        file = Path(RECORD_DIR) / f"{filename}.mp4"
+        file = (Path(RECORD_DIR) / f"{filename}.mp4").resolve()
         if file.is_file():
             return file
         return None
-
-    def stream_file(self, file: Path):
-        with open(file, "rb") as f:
-            while chunk := f.read(8192):
-                yield chunk
 
     def delete_file(self, filenames_list: list[str]) -> tuple[bool, str]:
         for filename in filenames_list:
