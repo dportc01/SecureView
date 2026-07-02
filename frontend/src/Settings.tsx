@@ -37,7 +37,7 @@ export function Settings() {
             If you have made changes and they don't appear here you might need
             to restart the backend
           </span>
-          <section className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
             {!conf ? (
               <span>
                 No configuration data detected, make sure the backend is running
@@ -73,8 +73,8 @@ export function Settings() {
                 </div>
               </>
             )}
-          </section>
-          <section className="flex flex-col gap-1">
+          </div>
+          <div className="flex flex-col gap-1">
             <Button
               className="max-w-md"
               disabled={unedited}
@@ -105,7 +105,7 @@ export function Settings() {
             <span className="text-muted-foreground">
               Saving the configuration will restart the backend
             </span>
-          </section>
+          </div>
         </main>
         <Toaster />
       </SidebarInset>

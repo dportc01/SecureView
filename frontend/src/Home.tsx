@@ -7,8 +7,8 @@ import { getCameras } from "./api/cameraClient";
 import { CamerasContainer } from "@/components/home/home-camerasContainer";
 import { TimeDisplay } from "@/components/home/home-timedisplay";
 import { Toaster } from "@/components/ui/sonner";
-import { TerminateSection } from "@/components/home/home-terminateSection";
-import { RestartSection } from "@/components/home/home-restartSection";
+import { Terminate } from "@/components/home/home-terminate";
+import { Restart } from "@/components/home/home-restart";
 
 export function Home() {
   const [cameras_ids, setCameraIds] = useState<number[]>([]);
@@ -26,9 +26,13 @@ export function Home() {
         <main className="px-5">
           <TimeDisplay />
           <div className="flex flex-col gap-6 py-6">
-            <CamerasContainer ids={cameras_ids} />
-            <RestartSection />
-            <TerminateSection />
+            <section>
+              <CamerasContainer ids={cameras_ids} />
+            </section>
+            <section className="flex flex-col gap-6">
+              <Restart />
+              <Terminate />
+            </section>
           </div>
         </main>
         <Toaster />

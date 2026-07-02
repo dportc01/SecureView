@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { restartSystem } from "@/api/systemClient";
 import { toast } from "sonner";
 
-export function RestartSection() {
+export function Restart() {
   return (
-    <section className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <h2 className="text-lg">Restart</h2>
       <p className="lg:w-[50vw]">
         System will restart and the page will be automatically reloaded.
@@ -38,6 +38,6 @@ export function RestartSection() {
       >
         Restart
       </Button>
-    </section>
+    </div>
   );
 }

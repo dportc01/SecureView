@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { terminateSystem } from "@/api/systemClient";
 
-export function TerminateSection() {
+export function Terminate() {
   return (
-    <section className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <h2 className="text-lg">Terminate</h2>
       <p className="lg:w-[50vw]">
         This will not only terminate cameras but the entire backend process.
@@ -14,6 +14,6 @@ export function TerminateSection() {
       <Button style={{ maxWidth: "120px" }} onClick={() => terminateSystem()}>
         Terminate
       </Button>
-    </section>
+    </div>
   );
 }
