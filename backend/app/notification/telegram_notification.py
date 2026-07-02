@@ -18,7 +18,7 @@ class TelegramNotification():
                 result = await self.bot.send_message(chat_id=user_id, text=msg)
                 self.logger.info(f"Sent notification {result.message_id} to {user_id}")
             except TelegramError as e:
-                self.logger.error(f"Couldn't notify {user_id}: {e}")
+                self.logger.exception(f"Couldn't notify {user_id}: {e}")
 
     async def notify_img(self, attached_msg: str, img: bytes) -> None:
         bio = BytesIO(img)
@@ -30,4 +30,4 @@ class TelegramNotification():
                 self.logger.info(f"Sent notification image {result.message_id} to {user_id}")
                 bio.seek(0)  # TODO: Check better method for reseting buffer
             except TelegramError as e:
-                self.logger.error(f"Couldn't send image to {user_id}: {e}")
+                self.logger.exception(f"Couldn't send image to {user_id}: {e}")

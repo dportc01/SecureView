@@ -80,7 +80,6 @@ export function Settings() {
               disabled={unedited}
               onClick={() => {
                 if (conf) {
-                  console.log(conf);
                   update_config(conf);
                   toast.promise(
                     (async () => {
@@ -95,7 +94,6 @@ export function Settings() {
                     {
                       loading: "Restarting...",
                       success: (msg) => msg,
-                      error: "No response, try reloading the page",
                       position: "top-center",
                     },
                   );

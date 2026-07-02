@@ -10,6 +10,8 @@ async function terminateSystem(): Promise<void> {
     method: "POST",
   });
 
+  console.log(res);
+
   await checkStatus(res);
   await readSucces(res);
 }

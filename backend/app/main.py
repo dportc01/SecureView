@@ -7,6 +7,7 @@ from .messaging import MultiprocessingBus, BusInterface
 from .notification import TelegramNotification
 from .record import Recorder
 from .config import MAX_QUEUE_SIZE, MAX_FRAME_QUEUE_SIZE
+from .logging.loggers import get_system_logger
 from multiprocessing import Queue, Process
 from queue import Empty
 
@@ -47,6 +48,12 @@ def start_all() -> bool:
 
     try:
         restart = system_queue.get(timeout=5)
+        # Clear queue
+        while True:
+            try:
+                system_queue.get_nowait()
+            except Empty:
+                break
     except Empty:
         restart = False
 
@@ -58,12 +65,16 @@ def start_all() -> bool:
 
 
 if __name__ == "__main__":
+    logger = get_system_logger()
+
     while True:
         restart = start_all()
 
         if restart:
             # Maybe change for log on the future
             print("================ Restarting system ================")
+            logger.info("Restarting system")
         else:
             print("================ Terminating system ================")
+            logger.info("Terminating system")
             break

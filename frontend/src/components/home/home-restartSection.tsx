@@ -31,7 +31,6 @@ export function RestartSection() {
             {
               loading: "Restarting...",
               success: (msg) => msg,
-              error: "No response, try reloading the page",
               position: "top-center",
             },
           );

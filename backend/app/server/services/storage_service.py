@@ -4,6 +4,7 @@ from enum import Enum
 import subprocess
 import json
 from app.config import RECORD_DIR
+from app.logging.loggers import get_files_logger
 
 
 class Status(str, Enum):
@@ -27,6 +28,9 @@ SIZE_TB = SIZE_GB * 1024
 
 
 class StorageServive:
+    def __init__(self) -> None:
+        self.logger = get_files_logger()
+
     def get_records(self) -> list[VideoFile]:
         video_files: list[VideoFile] = []
 
@@ -66,6 +70,7 @@ class StorageServive:
             file = Path(RECORD_DIR) / f"{filename}.mp4"
             if file.is_file():
                 file.unlink()
+                self.logger.info(f"Deleted file {filename}.mp4")
             else:
                 return False, filename
         return True, ""

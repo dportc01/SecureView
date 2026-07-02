@@ -1,6 +1,5 @@
 from pathlib import Path
 from collections import deque
-import logging
 import re
 
 LOG_PATTERN = re.compile(
@@ -37,7 +36,7 @@ class LogService:
             ]
 
         except Exception as e:
-            logging.exception(e)
+            print.exception(e)
             return None
 
     def log_size(self) -> str:
@@ -60,7 +59,7 @@ class LogService:
                 pass  # This truncates the file
             return True
         except Exception as e:
-            logging.exception(e)
+            print.exception(e)
             return False
 
     def _parse_line(self, line: str):

@@ -9,32 +9,33 @@ def build_system_bp(camera_service: CameraService, system_service: SystemService
 
     @bp.route("/system/terminate", methods=["POST"])
     def terminate():
-        success = camera_service.terminate_cameras()
-        if success is None:
-            return {"status": "error", "message": "Cameras didn't respond"}, 500
-
         success = system_service.terminate_system()
         if not success:
             return {
                 "stauts": "error",
-                "message": "Stopped cameras but couldn't stop server, manual termintaion required"
+                "message": "Couldn't stop server, manual intervention required"
             }, 500
+
+        success = camera_service.terminate_cameras()
+        if success is None:
+            return {"status": "error", "message": "Cameras didn't respond, "
+                    "manual intervention required"}, 500
 
         return {"status": "ok", "message": "Terminating cameras and server"}, 200
 
     @bp.route("/system/restart", methods=["POST"])
     def restart():
-        success = camera_service.terminate_cameras()
-        if success is None:
-            return {"status": "error", "message": "Cameras didn't respond"}, 500
-
         success = system_service.restart_system()
         if not success:
             return {
                 "status": "error",
-                "message": "Stopped cameras but couldn't restart server, "
-                "manual termination required"
+                "message": "Couldn't restart server, manual intervention required"
             }, 500
+
+        success = camera_service.terminate_cameras()
+        if success is None:
+            return {"status": "error", "message": "Cameras didn't respond, "
+                    "manual intervention required"}, 500
 
         return {"status": "ok", "message": "Restarting cameras and server"}, 200
 

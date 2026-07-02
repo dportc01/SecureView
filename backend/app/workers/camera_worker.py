@@ -125,7 +125,7 @@ def _process_frame(
                 )
             last_notif_time = now
     except Exception:
-        logger.error("Couldn't put notification on queue")
+        logger.exception("Couldn't put notification on queue")
 
     # Sending to Flask server
     bus.write_frame(camera_id, img_frame)

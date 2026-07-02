@@ -36,6 +36,28 @@ def get_record_logger(device_index: int):
     return logger
 
 
+def get_system_logger():
+    logger = logging.getLogger("SYSTEM")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    if not logger.handlers:
+        logger.addHandler(_get_file_handler())
+
+    return logger
+
+
+def get_files_logger():
+    logger = logging.getLogger("FILES")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    if not logger.handlers:
+        logger.addHandler(_get_file_handler())
+
+    return logger
+
+
 def _get_file_handler() -> logging.FileHandler:
     global _file_handler
 
