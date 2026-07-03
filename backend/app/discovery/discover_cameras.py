@@ -5,7 +5,7 @@ import platform
 import app.config as config
 
 
-class CameraType(str, Enum):
+class CameraType(Enum):
     MOCK = "MOCK"
     LOCAL = "LOCAL"
 

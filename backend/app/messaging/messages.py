@@ -8,7 +8,7 @@ class Command:
     action: Action
 
 
-class Action(str, Enum):
+class Action(Enum):
     START = "START"
     STOP = "STOP"
     TERMINATE = "TERMINATE"

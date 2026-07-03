@@ -7,7 +7,7 @@ from app.config import RECORD_DIR
 from app.logging.loggers import get_files_logger
 
 
-class Status(str, Enum):
+class Status(Enum):
     RECORDING = "Recording"
     FINISHED = "Finished"
 

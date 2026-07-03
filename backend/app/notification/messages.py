@@ -9,7 +9,7 @@ class Command:
     img: bytes | None
 
 
-class Type(str, Enum):
+class Type(Enum):
     MESSAGE = "MESSAGE"
     IMAGE = "IMAGE"
     TERMINATE = "TERMINATE"

@@ -9,7 +9,7 @@ class Command:
     frame: np.ndarray | None
 
 
-class Type(str, Enum):
+class Type(Enum):
     STOP = "STOP"
     FRAME = "FRAME"
     TERMINATE = "TERMINATE"  # Only meant to be called by manager
