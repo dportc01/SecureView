@@ -1,4 +1,5 @@
 from flask import Blueprint
+
 from app.server.services.camera_service import CameraService
 from app.server.services.system_service import SystemService
 

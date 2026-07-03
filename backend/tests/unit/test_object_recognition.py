@@ -1,7 +1,8 @@
-from app.object_recognition.classifier import Clasiffier
-from app.camera.frame import Frame
 from pathlib import Path
 import cv2
+
+from app.object_recognition.classifier import Clasiffier
+from app.camera.frame import Frame
 
 
 def test_classifier():

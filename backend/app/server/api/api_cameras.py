@@ -1,4 +1,5 @@
 from flask import Blueprint, Response, jsonify
+
 from app.server.services.camera_service import CameraService
 
 

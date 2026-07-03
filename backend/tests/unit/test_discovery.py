@@ -1,5 +1,6 @@
 import os
 import pytest
+
 from app.discovery import discover_cameras
 from app.discovery import CameraType
 

@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
+from multiprocessing import Queue
+
 from app.config import cors_allow_url
 from app.messaging import BusInterface
 
@@ -14,8 +16,6 @@ from app.server.api.api_cameras import build_cameras_bp
 from app.server.api.api_configuration import build_configuration_bp
 from app.server.api.api_system import build_system_bp
 from app.server.api.api_log import build_log_bp
-
-from multiprocessing import Queue
 
 
 def create_app(bus: BusInterface, cameras_ids: list[int], system_queue: Queue):

@@ -1,14 +1,15 @@
+from multiprocessing import Queue
+import socket
+import time
+import pytest
+import logging
+
 from app.discovery import CameraData, CameraType
 from app.messaging import MultiprocessingBus, BusInterface
 from app.workers import start_workers, wait_and_terminate_workers
 from app.notification import MockNotification
 from app.server import create_app
 from tests.integration.recorder_mock import RecorderMock
-from multiprocessing import Queue
-import socket
-import time
-import pytest
-import logging
 
 
 @pytest.fixture(scope="session")

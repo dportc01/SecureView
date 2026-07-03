@@ -1,8 +1,9 @@
 import pytest
 import time
+from multiprocessing import Queue
+
 from app.workers.notification_worker import notification_worker
 from app.notification import MockNotification, Command, Type
-from multiprocessing import Queue
 
 
 @pytest.fixture

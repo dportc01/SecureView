@@ -1,4 +1,6 @@
 import time
+from multiprocessing import Queue, Process
+from queue import Empty
 
 from .server import create_app
 from .discovery import discover_cameras
@@ -8,8 +10,6 @@ from .notification import TelegramNotification
 from .record import Recorder
 from .config import MAX_QUEUE_SIZE, MAX_FRAME_QUEUE_SIZE
 from .logging.loggers import get_system_logger
-from multiprocessing import Queue, Process
-from queue import Empty
 
 
 def run_app(bus: BusInterface, cameras_ids: list[int], system_queue: Queue):

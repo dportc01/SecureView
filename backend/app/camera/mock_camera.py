@@ -1,7 +1,8 @@
 from typing import Iterable
-from .frame import Frame
 import time
 import numpy as np
+
+from .frame import Frame
 
 
 class MockCamera:

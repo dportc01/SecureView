@@ -1,5 +1,6 @@
 from multiprocessing import Queue
 from queue import Empty, Full
+
 from .messages import Command, Action
 from app.discovery import CameraData
 from app.config import MAX_QUEUE_SIZE, MAX_FRAME_QUEUE_SIZE

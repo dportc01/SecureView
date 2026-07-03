@@ -4,6 +4,7 @@ import logging
 import os
 import json
 from datetime import time
+
 from .config_types import RecordTime, ConfigJson, ConfigJsonCam
 
 # Queue

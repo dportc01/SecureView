@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, send_file
+
 from app.server.services.log_service import LogService
 
 

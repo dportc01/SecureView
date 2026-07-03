@@ -3,8 +3,9 @@
 import time
 import logging
 import pytest
-from tests.integration.recorder_mock import RecorderMock
 from multiprocessing import Process, Queue
+
+from tests.integration.recorder_mock import RecorderMock
 from app.workers import start_workers, wait_and_terminate_workers, ManagerProcesses
 from app.messaging import BusInterface, MultiprocessingBus
 from app.notification import MockNotification

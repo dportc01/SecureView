@@ -1,4 +1,5 @@
 from typing import Protocol, Iterable
+
 from .frame import Frame
 
 

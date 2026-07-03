@@ -1,12 +1,13 @@
 # This tests are mostly falky and depend on the computer processing power
 
-from app.workers.record_woker import record_woker
-from app.record import Command, Type
-from tests.integration.recorder_mock import RecorderMock
 from multiprocessing import Queue, Process, Manager
 import numpy as np
 import pytest
 import time
+
+from app.workers.record_woker import record_woker
+from app.record import Command, Type
+from tests.integration.recorder_mock import RecorderMock
 
 
 @pytest.fixture(scope="function")

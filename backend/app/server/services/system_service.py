@@ -1,6 +1,7 @@
-from app.logging.loggers import get_system_logger
 from multiprocessing import Queue
 from queue import Full
+
+from app.logging.loggers import get_system_logger
 
 
 class SystemService:

@@ -1,6 +1,7 @@
+import json
+
 from app.config import CONF_JSON, ConfigJson, CONFIG_JSON_PATH
 from app.logging.loggers import get_files_logger
-import json
 
 
 class ConfigurationService:

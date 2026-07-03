@@ -1,6 +1,7 @@
 import cv2
 import platform
 from typing import Iterable
+
 from app.logging.loggers import get_camera_logger
 from .frame import Frame
 

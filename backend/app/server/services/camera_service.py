@@ -1,5 +1,6 @@
-from app.messaging import BusInterface
 import time
+
+from app.messaging import BusInterface
 
 
 class CameraService:

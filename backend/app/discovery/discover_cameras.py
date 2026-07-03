@@ -2,6 +2,7 @@ from typing import TypedDict
 from enum import Enum
 import cv2
 import platform
+
 import app.config as config
 
 

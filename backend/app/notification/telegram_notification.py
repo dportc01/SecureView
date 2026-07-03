@@ -1,6 +1,7 @@
 from telegram import Bot
 from telegram.error import TelegramError
 from io import BytesIO
+
 from app.logging.loggers import get_notification_logger
 from app.config import telegram_token, telegram_allowed_users
 
