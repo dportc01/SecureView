@@ -1,4 +1,4 @@
-class MockNotification():
+class MockNotification:
     def __init__(self) -> None:
         self.msg_called = False
         self.img_called = False

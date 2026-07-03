@@ -17,14 +17,8 @@ class MockCamera:
         print("Capture process begins")
         self.capturing = True
         while self.capturing:
-            frame = np.random.randint(
-                0, 255, (300, 400, 3), dtype=np.uint8
-            )
-            yield Frame(
-                data=frame,
-                width=400,
-                height=300
-            )
+            frame = np.random.randint(0, 255, (300, 400, 3), dtype=np.uint8)
+            yield Frame(data=frame, width=400, height=300)
             time.sleep(0.008)  # 120 FPS
 
     def stop_camera(self) -> None:

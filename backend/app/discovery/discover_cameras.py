@@ -25,9 +25,9 @@ def discover_cameras() -> list[CameraData]:
     # of cameras
     module = cv2.CAP_ANY
 
-    if (system == "Linux"):
+    if system == "Linux":
         module = cv2.CAP_V4L2
-    elif (system == "Windows"):
+    elif system == "Windows":
         module = cv2.CAP_DSHOW
 
     for i in range(config.MAX_LOCAL_CAMERA_INDEX):

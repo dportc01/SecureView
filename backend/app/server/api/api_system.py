@@ -3,7 +3,9 @@ from app.server.services.camera_service import CameraService
 from app.server.services.system_service import SystemService
 
 
-def build_system_bp(camera_service: CameraService, system_service: SystemService) -> Blueprint:
+def build_system_bp(
+    camera_service: CameraService, system_service: SystemService
+) -> Blueprint:
 
     bp = Blueprint("system", __name__)
 
@@ -13,13 +15,15 @@ def build_system_bp(camera_service: CameraService, system_service: SystemService
         if not success:
             return {
                 "stauts": "error",
-                "message": "Couldn't stop server, manual intervention required"
+                "message": "Couldn't stop server, manual intervention required",
             }, 500
 
         success = camera_service.terminate_cameras()
         if success is None:
-            return {"status": "error", "message": "Cameras didn't respond, "
-                    "manual intervention required"}, 500
+            return {
+                "status": "error",
+                "message": "Cameras didn't respond, " "manual intervention required",
+            }, 500
 
         return {"status": "ok", "message": "Terminating cameras and server"}, 200
 
@@ -29,13 +33,15 @@ def build_system_bp(camera_service: CameraService, system_service: SystemService
         if not success:
             return {
                 "status": "error",
-                "message": "Couldn't restart server, manual intervention required"
+                "message": "Couldn't restart server, manual intervention required",
             }, 500
 
         success = camera_service.terminate_cameras()
         if success is None:
-            return {"status": "error", "message": "Cameras didn't respond, "
-                    "manual intervention required"}, 500
+            return {
+                "status": "error",
+                "message": "Cameras didn't respond, " "manual intervention required",
+            }, 500
 
         return {"status": "ok", "message": "Restarting cameras and server"}, 200
 

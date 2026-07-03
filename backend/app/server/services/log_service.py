@@ -29,11 +29,7 @@ class LogService:
             with self.log_path.open("r", encoding="utf-8", errors="replace") as f:
                 lines = deque(f, maxlen=100)
 
-            return [
-                parsed
-                for line in lines
-                if (parsed := self._parse_line(line))
-            ]
+            return [parsed for line in lines if (parsed := self._parse_line(line))]
 
         except Exception as e:
             print.exception(e)

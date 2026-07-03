@@ -22,14 +22,12 @@ def build_cameras_bp(camera_service: CameraService) -> Blueprint:
                     continue
 
                 yield (
-                    b"--frame\r\n"
-                    b"Content-Type: image/jpeg\r\n\r\n" +
-                    frame +
-                    b"\r\n"
+                    b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
                 )
 
-        return Response(generate_frames(),
-                        mimetype="multipart/x-mixed-replace; boundary=frame")
+        return Response(
+            generate_frames(), mimetype="multipart/x-mixed-replace; boundary=frame"
+        )
 
     @bp.route("/cameras/<int:id>/start", methods=["POST"])
     def start_video(id):

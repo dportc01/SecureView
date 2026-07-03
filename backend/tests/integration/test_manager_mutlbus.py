@@ -18,10 +18,7 @@ def set_up_tests():
     bus = MultiprocessingBus(cameras_data)
     notifier = MockNotification()
     notif_queue = Queue()
-    recorder = RecorderMock({
-        "recording": False,
-        "frame_received": False
-    })
+    recorder = RecorderMock({"recording": False, "frame_received": False})
     record_queue = []
     for _ in range(len(cameras_data)):
         record_queue.append(Queue())
@@ -32,7 +29,7 @@ def set_up_tests():
         notifier=notifier,
         notif_queue=notif_queue,
         recorder=recorder,
-        record_queue=record_queue
+        record_queue=record_queue,
     )
 
     yield bus, control_params
@@ -57,15 +54,14 @@ def test_empty_data_manager():
     bus = MultiprocessingBus(cameras_data)
     notifier = MockNotification()
     notif_queue = Queue()
-    recorder = RecorderMock({
-        "recording": False,
-        "frame_received": False
-    })
+    recorder = RecorderMock({"recording": False, "frame_received": False})
     record_queue = []
     for _ in range(len(cameras_data)):
         record_queue.append(Queue())
 
-    control_params = start_workers(cameras_data, bus, notifier, notif_queue, recorder, record_queue)
+    control_params = start_workers(
+        cameras_data, bus, notifier, notif_queue, recorder, record_queue
+    )
 
     assert len(control_params.camera_processes) == 0
 
@@ -117,9 +113,10 @@ def test_camera_worker_stop(set_up_tests):
 
 
 def terminate_workers(
-        control_params: ManagerProcesses,
-        bus: BusInterface,
-        notif_queue: Queue, record_queue: list[Queue]
+    control_params: ManagerProcesses,
+    bus: BusInterface,
+    notif_queue: Queue,
+    record_queue: list[Queue],
 ):
     aux_procc = Process(target=simulate_external_terminate, args=(bus,))
     aux_procc.start()

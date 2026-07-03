@@ -10,5 +10,5 @@ class Frame:
     height: int
 
     def to_bytes(self) -> bytes:
-        _, buffer = cv2.imencode('.jpg', self.data)
+        _, buffer = cv2.imencode(".jpg", self.data)
         return buffer.tobytes()

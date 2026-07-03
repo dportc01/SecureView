@@ -5,7 +5,7 @@ from app.logging.loggers import get_notification_logger
 from app.config import telegram_token, telegram_allowed_users
 
 
-class TelegramNotification():
+class TelegramNotification:
     def __init__(self) -> None:
         if telegram_token is None:
             raise RuntimeError("Missing telegram bot token")
@@ -26,8 +26,12 @@ class TelegramNotification():
 
         for user_id in telegram_allowed_users:
             try:
-                result = await self.bot.send_photo(chat_id=user_id, photo=bio, caption=attached_msg)
-                self.logger.info(f"Sent notification image {result.message_id} to {user_id}")
+                result = await self.bot.send_photo(
+                    chat_id=user_id, photo=bio, caption=attached_msg
+                )
+                self.logger.info(
+                    f"Sent notification image {result.message_id} to {user_id}"
+                )
                 bio.seek(0)  # TODO: Check better method for reseting buffer
             except TelegramError as e:
                 self.logger.exception(f"Couldn't send image to {user_id}: {e}")

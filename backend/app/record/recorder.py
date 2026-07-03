@@ -5,12 +5,12 @@ from pathlib import Path
 from app.config import RECORD_DIR
 
 
-class Recorder():
+class Recorder:
     def __init__(self) -> None:
         self.format = ".mp4"
         self.filepath: Path | None = None
         self.final_path: Path | None = None
-        self.fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # type: ignore[attr-defined]
+        self.fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # type: ignore[attr-defined]
         self.out: cv2.VideoWriter
 
     def start_record(self, camera_id: int, height: int, width: int) -> None:

@@ -17,10 +17,7 @@ def client():
     bus = MultiprocessingBus(cameras_data)
     notifier = MockNotification()
     notif_queue = Queue()
-    recorder = RecorderMock({
-        "recording": False,
-        "frame_received": False
-    })
+    recorder = RecorderMock({"recording": False, "frame_received": False})
     record_queue = []
     for _ in range(len(cameras_data)):
         record_queue.append(Queue())
@@ -31,7 +28,7 @@ def client():
         notifier=notifier,
         notif_queue=notif_queue,
         recorder=recorder,
-        record_queue=record_queue
+        record_queue=record_queue,
     )
 
     cameras_ids = [cam["id"] for cam in cameras_data]

@@ -11,13 +11,9 @@ class InvalidQueueIndexError(Exception):
 
 class MultiprocessingBus:
     def __init__(self, cameras_data: list[CameraData]) -> None:
-        self.queues = {
-            cam["id"]: Queue(MAX_QUEUE_SIZE)
-            for cam in cameras_data
-        }
+        self.queues = {cam["id"]: Queue(MAX_QUEUE_SIZE) for cam in cameras_data}
         self.frames_queues = {
-            cam["id"]: Queue(MAX_FRAME_QUEUE_SIZE)
-            for cam in cameras_data
+            cam["id"]: Queue(MAX_FRAME_QUEUE_SIZE) for cam in cameras_data
         }
         self.res_queue = Queue()
 
@@ -29,10 +25,7 @@ class MultiprocessingBus:
 
     def send_terminate(self) -> None:
         for id, queue in self.queues.items():
-            cmd = Command(
-                dev_id=id,
-                action=Action.TERMINATE
-            )
+            cmd = Command(dev_id=id, action=Action.TERMINATE)
             queue.put(cmd)
 
     def cam_recv(self, id: int) -> Action | None:
@@ -88,10 +81,7 @@ class MultiprocessingBus:
     def _send(self, id: int, action: Action) -> None:
         queue = self._get_queue(id)
 
-        cmd = Command(
-            dev_id=id,
-            action=action
-        )
+        cmd = Command(dev_id=id, action=action)
 
         queue.put(cmd)
 

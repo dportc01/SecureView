@@ -6,7 +6,6 @@ import json
 from datetime import time
 from .config_types import RecordTime, ConfigJson, ConfigJsonCam
 
-
 # Queue
 MAX_LOCAL_CAMERA_INDEX = 4
 MAX_FRAME_QUEUE_SIZE = 60
@@ -75,4 +74,4 @@ if "cameras" in data:
 
 
 # Data for configuration api
-CONF_JSON = ConfigJson(notification_time=NOTIF_COOLDOWN/MINUTE, cameras=camera_config)
+CONF_JSON = ConfigJson(notification_time=NOTIF_COOLDOWN / MINUTE, cameras=camera_config)

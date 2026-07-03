@@ -12,10 +12,7 @@ import time
 @pytest.fixture(scope="function")
 def set_up_tests():
     manager = Manager()
-    state = manager.dict({
-        "recording": False,
-        "frame_received": False
-    })
+    state = manager.dict({"recording": False, "frame_received": False})
     mock = RecorderMock(state)
     queue = Queue()
     p = Process(target=record_woker, args=(mock, queue, 0))

@@ -34,7 +34,7 @@ def start_all() -> bool:
         notifier=notifier,
         notif_queue=notif_queue,
         recorder=recorder,
-        record_queue=recorder_queue
+        record_queue=recorder_queue,
     )
 
     cameras_ids = [cam["id"] for cam in cameras_data]

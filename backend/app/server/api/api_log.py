@@ -11,15 +11,15 @@ def build_log_bp(log_service: LogService) -> Blueprint:
         log = log_service.read_log()
 
         if log is None:
-            return {"status": "error", "message": "Couldn't open file, check "
-                    "that it exist or it is readeable"}, 500
+            return {
+                "status": "error",
+                "message": "Couldn't open file, check "
+                "that it exist or it is readeable",
+            }, 500
 
         size = log_service.log_size()
 
-        res = {
-            "logs": log,
-            "size": size
-        }
+        res = {"logs": log, "size": size}
 
         return jsonify(res)
 
@@ -28,7 +28,10 @@ def build_log_bp(log_service: LogService) -> Blueprint:
         success = log_service.clean_log()
 
         if not success:
-            return {"status": "error", "message": "Couldn't delete the contents of the file"}, 500
+            return {
+                "status": "error",
+                "message": "Couldn't delete the contents of the file",
+            }, 500
 
         return {"status": "ok", "message": "Succesfully deleted app.log contents"}, 200
 
