@@ -4,17 +4,11 @@ from datetime import datetime, time as dt_time
 from queue import Queue, Full
 from app.config import NOTIF_COOLDOWN, RECORD_TIMES, RecordTime
 from app.discovery import CameraData
-from app.camera.factory import build_camera
-from app.camera.frame import Frame
+from app.camera import build_camera
+from app.camera import Frame
 from app.messaging import BusInterface, Action
-from app.notification import (
-    Command as NotifCmd,
-    Type as NotifType
-)
-from app.record import (
-    Command as RecCmd,
-    Type as RecType
-)
+from app.notification import Command as NotifCmd, Type as NotifType
+from app.record import Command as RecCmd, Type as RecType
 from app.object_recognition.classifier import Clasiffier
 from app.logging.loggers import get_camera_logger
 from logging import Logger
@@ -29,24 +23,24 @@ def camera_woker(
 ):
 
     camera = build_camera(camera_data)
-    logger = get_camera_logger(camera_data['id'])
+    logger = get_camera_logger(camera_data["id"])
     classifier = Clasiffier()
     last_notif_time: float = 0.0
-    record_times = RECORD_TIMES.get(camera_data['id'])
+    record_times = RECORD_TIMES.get(camera_data["id"])
     is_recording = False
     alive = True
 
     try:
         while alive:
-            order = bus.cam_recv(camera_data['id'])
+            order = bus.cam_recv(camera_data["id"])
 
-            if (order == Action.START):
+            if order == Action.START:
                 camera.open_camera()
                 bus.respond(f"Starting recording on camera: {camera_data['id']}")
                 frame_stream = camera.start_capture()
                 for frame in frame_stream:
                     last_notif_time, is_recording = _process_frame(
-                        camera_id=camera_data['id'],
+                        camera_id=camera_data["id"],
                         logger=logger,
                         bus=bus,
                         frame=frame,
@@ -59,16 +53,16 @@ def camera_woker(
                     )
 
                     # Breack loop check
-                    order = bus.cam_recv(camera_data['id'])
+                    order = bus.cam_recv(camera_data["id"])
                     if order == Action.STOP or order == Action.TERMINATE:
                         break
 
-            if (order == Action.STOP):
+            if order == Action.STOP:
                 bus.respond(f"Stoping recording on camera: {camera_data['id']}")
                 camera.stop_camera()
                 record_queue.put(RecCmd(RecType.STOP, None))
 
-            if (order == Action.TERMINATE):
+            if order == Action.TERMINATE:
                 bus.respond(f"Terminating camera: {camera_data['id']}")
                 logger.info(f"Terminating camera {camera_data['id']}")
                 alive = False
@@ -91,7 +85,7 @@ def _process_frame(
     last_notif_time: float,
     record_queue: Queue,
     record_times: RecordTime | None,
-    is_recording: bool
+    is_recording: bool,
 ) -> tuple[float, bool]:
 
     now = time.time()
@@ -109,7 +103,7 @@ def _process_frame(
             end=record_times.end,
             record_queue=record_queue,
             is_recording=is_recording,
-            frame=frame.data
+            frame=frame.data,
         )
 
     # JPG img encoding
@@ -123,7 +117,7 @@ def _process_frame(
                     NotifCmd(
                         NotifType.IMAGE,
                         f"{detect.class_name} detected on camera: {camera_id}",
-                        img_frame
+                        img_frame,
                     )
                 )
             last_notif_time = now
@@ -137,12 +131,12 @@ def _process_frame(
 
 
 def _record_frame(
-        now: dt_time,
-        start: dt_time,
-        end: dt_time,
-        record_queue: Queue,
-        is_recording: bool,
-        frame: np.ndarray
+    now: dt_time,
+    start: dt_time,
+    end: dt_time,
+    record_queue: Queue,
+    is_recording: bool,
+    frame: np.ndarray,
 ) -> bool:
 
     if _is_between(now, start, end):

@@ -1,7 +1,7 @@
 from app.camera import factory
 from app.discovery import CameraType
-from app.camera.mock_camera import MockCamera
-from app.camera.local_camera import LocalCamera
+from app.camera import MockCamera
+from app.camera import LocalCamera
 
 
 def test_build_mock_camera():

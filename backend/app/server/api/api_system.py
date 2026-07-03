@@ -1,7 +1,7 @@
 from flask import Blueprint
 
-from app.server.services.camera_service import CameraService
-from app.server.services.system_service import SystemService
+from app.server.services import CameraService
+from app.server.services import SystemService
 
 
 def build_system_bp(

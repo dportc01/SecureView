@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import cv2
 
-from app.camera.frame import Frame
+from app.camera import Frame
 
 
 @dataclass

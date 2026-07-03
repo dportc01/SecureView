@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 
-from app.server.services.configuration_service import ConfigurationService
+from app.server.services import ConfigurationService
 
 
 def build_configuration_bp(configuration_service: ConfigurationService) -> Blueprint:

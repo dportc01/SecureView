@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, send_file
 
-from app.server.services.storage_service import StorageServive
+from app.server.services import StorageServive
 
 
 def build_storage_bp(storage_service: StorageServive) -> Blueprint:

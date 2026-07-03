@@ -5,17 +5,19 @@ from multiprocessing import Queue
 from app.config import cors_allow_url
 from app.messaging import BusInterface
 
-from app.server.services.camera_service import CameraService
-from app.server.services.storage_service import StorageServive
-from app.server.services.configuration_service import ConfigurationService
-from app.server.services.system_service import SystemService
-from app.server.services.log_service import LogService
+from app.server.services import (
+    CameraService,
+    StorageServive,
+    ConfigurationService,
+    SystemService,
+    LogService,
+)
 
-from app.server.api.api_storge import build_storage_bp
-from app.server.api.api_cameras import build_cameras_bp
-from app.server.api.api_configuration import build_configuration_bp
-from app.server.api.api_system import build_system_bp
-from app.server.api.api_log import build_log_bp
+from app.server.api import build_storage_bp
+from app.server.api import build_cameras_bp
+from app.server.api import build_configuration_bp
+from app.server.api import build_system_bp
+from app.server.api import build_log_bp
 
 
 def create_app(bus: BusInterface, cameras_ids: list[int], system_queue: Queue):
