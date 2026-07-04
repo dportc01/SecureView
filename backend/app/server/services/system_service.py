@@ -14,6 +14,7 @@ class SystemService:
             self.queue.put_nowait(False)
             return True
         except (Full, ValueError) as e:
+            print(e)
             self.logger.exception(e)
             return False
 
@@ -22,5 +23,6 @@ class SystemService:
             self.queue.put_nowait(True)
             return True
         except (Full, ValueError) as e:
+            print(e)
             self.logger.exception(e)
             return False

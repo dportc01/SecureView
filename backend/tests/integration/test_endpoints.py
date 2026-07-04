@@ -113,11 +113,13 @@ def test_stop(session_client):
 # ============== SYSTEM ENDPOINTS ==============
 def test_terminate(function_client):
     response = function_client.post("/system/terminate")
+    time.sleep(0.2)
     assert response.status_code == 200
 
 
 def test_restart(function_client):
     response = function_client.post("/system/restart")
+    time.sleep(0.2)
     assert response.status_code == 200
 
 
