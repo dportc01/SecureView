@@ -1,7 +1,7 @@
 from app.record import Recorder
 
 
-class RecorderMock(Recorder):
+class MockRecorder(Recorder):
     def __init__(self, state):
         self.state = state
 

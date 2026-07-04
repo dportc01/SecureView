@@ -5,7 +5,7 @@ import logging
 import pytest
 from multiprocessing import Process, Queue
 
-from tests.integration.recorder_mock import RecorderMock
+from tests.integration.mock_recorder import MockRecorder
 from app.workers import start_workers, wait_and_terminate_workers, ManagerProcesses
 from app.messaging import BusInterface, MultiprocessingBus
 from app.notification import MockNotification
@@ -19,7 +19,7 @@ def set_up_tests():
     bus = MultiprocessingBus(cameras_data)
     notifier = MockNotification()
     notif_queue = Queue()
-    recorder = RecorderMock({"recording": False, "frame_received": False})
+    recorder = MockRecorder({"recording": False, "frame_received": False})
     record_queue = []
     for _ in range(len(cameras_data)):
         record_queue.append(Queue())
@@ -55,7 +55,7 @@ def test_empty_data_manager():
     bus = MultiprocessingBus(cameras_data)
     notifier = MockNotification()
     notif_queue = Queue()
-    recorder = RecorderMock({"recording": False, "frame_received": False})
+    recorder = MockRecorder({"recording": False, "frame_received": False})
     record_queue = []
     for _ in range(len(cameras_data)):
         record_queue.append(Queue())

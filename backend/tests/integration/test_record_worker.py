@@ -5,18 +5,18 @@ import numpy as np
 import pytest
 import time
 
-from app.workers.record_woker import record_woker
+from app.workers.record_worker import record_worker
 from app.record import Command, Type
-from tests.integration.recorder_mock import RecorderMock
+from tests.integration.mock_recorder import MockRecorder
 
 
 @pytest.fixture(scope="function")
 def set_up_tests():
     manager = Manager()
     state = manager.dict({"recording": False, "frame_received": False})
-    mock = RecorderMock(state)
+    mock = MockRecorder(state)
     queue = Queue()
-    p = Process(target=record_woker, args=(mock, queue, 0))
+    p = Process(target=record_worker, args=(mock, queue, 0))
     p.start()
 
     yield state, queue

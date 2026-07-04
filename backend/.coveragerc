@@ -1,0 +1,13 @@
+[run]
+concurrency = multiprocessing
+parallel = True
+source =
+    app
+
+omit =
+    app/main.py
+    app/**/mock_*.py
+
+[report]
+show_missing = True
+skip_covered = True

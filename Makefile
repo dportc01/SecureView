@@ -1,4 +1,4 @@
-.PHONY: run frontend frontend-lint backend-dev backend-test backend-lint backend-clean
+.PHONY: run frontend frontend-lint backend-dev backend-test backend-test-cov backend-lint backend-clean
 
 run:
 	@echo "================ STARTING ALL SERVICES ================"
@@ -11,6 +11,8 @@ backend-dev:
 	cd backend/ && source .venv/bin/activate && python -m app.main
 backend-test:
 	cd backend/ && source .venv/bin/activate && pytest -s --log-cli-level=INFO
+backend-test-cov:
+	cd backend/ && source .venv/bin/activate && pytest --cov=app
 backend-lint:
 	cd backend/ && source .venv/bin/activate && flake8
 backend-clean:

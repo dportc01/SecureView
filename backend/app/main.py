@@ -1,19 +1,39 @@
 import time
 from multiprocessing import Queue, Process
 from queue import Empty
+from pathlib import Path
 
 from .server import create_app
+from .server.services import (
+    CameraService,
+    StorageService,
+    ConfigurationService,
+    SystemService,
+    LogService,
+)
 from .discovery import discover_cameras
 from .workers import start_workers, wait_and_terminate_workers
 from .messaging import MultiprocessingBus, BusInterface
 from .notification import TelegramNotification
 from .record import Recorder
-from .config import MAX_QUEUE_SIZE, MAX_FRAME_QUEUE_SIZE
+from .config import MAX_QUEUE_SIZE, MAX_FRAME_QUEUE_SIZE, RECORD_DIR
 from .logging.loggers import get_system_logger
 
 
 def run_app(bus: BusInterface, cameras_ids: list[int], system_queue: Queue):
-    app = create_app(bus, cameras_ids, system_queue)
+    print(f"PATH: {RECORD_DIR}")
+    camera_service = CameraService(bus, cameras_ids)
+    storage_service = StorageService(Path(RECORD_DIR))
+    configuration_service = ConfigurationService()
+    system_service = SystemService(system_queue)
+    log_service = LogService()
+    app = create_app(
+        camera_service=camera_service,
+        storage_service=storage_service,
+        configuration_service=configuration_service,
+        system_service=system_service,
+        log_service=log_service,
+    )
     app.run(host="0.0.0.0", port=5000)
 
 

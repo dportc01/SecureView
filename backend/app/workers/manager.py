@@ -9,16 +9,12 @@ from app.discovery import CameraData
 from app.notification import (
     NotificationInterface,
     Type as NotifType,
-    Command as NotifCommand
+    Command as NotifCommand,
 )
-from app.record import (
-    Recorder,
-    Type as RecType,
-    Command as RecCommand
-)
+from app.record import Recorder, Type as RecType, Command as RecCommand
 from .camera_worker import camera_woker
 from .notification_worker import notification_worker
-from .record_woker import record_woker
+from .record_worker import record_worker
 
 
 @dataclass
@@ -29,12 +25,12 @@ class ManagerProcesses:
 
 
 def start_workers(
-        cameras_data: list[CameraData],
-        bus: BusInterface,
-        notifier: NotificationInterface,
-        notif_queue: Queue,
-        recorder: Recorder,
-        record_queue: list[Queue]
+    cameras_data: list[CameraData],
+    bus: BusInterface,
+    notifier: NotificationInterface,
+    notif_queue: Queue,
+    recorder: Recorder,
+    record_queue: list[Queue],
 ) -> ManagerProcesses:
     """
     Start worker processes for handling camera streams, notifications and recording.
@@ -63,15 +59,15 @@ def start_workers(
 
     for i in range(len(cameras_data)):
         p_rec = Process(
-            target=record_woker,
-            args=(recorder, record_queue[i], cameras_data[i]["id"])
+            target=record_worker,
+            args=(recorder, record_queue[i], cameras_data[i]["id"]),
         )
         p_rec.start()
         record_processes.append(p_rec)
 
         p_cam = Process(
             target=camera_woker,
-            args=(cameras_data[i], bus, notif_queue, record_queue[i])
+            args=(cameras_data[i], bus, notif_queue, record_queue[i]),
         )
         p_cam.start()
         camera_processes.append(p_cam)
@@ -84,9 +80,8 @@ def start_workers(
 
 
 def wait_and_terminate_workers(
-        control_params: ManagerProcesses,
-        notif_queue: Queue,
-        record_queue: list[Queue]):
+    control_params: ManagerProcesses, notif_queue: Queue, record_queue: list[Queue]
+):
 
     for p in control_params.camera_processes:
         p.join()

@@ -4,11 +4,10 @@ from enum import Enum
 import subprocess
 import json
 
-from app.config import RECORD_DIR
 from app.logging.loggers import get_files_logger
 
 
-class Status(Enum):
+class Status(str, Enum):
     RECORDING = "Recording"
     FINISHED = "Finished"
 
@@ -28,14 +27,15 @@ SIZE_GB = SIZE_MB * 1024
 SIZE_TB = SIZE_GB * 1024
 
 
-class StorageServive:
-    def __init__(self) -> None:
+class StorageService:
+    def __init__(self, record_path: Path) -> None:
         self.logger = get_files_logger()
+        self.record_path = record_path
 
     def get_records(self) -> list[VideoFile]:
         video_files: list[VideoFile] = []
 
-        folder = Path(RECORD_DIR)
+        folder = self.record_path
 
         for file in folder.iterdir():
             if file.is_file():
@@ -61,14 +61,14 @@ class StorageServive:
         return video_files
 
     def get_file(self, filename: str) -> Path | None:
-        file = (Path(RECORD_DIR) / f"{filename}.mp4").resolve()
+        file = (self.record_path / f"{filename}.mp4").resolve()
         if file.is_file():
             return file
         return None
 
     def delete_file(self, filenames_list: list[str]) -> tuple[bool, str]:
         for filename in filenames_list:
-            file = Path(RECORD_DIR) / f"{filename}.mp4"
+            file = self.record_path / f"{filename}.mp4"
             if file.is_file():
                 file.unlink()
                 self.logger.info(f"Deleted file {filename}.mp4")

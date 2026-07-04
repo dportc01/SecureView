@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, request, send_file
 
-from app.server.services import StorageServive
+from app.server.services import StorageService
 
 
-def build_storage_bp(storage_service: StorageServive) -> Blueprint:
+def build_storage_bp(storage_service: StorageService) -> Blueprint:
     bp = Blueprint("storage", __name__)
 
     @bp.route("/storage/get")

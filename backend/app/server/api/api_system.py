@@ -23,7 +23,7 @@ def build_system_bp(
         if success is None:
             return {
                 "status": "error",
-                "message": "Cameras didn't respond, " "manual intervention required",
+                "message": "Cameras didn't respond, manual intervention required",
             }, 500
 
         return {"status": "ok", "message": "Terminating cameras and server"}, 200
@@ -41,7 +41,7 @@ def build_system_bp(
         if success is None:
             return {
                 "status": "error",
-                "message": "Cameras didn't respond, " "manual intervention required",
+                "message": "Cameras didn't respond, manual intervention required",
             }, 500
 
         return {"status": "ok", "message": "Restarting cameras and server"}, 200
