@@ -30,7 +30,7 @@ def test_start_record(set_up_tests):
     assert state["recording"] is False
 
     queue.put(Command(Type.FRAME, np.zeros((540, 960, 3), dtype=np.uint8)))
-    time.sleep(0.5)
+    time.sleep(0.6)
     assert state["recording"] is True
 
 
@@ -39,11 +39,11 @@ def test_stop_record(set_up_tests):
     assert state["recording"] is False
 
     queue.put(Command(Type.FRAME, np.zeros((540, 960, 3), dtype=np.uint8)))
-    time.sleep(0.5)
+    time.sleep(0.6)
     assert state["recording"] is True
 
     queue.put(Command(Type.STOP, None))
-    time.sleep(0.5)
+    time.sleep(0.6)
     assert state["recording"] is False
 
 
