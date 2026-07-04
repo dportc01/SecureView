@@ -2,6 +2,7 @@ from multiprocessing import Queue
 from queue import Full
 
 from app.logging.loggers import get_system_logger
+import logging
 
 
 class SystemService:
@@ -14,7 +15,7 @@ class SystemService:
             self.queue.put_nowait(False)
             return True
         except (Full, ValueError) as e:
-            print(e)
+            logging.exception(f"terminate: {e}")
             self.logger.exception(e)
             return False
 
@@ -23,6 +24,6 @@ class SystemService:
             self.queue.put_nowait(True)
             return True
         except (Full, ValueError) as e:
-            print(f"THIS IS THE ERROR {e}")
+            logging.exception(f"restart: {e}")
             self.logger.exception(e)
             return False
