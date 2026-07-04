@@ -23,6 +23,6 @@ class SystemService:
             self.queue.put_nowait(True)
             return True
         except (Full, ValueError) as e:
-            print(e)
+            print(f"THIS IS THE ERROR {e}")
             self.logger.exception(e)
             return False
