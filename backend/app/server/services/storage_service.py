@@ -39,24 +39,25 @@ class StorageService:
 
         for file in folder.iterdir():
             if file.is_file():
-                if ".tmp" in file.suffixes:
-                    video_files.append(
-                        VideoFile(
-                            name=str(file.name.removesuffix(".tmp.mp4")),
-                            status=Status.RECORDING,
-                            duration="N/A",
-                            size=self._get_size_string(file.stat().st_size),
+                if ".mp4" == file.suffix:
+                    if file.suffixes[-2:] == [".tmp", ".mp4"]:
+                        video_files.append(
+                            VideoFile(
+                                name=str(file.name.removesuffix(".tmp.mp4")),
+                                status=Status.RECORDING,
+                                duration="N/A",
+                                size=self._get_size_string(file.stat().st_size),
+                            )
                         )
-                    )
-                elif ".mp4" == file.suffix:
-                    video_files.append(
-                        VideoFile(
-                            name=str(file.stem),
-                            status=Status.FINISHED,
-                            duration=self._get_duration(file),
-                            size=self._get_size_string(file.stat().st_size),
+                    else:
+                        video_files.append(
+                            VideoFile(
+                                name=str(file.stem),
+                                status=Status.FINISHED,
+                                duration=self._get_duration(file),
+                                size=self._get_size_string(file.stat().st_size),
+                            )
                         )
-                    )
 
         return video_files
 

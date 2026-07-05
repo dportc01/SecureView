@@ -1,5 +1,7 @@
 import logging
 
+from app.config import LOG_PATH
+
 _file_handler = None
 
 
@@ -62,7 +64,7 @@ def _get_file_handler() -> logging.FileHandler:
     global _file_handler
 
     if _file_handler is None:
-        _file_handler = logging.FileHandler("app.log")
+        _file_handler = logging.FileHandler(LOG_PATH)
         formatter = logging.Formatter(
             "TIME: %(asctime)s - LEVEL: %(levelname)s - %(name)s - MESSAGE: %(message)s",
         )

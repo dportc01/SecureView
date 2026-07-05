@@ -1,4 +1,5 @@
 from .config import (
+    LOG_PATH,
     MAX_LOCAL_CAMERA_INDEX,
     MAX_QUEUE_SIZE,
     MAX_FRAME_QUEUE_SIZE,
@@ -18,6 +19,7 @@ from .config_types import (
 )
 
 __all__ = [
+    "LOG_PATH",
     "MAX_LOCAL_CAMERA_INDEX",
     "MAX_QUEUE_SIZE",
     "MAX_FRAME_QUEUE_SIZE",

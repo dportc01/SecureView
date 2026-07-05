@@ -3,27 +3,25 @@ from datetime import datetime
 import numpy as np
 from pathlib import Path
 
-from app.config import RECORD_DIR
-
 
 class Recorder:
-    def __init__(self) -> None:
+    def __init__(self, record_dir: Path) -> None:
         self.format = ".mp4"
+        self.record_dir = record_dir
         self.filepath: Path | None = None
         self.final_path: Path | None = None
         self.fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # type: ignore[attr-defined]
         self.out: cv2.VideoWriter
 
     def start_record(self, camera_id: int, height: int, width: int) -> None:
-        record_dir = Path(RECORD_DIR)
-        record_dir.mkdir(parents=True, exist_ok=True)
+        self.record_dir.mkdir(parents=True, exist_ok=True)
 
         now = datetime.now()
         date = now.strftime("%d.%m.%y_%H-%M-%S.%f")
 
         filename = f"camera{camera_id}_{date}"
-        self.filepath = record_dir / f"{filename}.tmp{self.format}"
-        self.final_path = record_dir / f"{filename}{self.format}"
+        self.filepath = self.record_dir / f"{filename}.tmp{self.format}"
+        self.final_path = self.record_dir / f"{filename}{self.format}"
 
         self.out = cv2.VideoWriter(str(self.filepath), self.fourcc, 30, (width, height))
 

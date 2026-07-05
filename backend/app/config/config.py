@@ -7,11 +7,13 @@ from datetime import time
 
 from .config_types import RecordTime, ConfigJson, ConfigJsonCam
 
+# Log path
+LOG_PATH = "app.log"
+
 # Queue
 MAX_LOCAL_CAMERA_INDEX = 4
 MAX_FRAME_QUEUE_SIZE = 60
 MAX_QUEUE_SIZE = 10
-
 
 # Env vars
 load_dotenv()
@@ -75,4 +77,6 @@ if "cameras" in data:
 
 
 # Data for configuration api
-CONF_JSON = ConfigJson(notification_time=NOTIF_COOLDOWN / MINUTE, cameras=camera_config)
+CONF_JSON = ConfigJson(
+    notification_time=int(NOTIF_COOLDOWN / MINUTE), cameras=camera_config
+)

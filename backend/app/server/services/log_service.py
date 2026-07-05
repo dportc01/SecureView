@@ -17,11 +17,8 @@ SIZE_TB = SIZE_GB * 1024
 
 
 class LogService:
-    def __init__(self) -> None:
-        self.log_path = Path(__file__).resolve().parents[3] / "app.log"
-
-        if not self.log_path.exists():
-            raise FileNotFoundError(f"There is no file named {str(self.log_path)}")
+    def __init__(self, log_path: Path) -> None:
+        self.log_path = log_path
 
     def read_log(self) -> list[dict] | None:
 
@@ -32,10 +29,13 @@ class LogService:
             return [parsed for line in lines if (parsed := self._parse_line(line))]
 
         except Exception as e:
-            print.exception(e)
+            print(e)
             return None
 
     def log_size(self) -> str:
+        if not self.log_path.exists():
+            return "0 Bytes"
+
         size = self.log_path.stat().st_size
 
         if size >= SIZE_TB:
@@ -55,7 +55,7 @@ class LogService:
                 pass  # This truncates the file
             return True
         except Exception as e:
-            print.exception(e)
+            print(e)
             return False
 
     def _parse_line(self, line: str):
