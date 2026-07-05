@@ -18,12 +18,12 @@ SIZE_TB = SIZE_GB * 1024
 
 class LogService:
     def __init__(self, log_path: Path) -> None:
-        self.log_path = log_path
+        self._log_path = log_path
 
     def read_log(self) -> list[dict] | None:
 
         try:
-            with self.log_path.open("r", encoding="utf-8", errors="replace") as f:
+            with self._log_path.open("r", encoding="utf-8", errors="replace") as f:
                 lines = deque(f, maxlen=100)
 
             return [parsed for line in lines if (parsed := self._parse_line(line))]
@@ -33,10 +33,10 @@ class LogService:
             return None
 
     def log_size(self) -> str:
-        if not self.log_path.exists():
+        if not self._log_path.exists():
             return "0 Bytes"
 
-        size = self.log_path.stat().st_size
+        size = self._log_path.stat().st_size
 
         if size >= SIZE_TB:
             return f"{size / SIZE_TB:.2f} TB"
@@ -51,12 +51,18 @@ class LogService:
 
     def clean_log(self) -> bool:
         try:
-            with self.log_path.open("w", encoding="utf-8"):
+            with self._log_path.open("w", encoding="utf-8"):
                 pass  # This truncates the file
             return True
         except Exception as e:
             print(e)
             return False
+
+    def get_file(self) -> Path | None:
+        file = self._log_path.resolve()
+        if file.is_file():
+            return file
+        return None
 
     def _parse_line(self, line: str):
         match = LOG_PATTERN.match(line)

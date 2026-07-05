@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 
-from app.config import cors_allow_url
+from app.config import cors_allow_origins
 
 from app.server.services import (
     CameraService,
@@ -27,7 +27,7 @@ def create_app(
 ):
 
     app = Flask(__name__)
-    CORS(app, origins=cors_allow_url)
+    CORS(app, origins=cors_allow_origins)
 
     cameras_bp = build_cameras_bp(camera_service)
     app.register_blueprint(cameras_bp)

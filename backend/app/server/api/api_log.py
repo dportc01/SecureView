@@ -38,14 +38,16 @@ def build_log_bp(log_service: LogService) -> Blueprint:
 
     @bp.route("/log/download")
     def download_log():
-        if not log_service.log_path.exists():
+        log_file = log_service.get_file()
+
+        if log_file is None:
             return {
                 "status": "error",
-                "message": f"File {log_service.log_path} doesn't exist",
+                "message": f"File {log_file} doesn't exist",
             }, 404
 
         return send_file(
-            log_service.log_path,
+            log_file,
             as_attachment=True,
             download_name="app.log",
             mimetype="text/plain",

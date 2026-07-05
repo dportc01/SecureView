@@ -30,7 +30,7 @@ if not raw:
 else:
     telegram_allowed_users = [x.strip() for x in raw.split(",") if x.strip()]
 
-cors_allow_url = os.getenv("FRONTEND_URL", "*")
+cors_allow_origins = [url.strip() for url in os.getenv("FRONTEND_URLS", "*").split(",")]
 
 # Open ./config.json
 CONFIG_JSON_PATH = Path(__file__).with_name("config.json")

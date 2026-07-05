@@ -28,7 +28,6 @@ from .logging.loggers import get_system_logger
 
 
 def run_app(bus: BusInterface, cameras_ids: list[int], system_queue: Queue):
-    print(f"LOG_PATH: {Path(LOG_PATH)}")
     camera_service = CameraService(bus, cameras_ids)
     storage_service = StorageService(Path(RECORD_DIR))
     configuration_service = ConfigurationService(CONFIG_JSON_PATH, CONF_JSON)

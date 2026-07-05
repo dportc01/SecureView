@@ -7,7 +7,7 @@ frontend:
 	cd frontend/ && npm run dev
 frontend-lint:
 	cd frontend/ && npm run lint
-backend:
+backend-dev:
 	cd backend/ && source .venv/bin/activate && python -m app.main
 backend-test:
 	cd backend/ && source .venv/bin/activate && pytest -s --log-cli-level=INFO
