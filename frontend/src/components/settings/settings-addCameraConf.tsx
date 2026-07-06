@@ -18,7 +18,7 @@ import { toast } from "sonner";
 
 type Porps = {
   conf: ConfigJson;
-  setConf: Dispatch<SetStateAction<ConfigJson | null>>;
+  setConf: Dispatch<SetStateAction<ConfigJson | undefined>>;
   unedited: boolean;
   setUnedited: Dispatch<SetStateAction<boolean>>;
 };

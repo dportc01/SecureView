@@ -18,6 +18,8 @@ MAX_QUEUE_SIZE = 10
 # Env vars
 load_dotenv()
 
+PORT = os.getenv("PORT", 5000)
+
 raw = os.getenv("TELEGRAM_BOT_TOKEN")
 if not raw:
     logging.error("Missing enviromental variable TELEGRAM_BOT_TOKEN")

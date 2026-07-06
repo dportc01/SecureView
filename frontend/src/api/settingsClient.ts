@@ -1,5 +1,5 @@
 import { type ConfigJson } from "@/types/Conf";
-import { checkStatus, readSucces } from "./resAnalyzer";
+import { checkStatus, readSucces, resWrapper } from "./resAnalyzer";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 if (!apiUrl) {
@@ -21,16 +21,18 @@ async function get_config(): Promise<ConfigJson> {
 }
 
 async function update_config(newConfig: ConfigJson): Promise<void> {
-  const res = await fetch(`${apiUrl}/config/update`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newConfig),
-  });
+  resWrapper(async () => {
+    const res = await fetch(`${apiUrl}/config/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newConfig),
+    });
 
-  await checkStatus(res);
-  await readSucces(res);
+    await checkStatus(res);
+    await readSucces(res);
+  });
 }
 
 export { get_config, update_config };

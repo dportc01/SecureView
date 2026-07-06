@@ -38,4 +38,5 @@ pytokens==0.4.1
 requests==2.34.2
 typing_extensions==4.15.0
 urllib3==2.7.0
+waitress==3.0.2
 Werkzeug==3.1.6

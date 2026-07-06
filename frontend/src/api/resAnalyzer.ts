@@ -1,5 +1,24 @@
 import { toast } from "sonner";
 
+export async function resWrapper<T>(
+  apiCall: () => Promise<T>,
+): Promise<T | undefined> {
+  try {
+    return await apiCall();
+  } catch (err) {
+    if (err instanceof TypeError) {
+      showError("Backend did not respond");
+    } else if (err instanceof Error) {
+      showError(err.message);
+    } else {
+      showError("Unexpected error");
+    }
+
+    // Propagate to upwards await
+    throw err;
+  }
+}
+
 export async function checkStatus(res: Response): Promise<void> {
   if (!res.ok) {
     let errorBody;
@@ -13,15 +32,18 @@ export async function checkStatus(res: Response): Promise<void> {
       }
     } catch {
       errorBody = await res.text();
+
+      if (errorBody) {
+        message = errorBody;
+      }
     }
 
     console.error("API error:", {
       status: res.status,
       body: errorBody,
     });
-    toast.error(message, { position: "top-center" });
 
-    throw new Error(`Request failed with status ${res.status}`);
+    throw new Error(message);
   }
 }
 
@@ -32,4 +54,8 @@ export async function readSucces(res: Response): Promise<void> {
   } catch {
     toast.success("Operation succes", { position: "top-center" });
   }
+}
+
+function showError(error: string) {
+  toast.error(error, { position: "top-center" });
 }

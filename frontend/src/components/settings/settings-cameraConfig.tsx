@@ -17,7 +17,7 @@ import { toast } from "sonner";
 
 type Props = {
   conf: ConfigJsonCam;
-  setConf: Dispatch<SetStateAction<ConfigJson | null>>;
+  setConf: Dispatch<SetStateAction<ConfigJson | undefined>>;
   unedited: boolean;
   setUnedited: Dispatch<SetStateAction<boolean>>;
 };

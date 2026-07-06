@@ -14,7 +14,7 @@ import { NotifTime } from "@/components/settings/settings-notifTime";
 
 export function Settings() {
   const [unedited, setUnedited] = useState<boolean>(true);
-  const [conf, setConf] = useState<ConfigJson | null>(null);
+  const [conf, setConf] = useState<ConfigJson | undefined>(undefined);
 
   // const placeholder: ConfigJson = {
   //   notification_time: 90,
@@ -22,9 +22,7 @@ export function Settings() {
   // };
 
   useEffect(() => {
-    get_config().then((data) => {
-      setConf(data);
-    });
+    get_config().then(setConf);
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import { checkStatus, readSucces } from "./resAnalyzer";
+import { checkStatus, readSucces, resWrapper } from "./resAnalyzer";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 if (!apiUrl) {
@@ -6,28 +6,30 @@ if (!apiUrl) {
 }
 
 async function terminateSystem(): Promise<void> {
-  const res = await fetch(`${apiUrl}/system/terminate`, {
-    method: "POST",
+  resWrapper(async () => {
+    const res = await fetch(`${apiUrl}/system/terminate`, {
+      method: "POST",
+    });
+
+    await checkStatus(res);
+    await readSucces(res);
   });
-
-  console.log(res);
-
-  await checkStatus(res);
-  await readSucces(res);
 }
 
-async function restartSystem(): Promise<string> {
-  const res = await fetch(`${apiUrl}/system/restart`, {
-    method: "POST",
-  });
+async function restartSystem(): Promise<string | undefined> {
+  return resWrapper(async () => {
+    const res = await fetch(`${apiUrl}/system/restart`, {
+      method: "POST",
+    });
 
-  await checkStatus(res);
-  try {
-    const body = await res.json();
-    return typeof body === "string" ? body : "Operation successful";
-  } catch {
-    return "Operation successful";
-  }
+    await checkStatus(res);
+    try {
+      const body = await res.json();
+      return typeof body === "string" ? body : "Operation successful";
+    } catch {
+      return "Operation successful";
+    }
+  });
 }
 
 export { terminateSystem, restartSystem };

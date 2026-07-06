@@ -1,4 +1,5 @@
 import time
+from waitress import serve
 from multiprocessing import Queue, Process
 from queue import Empty
 from pathlib import Path
@@ -11,7 +12,7 @@ from .server.services import (
     SystemService,
     LogService,
 )
-from .discovery import discover_cameras
+from .discovery import discover_cameras, CameraData
 from .workers import start_workers, wait_and_terminate_workers
 from .messaging import MultiprocessingBus, BusInterface
 from .notification import TelegramNotification
@@ -23,38 +24,47 @@ from .config import (
     LOG_PATH,
     CONFIG_JSON_PATH,
     CONF_JSON,
+    PORT,
 )
 from .logging.loggers import get_system_logger
 
 
-def run_app(bus: BusInterface, cameras_ids: list[int], system_queue: Queue):
+def _run_server(bus: BusInterface, cameras_ids: list[int], system_queue: Queue):
     camera_service = CameraService(bus, cameras_ids)
     storage_service = StorageService(Path(RECORD_DIR))
     configuration_service = ConfigurationService(CONFIG_JSON_PATH, CONF_JSON)
     system_service = SystemService(system_queue)
     log_service = LogService(Path(LOG_PATH))
-    app = create_app(
+
+    server = create_app(
         camera_service=camera_service,
         storage_service=storage_service,
         configuration_service=configuration_service,
         system_service=system_service,
         log_service=log_service,
     )
-    app.run(host="0.0.0.0", port=5000)
+
+    serve(
+        server,
+        host="0.0.0.0",
+        port=PORT,
+        threads=4,
+    )
 
 
-def start_all() -> bool:
+def _run_workers(
+    bus: BusInterface,
+    recorder_queue: list[Queue],
+    notif_queue: Queue,
+    cameras_data: list[CameraData],
+):
     # Initialize everything, queues need to be initialized on __main__
-    cameras_data = discover_cameras()
-    bus = MultiprocessingBus(cameras_data)
     notifier = TelegramNotification()
-    notif_queue = Queue(MAX_QUEUE_SIZE * len(cameras_data))
     recorder = Recorder(Path(RECORD_DIR))
-    recorder_queue = []
     for _ in range(len(cameras_data)):
         recorder_queue.append(Queue(MAX_FRAME_QUEUE_SIZE))
 
-    processes = start_workers(
+    return start_workers(
         cameras_data=cameras_data,
         bus=bus,
         notifier=notifier,
@@ -63,11 +73,20 @@ def start_all() -> bool:
         record_queue=recorder_queue,
     )
 
+
+def start_all() -> bool:
+    # Initialize everything, queues need to be initialized on __main__
+    cameras_data = discover_cameras()
+    bus = MultiprocessingBus(cameras_data)
+    notif_queue = Queue(MAX_QUEUE_SIZE * len(cameras_data))
+    recorder_queue = []
+    processes = _run_workers(bus, recorder_queue, notif_queue, cameras_data)
+
     cameras_ids = [cam["id"] for cam in cameras_data]
 
     system_queue = Queue()
     # Server is run from a process instead of a thread to better handle termination
-    app_process = Process(target=run_app, args=(bus, cameras_ids, system_queue))
+    app_process = Process(target=_run_server, args=(bus, cameras_ids, system_queue))
     app_process.start()
 
     wait_and_terminate_workers(processes, notif_queue, recorder_queue)
