@@ -42,48 +42,70 @@ This code was developed as the backbone for my Bachelor's Thesis in Ingeniería 
    make frontend-build
    ```
 
-6. Expose the built files created on `forntend/dist/` trough your preffered method
+6. Expose the built files created on `frontend/dist/` trough your preffered method
 7. Start the backend by running:
 
    ```Shell
    make backend
    ```
 
-## Usage
+## Features and Usage
+
+SecureView currently supports only cameras detected by OpenCV (`cv2`). However, it provides the necessary interface to implement additional camera sources in `backend/app/cameras/camera_interface.py`.
+
+Each camera records only if the current time is within its configured recording interval. If no recording interval is configured for a camera, it will not record. If the start and end times are identical, the camera records continuously.
+
+Stopping, restarting, or terminating the backend will gracefully finish all recordings currently in progress.
+
+Recordings are stored in `backend/video_records/`, while application logs are stored in `backend/app.log`.
+
+Whenever an active camera detects a person, SecureView sends a Telegram notification with the camera ID and the captured frame. Each camera has its own notification cooldown, meaning that after Camera 0 sends a notification, Camera 2 can still immediately send one if it also detects a person.
+
+Whenever cameras are connected or disconnected, the backend must be restarted so that it can detect the available devices.
+
+Restarting the backend is also required after modifying the application settings.
+
+The application consists of four pages:
+
+### Home
+
+The **Home** page displays all detected cameras. Cameras that are unavailable display a **"NO SIGNAL"** image. Cameras can be started or stopped using the **Start** and **Stop** buttons, and the video stream can be enlarged by clicking on it.
+
+This page also includes the **Terminate** button, which completely stops the backend, and the **Restart** button, which restarts the application to apply configuration changes or detect the available cameras.
+
+### Storage
+
+The **Storage** page displays both ongoing and completed recordings, including information such as the recording name, duration, and file size. Completed recordings can be downloaded or deleted.
+
+### Settings
+
+The **Settings** page displays the current configuration. It allows the user to modify the notification cooldown and configure the recording intervals for individual cameras.
+
+### Logging
+
+The **Logging** page displays up to the last 100 lines of the application log, along with the total log file size. It also allows the user to download the complete log or delete its contents.
 
 ## Structure
 
 ### Backend structure
 
 ```
-app
-├── config/                      # Environment variables & global configuration
-│   └── config.py
-│
-├── main.py                     # Development entry point
-│
-├── messaging/                  # Communication bus (Flask ↔ camera workers)
-│   ├── bus_interface.py
-│   ├── multiprocessing_bus.py
-│   └── redis_bus.py
-│
-├── server/                     # Flask app initialization, routes, services
-│   ├── api/
-│   │   ├── __init__.py
-│   │   └── routes.py
-│   │
-│   ├── services/
-│   │   └── camera_service.py
-│   │
-│   └── __init__.py
-│
-├── workers/                   # Camera worker system
-│   ├── camera/
-│   │   ├── camera_interface.py
-│   │   └── usb_camera.py
-│   │
-│   ├── camera_worker.py        # Builds camera implementation
-│   └── manager.py              # Orchestrates all camera workers
-│
-└── wsgi.py                    # Production Flask entry point
+.
+├── app/
+│   ├── assets/
+│   ├── camera/
+│   ├── config/
+│   ├── discovery/
+│   ├── logging/
+│   ├── messaging/
+│   ├── notification/
+│   ├── object_recognition/
+│   ├── record/
+│   ├── server/
+│   │   ├── api/
+│   │   └── services/
+│   └── workers/
+└── tests/
+    ├── integration/
+    └── unit/
 ```
