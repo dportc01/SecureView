@@ -57,7 +57,7 @@ class MultiprocessingBus:
     def read_frame(self, id: int) -> bytes | None:
         queue = self._get_frames_queue(id)
         try:
-            frame: bytes = queue.get_nowait()
+            frame: bytes = queue.get(timeout=1)
             return frame
         except Empty:
             return None

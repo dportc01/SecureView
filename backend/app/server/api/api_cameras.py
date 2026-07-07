@@ -18,10 +18,6 @@ def build_cameras_bp(camera_service: CameraService) -> Blueprint:
         def generate_frames():
             while True:
                 frame = camera_service.read_camera(id)
-
-                if frame is None:
-                    continue
-
                 yield (
                     b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
                 )
