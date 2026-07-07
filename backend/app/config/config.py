@@ -18,7 +18,8 @@ MAX_QUEUE_SIZE = 10
 # Env vars
 load_dotenv()
 
-PORT = os.getenv("PORT", 5000)
+SERVER_PORT = os.getenv("SERVER_PORT", 5000)
+SERVER_THREADS = os.getenv("SERVER_THREADS", 8)
 
 raw = os.getenv("TELEGRAM_BOT_TOKEN")
 if not raw:

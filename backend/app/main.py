@@ -24,7 +24,8 @@ from .config import (
     LOG_PATH,
     CONFIG_JSON_PATH,
     CONF_JSON,
-    PORT,
+    SERVER_PORT,
+    SERVER_THREADS,
 )
 from .logging.loggers import get_system_logger
 
@@ -47,8 +48,8 @@ def _run_server(bus: BusInterface, cameras_ids: list[int], system_queue: Queue):
     serve(
         server,
         host="0.0.0.0",
-        port=PORT,
-        threads=4,
+        port=SERVER_PORT,
+        threads=SERVER_THREADS,
     )
 
 
