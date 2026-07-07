@@ -51,7 +51,7 @@ This code was developed as the backbone for my Bachelor's Thesis in Ingeniería 
 
 ## Features and Usage
 
-SecureView currently supports only cameras detected by OpenCV (`cv2`). However, it provides the necessary interface to implement additional camera sources in `backend/app/cameras/camera_interface.py`.
+SecureView currently supports only cameras detected by OpenCV (`cv2`). To support additional camera sources, implement a class that inherits from `backend/app/camera/camera_interface.py` and update `backend/app/camera/factory.py` and `backend/app/discovery/discover_cameras.py` to instantiate and detect the new camera type.
 
 Each camera records only if the current time is within its configured recording interval. If no recording interval is configured for a camera, it will not record. If the start and end times are identical, the camera records continuously.
 
@@ -92,20 +92,22 @@ The **Logging** page displays up to the last 100 lines of the application log, a
 ```
 .
 ├── app/
-│   ├── assets/
-│   ├── camera/
-│   ├── config/
-│   ├── discovery/
-│   ├── logging/
-│   ├── messaging/
-│   ├── notification/
-│   ├── object_recognition/
-│   ├── record/
+│   ├── assets/							# Static resources
+│   ├── camera/							# Camera interfaces and implementations
+│   ├── config/							# Configuration loading and constants
+│   ├── discovery/						# Camera discovery
+│   ├── logging/						# Custom loggers
+│   ├── messaging/						# Server to worker communication
+│   ├── notification/					# Notification implementation
+│   ├── object_recognition/				# Frame object recognition
+│   ├── record/							# Video recording
 │   ├── server/
-│   │   ├── api/
-│   │   └── services/
-│   └── workers/
+│   │   ├── api/						# REST API endpoints
+│   │   └── services/					# Business logic
+│   ├── workers/						# Work loops and class orchestration
+│   ├── __init__.py						# App package definition
+│   └── main.py							# Entry point
 └── tests/
-    ├── integration/
-    └── unit/
+    ├── integration/					# Integration tests
+    └── unit/							# Unit tests
 ```
