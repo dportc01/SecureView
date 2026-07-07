@@ -20,78 +20,80 @@ export function NotifTime({ conf, setConf, unedited, setUnedited }: Porps) {
   const minutes = conf.notification_time % 60;
 
   return (
-    <div className="flex flex-row items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <span>Time between notifications: </span>
-      <div className="flex flex-row gap-2">
-        <Input
-          id="notif-hours"
-          type="number"
-          min={0}
-          max={24}
-          step={1}
-          readOnly={readOnly}
-          value={hours}
-          className={cn(
-            "max-w-18",
-            readOnly ? "text-muted-foreground" : "text-primary",
-          )}
-          onChange={(e) => {
-            const value = Number(e.target.valueAsNumber);
+      <div className="flex flex-nowrap gap-4">
+        <div className="flex flex-row gap-2">
+          <Input
+            id="notif-hours"
+            type="number"
+            min={0}
+            max={24}
+            step={1}
+            readOnly={readOnly}
+            value={hours}
+            className={cn(
+              "max-w-18",
+              readOnly ? "text-muted-foreground" : "text-primary",
+            )}
+            onChange={(e) => {
+              const value = Number(e.target.valueAsNumber);
 
-            if (Number.isNaN(value)) return;
+              if (Number.isNaN(value)) return;
 
-            let clamped = value;
-            if (minutes <= 0) {
-              if (value <= 0) {
-                toast.warning("Value can not be bellow 0 hours, 1 minutes", {
-                  position: "top-center",
-                });
+              let clamped = value;
+              if (minutes <= 0) {
+                if (value <= 0) {
+                  toast.warning("Value can not be bellow 0 hours, 1 minutes", {
+                    position: "top-center",
+                  });
+                }
+                clamped = Math.min(24, Math.max(1, value));
+              } else {
+                clamped = Math.min(24, Math.max(0, value));
               }
-              clamped = Math.min(24, Math.max(1, value));
-            } else {
-              clamped = Math.min(24, Math.max(0, value));
-            }
 
-            setConf((prev) => ({
-              ...prev!,
-              notification_time: clamped * 60 + minutes,
-            }));
-          }}
-        />
-        <Label htmlFor="notif-hours">Hours</Label>
-      </div>
-      <div className="flex flex-row gap-2">
-        <Input
-          id="notif-minutes"
-          type="number"
-          min={0}
-          max={59}
-          step={1}
-          readOnly={readOnly}
-          value={minutes}
-          className={cn(
-            "max-w-18",
-            readOnly ? "text-muted-foreground" : "text-primary",
-          )}
-          onChange={(e) => {
-            const value = Number(e.target.valueAsNumber);
+              setConf((prev) => ({
+                ...prev!,
+                notification_time: clamped * 60 + minutes,
+              }));
+            }}
+          />
+          <Label htmlFor="notif-hours">Hours</Label>
+        </div>
+        <div className="flex flex-row gap-2">
+          <Input
+            id="notif-minutes"
+            type="number"
+            min={0}
+            max={59}
+            step={1}
+            readOnly={readOnly}
+            value={minutes}
+            className={cn(
+              "max-w-18",
+              readOnly ? "text-muted-foreground" : "text-primary",
+            )}
+            onChange={(e) => {
+              const value = Number(e.target.valueAsNumber);
 
-            if (Number.isNaN(value)) return;
+              if (Number.isNaN(value)) return;
 
-            let clamped = value;
-            if (hours <= 0) {
-              clamped = Math.min(59, Math.max(1, value));
-            } else {
-              clamped = Math.min(59, Math.max(0, value));
-            }
+              let clamped = value;
+              if (hours <= 0) {
+                clamped = Math.min(59, Math.max(1, value));
+              } else {
+                clamped = Math.min(59, Math.max(0, value));
+              }
 
-            setConf((prev) => ({
-              ...prev!,
-              notification_time: hours * 60 + clamped,
-            }));
-          }}
-        />
-        <Label htmlFor="notif-minutes">Minutes</Label>
+              setConf((prev) => ({
+                ...prev!,
+                notification_time: hours * 60 + clamped,
+              }));
+            }}
+          />
+          <Label htmlFor="notif-minutes">Minutes</Label>
+        </div>
       </div>
       <Button
         variant={"ghost"}

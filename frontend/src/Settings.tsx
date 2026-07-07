@@ -58,7 +58,7 @@ export function Settings() {
                   />
                 </div>
 
-                <div className="grid grid-cols-3 gap-6 w-full">
+                <div className="flex flex-wrap gap-6">
                   {conf.cameras.map((camera) => (
                     <CameraConfig
                       key={camera.id}

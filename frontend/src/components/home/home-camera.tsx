@@ -14,15 +14,17 @@ export function Camera({ id }: { id: number }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col min-w-35">
       <CardHeader className="text-base">Camera {id}</CardHeader>
       <CardContent>
-        <img
-          src={`${apiUrl}/cameras/${id}`}
-          style={{ cursor: "pointer" }}
-          onClick={() => setOpen(true)}
-          alt="No video stream found"
-        />
+        {!open && (
+          <img
+            src={`${apiUrl}/cameras/${id}`}
+            className="cursor-pointer"
+            onClick={() => setOpen(true)}
+            alt="No video stream found"
+          />
+        )}
         {open && (
           <div
             onClick={() => setOpen(false)}
@@ -42,7 +44,11 @@ export function Camera({ id }: { id: number }) {
           >
             <img
               src={`${apiUrl}/cameras/${id}`}
-              style={{ width: "auto", height: "90vh" }}
+              className="
+                h-[90vh] w-auto
+                portrait:h-auto
+                portrait:w-[90vw]
+              "
             />
           </div>
         )}

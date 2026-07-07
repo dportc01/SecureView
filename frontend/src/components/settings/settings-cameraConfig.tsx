@@ -27,7 +27,7 @@ export function CameraConfig({ conf, setConf, unedited, setUnedited }: Props) {
   const [readOnlyEnd, setReadOnlyEnd] = useState<boolean>(true);
 
   return (
-    <Card className="p-4 max-w-md w-full">
+    <Card className="p-4 max-w-md min-w-40 w-full">
       <FieldSet>
         <FieldLegend className="flex w-full items-center justify-between">
           Camera {conf.id} configuration

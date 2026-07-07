@@ -14,7 +14,7 @@ export function CamerasContainer({ ids }: { ids: number[] }) {
           running correctly or adjust the environment variables.
         </p>
       ) : (
-        <div className="flex gap-10">{cameras}</div>
+        <div className="flex items-start gap-10">{cameras}</div>
       )}
     </div>
   );
