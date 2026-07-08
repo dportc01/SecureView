@@ -111,3 +111,51 @@ The **Logging** page displays up to the last 100 lines of the application log, a
     ├── integration/					# Integration tests
     └── unit/							# Unit tests
 ```
+
+### ==Front==end structure
+
+```
+.
+├── public								# Static resources
+└── src									# Application source
+    ├── api								# Api client
+    ├── components						# React components
+    │   ├── home						# Home page components
+    │   ├── logging						# Logging page components
+    │   ├── settings					# Settings page components
+    │   ├── storage						# Storage page components
+    │   └── ui							# Predefined shadcn/ui components
+    ├── hooks							# Custom Hooks
+    ├── lib								# Helper functions
+    └── types							# Typescript types
+```
+
+## Development
+
+Development utilities are already included in the project dependencies.
+
+The `Makefile` also provides commands to help with development:
+
+- `run` — Runs the ==front==end in development mode and the backend.
+- `frontend` — Runs the ==front==end in development mode.
+- `frontend-lint` — Lints the frontend using **ESLint**.
+- `backend-test` — Runs Python tests using **pytest**.
+- `backend-test-cov` — Runs tests and generates a coverage report.
+- `backend-lint` — Lints the backend using **flake8**.
+- `backend-clean` — Removes execution artifacts, and coverage caches.
+
+### Testing
+
+- Unit and integration tests included.
+- Approximately **85% code coverage**.
+- Coverage report available through `make backend-test-cov`.
+
+## Contributing
+
+Although contributions are welcome, this project is no longer under active development. If your changes are substantial, I recommend creating a fork and continuing development there in accordance with the project's license.
+
+While not required, I would greatly appreciate a reference to the original repository if you build upon this project. 😊
+
+## Licensing
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.

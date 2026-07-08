@@ -21,3 +21,4 @@ backend-clean:
 	find backend/ -type d -name "__pycache__" -exec rm -rf {} +
 	find backend/ -type f -name "*.pyc" -delete
 	find backend/ -type f -name ".coverage.*" -delete
+	find backend/ -type f -name ".coverage" -delete
