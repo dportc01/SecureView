@@ -9,6 +9,7 @@ import { BookText, FilePlay, HouseIcon, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { ThemeIcon } from "@/components/theme-icon";
 
 type ContentType = {
   title: SiteName;
@@ -51,6 +52,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           className="h-5 w-auto"
         />
         <h1 className="text-xl font-medium">SecureView</h1>
+        <div className="ml-auto">
+          <ThemeIcon />
+        </div>
       </SidebarHeader>
       <SidebarContent>
         {content.map((item) => {
