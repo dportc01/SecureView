@@ -9,6 +9,7 @@ import { TimeDisplay } from "@/components/home/home-timedisplay";
 import { Toaster } from "@/components/ui/sonner";
 import { Terminate } from "@/components/home/home-terminate";
 import { Restart } from "@/components/home/home-restart";
+import { Disclaimer } from "@/components/home/home-disclaimer";
 
 export function Home() {
   const [cameras_ids, setCameraIds] = useState<number[]>([]);
@@ -32,6 +33,7 @@ export function Home() {
             <section className="flex flex-col gap-6">
               <Restart />
               <Terminate />
+              <Disclaimer />
             </section>
           </div>
         </main>
