@@ -112,7 +112,7 @@ The **Logging** page displays up to the last 100 lines of the application log, a
     └── unit/							# Unit tests
 ```
 
-### ==Front==end structure
+### Frontend structure
 
 ```
 .
@@ -136,8 +136,8 @@ Development utilities are already included in the project dependencies.
 
 The `Makefile` also provides commands to help with development:
 
-- `run` — Runs the ==front==end in development mode and the backend.
-- `frontend` — Runs the ==front==end in development mode.
+- `run` — Runs the frontend in development mode and the backend.
+- `frontend` — Runs the frontend in development mode.
 - `frontend-lint` — Lints the frontend using **ESLint**.
 - `backend-test` — Runs Python tests using **pytest**.
 - `backend-test-cov` — Runs tests and generates a coverage report.
