@@ -154,7 +154,7 @@ The `Makefile` also provides commands to help with development:
 
 Although contributions are welcome, this project is no longer under active development. If your changes are substantial, I recommend creating a fork and continuing development there in accordance with the project's license.
 
-While not required, I would greatly appreciate a reference to the original repository if you build upon this project. 😊
+While not required, I would greatly appreciate a reference to the original repository if you build upon this project. :D
 
 ## Licensing
 
