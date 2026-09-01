@@ -33,7 +33,7 @@ This code was developed as the backbone for my Bachelor's Thesis in Ingeniería 
    **`frontend/.env`** _(used for development)_
    - `VITE_API_URL`: URL of the Python backend server.
 
-   **`frontend/.env.prod`**
+   **`frontend/.env.production`**
    - `VITE_API_URL`: URL of the Python backend server used in the production build.
 
 5. Build the frontend by running:
