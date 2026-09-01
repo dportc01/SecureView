@@ -11,7 +11,6 @@ from .config_types import RecordTime, ConfigJson, ConfigJsonCam
 LOG_PATH = "app.log"
 
 # Queue
-MAX_LOCAL_CAMERA_INDEX = 4
 MAX_FRAME_QUEUE_SIZE = 60
 MAX_QUEUE_SIZE = 10
 
@@ -20,6 +19,7 @@ load_dotenv()
 
 SERVER_PORT = os.getenv("SERVER_PORT", 5000)
 SERVER_THREADS = os.getenv("SERVER_THREADS", 8)
+MAX_LOCAL_CAMERA_INDEX = os.getenv("MAX_LOCAL_CAMERA_INDEX", 4)
 
 raw = os.getenv("TELEGRAM_BOT_TOKEN")
 if not raw:

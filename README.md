@@ -27,8 +27,9 @@ This code was developed as the backbone for my Bachelor's Thesis in Ingeniería 
    - `TELEGRAM_BOT_TOKEN`: Token of the Telegram bot.
    - `TELEGRAM_ALLOWED_USERS`: IDs of the users that will receive notifications. If there are multiple users, separate them with commas (e.g., `user1,user2,user3`).
    - `FRONTEND_URLS`: URLs where the frontend is hosted to allow CORS. If there are multiple URLs, separate them with commas (e.g., `http://xxxx:5173,http://xxxx:80`).
-   - `SERVER_PORT`: Port number of the Python backend server.
-   - `SERVER_THREADS`: Number of threads dedicated to handling parallel HTTP requests.
+   - `SERVER_PORT`: Port number of the Python backend server (default 5000).
+   - `SERVER_THREADS`: Number of threads dedicated to handling parallel HTTP requests (default 8).
+   - `MAX_LOCAL_CAMERA_INDEX`: Maximum number of local camera indexes to check, as assigned by the operating system. It is recommended to set this value higher than the expected number of connected cameras, as some operating systems may assign multiple indexes to different interfaces or aspects of the same physical camera (default 4).
 
    **`frontend/.env`** _(used for development)_
    - `VITE_API_URL`: URL of the Python backend server.

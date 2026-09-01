@@ -21,9 +21,6 @@ def discover_cameras() -> list[CameraData]:
     cameras_data: list[CameraData] = []
     system = platform.system()
 
-    # Module spcification helps supress not found camera related issues.
-    # To completly silence warnign set MAX_LOCAL_CAMERA_INDEX to the number
-    # of cameras
     module = cv2.CAP_ANY
 
     if system == "Linux":
@@ -31,7 +28,15 @@ def discover_cameras() -> list[CameraData]:
     elif system == "Windows":
         module = cv2.CAP_DSHOW
 
-    for i in range(config.MAX_LOCAL_CAMERA_INDEX):
+    try:
+        max_camera_index = int(config.MAX_LOCAL_CAMERA_INDEX) + 1
+    except (TypeError, ValueError):
+        raise ValueError("MAX_LOCAL_CAMERA_INDEX must be a number")
+
+    if max_camera_index <= 0:
+        raise ValueError("MAX_LOCAL_CAMERA_INDEX must be 0 or greater")
+
+    for i in range(max_camera_index):
         cap = cv2.VideoCapture(i, module)
         if cap.isOpened():
             cap.release()
