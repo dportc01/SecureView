@@ -50,6 +50,8 @@ This code was developed as the backbone for my Bachelor's Thesis in Ingeniería 
    make backend
    ```
 
+**Note**: If you are deploying the frontend using an **Apache HTTP Server** , make sure that the `rewrite_module` is enabled and that `AllowOverride All` is configured for the directory serving the frontend. This is required for React Router client-side routes to work correctly when the page is refreshed.
+
 ## Features and Usage
 
 SecureView currently supports only cameras detected by OpenCV (`cv2`). To support additional camera sources, implement a class that inherits from `backend/app/camera/camera_interface.py` and update `backend/app/camera/factory.py` and `backend/app/discovery/discover_cameras.py` to instantiate and detect the new camera type.
