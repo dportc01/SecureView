@@ -6,7 +6,7 @@ This code was developed as the backbone for my Bachelor's Thesis in Ingeniería 
 
 ## Requirements
 
-- Python 3
+- Python 3.14
 - Node.js 20+
 - Make
 - ffprobe
